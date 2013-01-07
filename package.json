@@ -1,0 +1,11 @@
+{
+  "name": "YeoPress",
+  "version": "0.0.1",
+  "description": "A Yeoman generator for WordPress",
+  "main": "lib/generators/YeoPress/index.js",
+  "scripts": {
+    "test": "grunt mocha"
+  },
+  "author": "Wes Todd",
+  "license": "BSD"
+}
