@@ -9,6 +9,7 @@
   "author": "Wes Todd",
   "license": "BSD",
   "dependencies": {
-    "prompt": "~0.2.9"
+    "prompt": "~0.2.9",
+    "yeoman": "~0.9.6"
   }
 }
