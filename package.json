@@ -19,9 +19,11 @@
   "author": "Wes Todd",
   "license": "BSD",
   "devDependencies": {
-    "grunt-contrib-sass": "~0.2.2",
     "grunt": "~0.4.0rc8",
-    "grunt-contrib-watch": "~0.2.0"
+    "grunt-contrib-sass": "~0.2.2",
+    "grunt-contrib-jshint": "~0.1.1"
+	"grunt-regarde": "~0.1.1",
+	"grunt-contrib-livereload": "~0.1.0"
   },
   "jam": {
     "packageDir": "js/vendor",

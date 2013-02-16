@@ -1,10 +1,21 @@
 module.exports = function(grunt) {
 	grunt.initConfig({
-		'watch' : {
+		'regarde' : {
 			sass : {
 				files : ['scss/**/*.scss'],
-				tasks : 'sass:dev'
+				tasks : ['sass:dev']
+			},
+			js : {
+				files : ['js/**/*.js'],
+				tasks : ['jshint']
+			},
+			reload : {
+				files : ['**/*'],
+				tasks : ['livereload']
 			}
+		},
+		'jshint' : {
+			all : ['js/*.js']
 		},
 		'sass' : {
 			build : {
@@ -26,8 +37,10 @@ module.exports = function(grunt) {
 		}
 	});
 
-	grunt.registerTask('default', ['watch']);
+	grunt.registerTask('default', ['livereload-start', 'regarde']);
 
 	grunt.loadNpmTasks('grunt-contrib-sass');
-	grunt.loadNpmTasks('grunt-contrib-watch');
+	grunt.loadNpmTasks('grunt-contrib-jshint');
+	grunt.loadNpmTasks('grunt-contrib-livereload');
+	grunt.loadNpmTasks('grunt-regarde');
 };
