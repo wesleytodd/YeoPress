@@ -3,14 +3,14 @@ module.exports = function(grunt) {
 		'regarde' : {
 			sass : {
 				files : ['scss/**/*.scss'],
-				tasks : ['sass:dev']
+				tasks : ['sass:dev', 'livereload']
 			},
 			js : {
 				files : ['js/**/*.js'],
-				tasks : ['jshint']
+				tasks : ['jshint', 'livereload']
 			},
-			reload : {
-				files : ['**/*'],
+			php : {
+				files : ['**/*.php'],
 				tasks : ['livereload']
 			}
 		},
