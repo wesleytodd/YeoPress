@@ -19,148 +19,148 @@ hgroup,
 nav,
 section,
 summary {
-		display: block;
-		}
+	display: block;
+}
 audio,
 canvas,
 video {
-		display: inline-block;
-		}
-audio:not(
-		display: none;
-			height: 0;
-			}
-[
-		display: none;
-		}
-abbr[
-		border-bottom: 1px dotted;
-		}
+	display: inline-block;
+}
+audio:not([controls]) {
+	display: none;
+	height: 0;
+}
+[hidden] {
+	display: none;
+}
+abbr[title] {
+	border-bottom: 1px dotted;
+}
 b,
 strong {
-		font-weight: bold;
-		}
+	font-weight: bold;
+}
 blockquote {
-		margin: $size_base (}
-		}
+	margin: $size_base ($size_base * 2.5);
+}
 dfn {
-		font-style: italic;
-		}
+	font-style: italic;
+}
 mark {
-		background: $color_opposite;
-			color: $color_body_copy;
-			}
+	background: $color_opposite;
+	color: $color_body_copy;
+}
 code,
 kbd,
 pre,
 samp {
-		font-family: monospace, serif;
-			_font-family: }
-				font-size: $size_base;
-				}
+	font-family: monospace, serif;
+	_font-family: 'courier new', monospace;
+	font-size: $size_base;
+}
 pre {
-		white-space: pre;
-			white-space: pre-wrap;
-				word-wrap: break-word;
-				}
+	white-space: pre;
+	white-space: pre-wrap;
+	word-wrap: break-word;
+}
 q {
-		quotes: none;
-		}
+	quotes: none;
+}
 q:before,
 q:after {
-		content: }
-			content: none;
-			}
+	content: '';
+	content: none;
+}
 small {
-		font-size: 80%;
-		}
+	font-size: 80%;
+}
 sub,
 sup {
-		font-size: 75%;
-			line-height: 0;
-				position: relative;
-					vertical-align: baseline;
-					}
+	font-size: 75%;
+	line-height: 0;
+	position: relative;
+	vertical-align: baseline;
+}
 sup {
-		top: -(}
-		}
+	top: -($size_base * .5);
+}
 sub {
-		bottom: -(}
-		}
-svg:not(
-		overflow: hidden;
-		}
+	bottom: -($size_base * .25);
+}
+svg:not(:root) {
+	overflow: hidden;
+}
 figure {
-		margin: 0;
-		}
+	margin: 0;
+}
 table {
-		border-collapse: collapse;
-			border-spacing: 0;
-			}
+	border-collapse: collapse;
+	border-spacing: 0;
+}
 nav ul,
 nav ol {
-		list-style: none;
-			list-style-image: none;
-				padding: 0;
-					margin: 0;
-					}
+	list-style: none;
+	list-style-image: none;
+	padding: 0;
+	margin: 0;
+}
 img {
-		border: 0;
-			-ms-interpolation-mode: bicubic;
-				vertical-align: middle;
-				}
+	border: 0;
+	-ms-interpolation-mode: bicubic;
+	vertical-align: middle;
+}
 /* ==========================================================================
 	Print styles.
-		Inlined to avoid required HTTP connection: h5bp.com/r
-		/* ========================================================================== */
-		@media print {
-				* {}
-				*		background: transparent !important;
-				*				color: #000 !important;
-				*						box-shadow:none !important;
-				*								text-shadow: none !important;
-				*									}}
-				*										a,
-				*											a:visited {}
-				*													text-decoration: underline;
-				*														}}
-				*															a[}
-				*																	content: }}
-				*																		}}
-				*																			abbr[}
-				*																					content: }}
-				*																						}}
-				*																							.ir a:after,
-				*																								a[}
-				*																									a[}
-				*																											content: }}
-				*																												}}
-				*																													pre,
-				*																														blockquote {}
-				*																																border: 1px solid $color_body_copy;
-				*																																		page-break-inside: avoid;
-				*																																			}}
-				*																																				thead {}
-				*																																						display: table-header-group;
-				*																																							}}
-				*																																								tr,
-				*																																									img {}
-				*																																											page-break-inside: avoid;
-				*																																												}}
-				*																																													img {}
-				*																																															max-width: 100% !important;
-				*																																																}}
-				*																																																	@page {}
-				*																																																			margin: 0.5cm;
-				*																																																				}}
-				*																																																					p,
-				*																																																						h2,
-				*																																																							h3 {}
-				*																																																									orphans: 3;
-				*																																																											widows: 3;
-				*																																																												}}
-				*																																																													h2,
-				*																																																														h3 {}
-				*																																																																page-break-after: avoid;
-				*																																																																	}}
-				*																																																																	}
+	Inlined to avoid required HTTP connection: h5bp.com/r
+/* ========================================================================== */
+@media print {
+	* {
+		background: transparent !important;
+		color: #000 !important;
+		box-shadow:none !important;
+		text-shadow: none !important;
+	}
+	a,
+	a:visited {
+		text-decoration: underline;
+	}
+	a[href]:after {
+		content: " (" attr(href) ")";
+	}
+	abbr[title]:after {
+		content: " (" attr(title) ")";
+	}
+	.ir a:after,
+	a[href^="javascript:"]:after,
+	a[href^="#"]:after {
+		content: "";
+	}
+	pre,
+	blockquote {
+		border: 1px solid $color_body_copy;
+		page-break-inside: avoid;
+	}
+	thead {
+		display: table-header-group;
+	}
+	tr,
+	img {
+		page-break-inside: avoid;
+	}
+	img {
+		max-width: 100% !important;
+	}
+	@page {
+		margin: 0.5cm;
+	}
+	p,
+	h2,
+	h3 {
+		orphans: 3;
+		widows: 3;
+	}
+	h2,
+	h3 {
+		page-break-after: avoid;
+	}
+}

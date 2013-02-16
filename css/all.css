@@ -1,0 +1,606 @@
+/* ==========================================================================
+	Variables
+/* ========================================================================== */
+/* Colors */
+/* Font Sizes */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+nav,
+section, article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+nav,
+section,
+summary {
+  display: block;
+}
+
+audio,
+canvas,
+video {
+  display: inline-block;
+}
+
+audio:not([controls]) {
+  display: none;
+  height: 0;
+}
+
+[hidden] {
+  display: none;
+}
+
+abbr[title] {
+  border-bottom: 1px dotted;
+}
+
+b,
+strong {
+  font-weight: bold;
+}
+
+blockquote {
+  margin: 1em 2.5em;
+}
+
+dfn {
+  font-style: italic;
+}
+
+mark {
+  background: white;
+  color: #444444;
+}
+
+code,
+kbd,
+pre,
+samp {
+  font-family: monospace, serif;
+  _font-family: 'courier new', monospace;
+  font-size: 1em;
+}
+
+pre {
+  white-space: pre;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+q {
+  quotes: none;
+}
+
+q:before,
+q:after {
+  content: '';
+  content: none;
+}
+
+small {
+  font-size: 80%;
+}
+
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+sup {
+  top: -0.5em;
+}
+
+sub {
+  bottom: -0.25em;
+}
+
+svg:not(:root) {
+  overflow: hidden;
+}
+
+figure {
+  margin: 0;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+nav ul,
+nav ol {
+  list-style: none;
+  list-style-image: none;
+  padding: 0;
+  margin: 0;
+}
+
+img {
+  border: 0;
+  -ms-interpolation-mode: bicubic;
+  vertical-align: middle;
+}
+
+/* ==========================================================================
+	Print styles.
+	Inlined to avoid required HTTP connection: h5bp.com/r
+/* ========================================================================== */
+@media print {
+  * {
+    background: transparent !important;
+    color: #000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  a,
+  a:visited {
+    text-decoration: underline;
+  }
+
+  a[href]:after {
+    content: " (" attr(href) ")";
+  }
+
+  abbr[title]:after {
+    content: " (" attr(title) ")";
+  }
+
+  .ir a:after,
+  a[href^="javascript:"]:after,
+  a[href^="#"]:after {
+    content: "";
+  }
+
+  pre,
+  blockquote {
+    border: 1px solid #444444;
+    page-break-inside: avoid;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  tr,
+  img {
+    page-break-inside: avoid;
+  }
+
+  img {
+    max-width: 100% !important;
+  }
+
+  @page {
+    margin: 0.5cm;
+}
+
+  p,
+  h2,
+  h3 {
+    orphans: 3;
+    widows: 3;
+  }
+
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
+}
+/* ==========================================================================
+	Variables
+/* ========================================================================== */
+/* Colors */
+/* Font Sizes */
+/* ==========================================================================
+	Imports
+/* ========================================================================== */
+/* ==========================================================================
+	Variables
+/* ========================================================================== */
+/* Colors */
+/* Font Sizes */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+nav,
+section, article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+nav,
+section,
+summary {
+  display: block;
+}
+
+audio,
+canvas,
+video {
+  display: inline-block;
+}
+
+audio:not([controls]) {
+  display: none;
+  height: 0;
+}
+
+[hidden] {
+  display: none;
+}
+
+abbr[title] {
+  border-bottom: 1px dotted;
+}
+
+b,
+strong {
+  font-weight: bold;
+}
+
+blockquote {
+  margin: 1em 2.5em;
+}
+
+dfn {
+  font-style: italic;
+}
+
+mark {
+  background: white;
+  color: #444444;
+}
+
+code,
+kbd,
+pre,
+samp {
+  font-family: monospace, serif;
+  _font-family: 'courier new', monospace;
+  font-size: 1em;
+}
+
+pre {
+  white-space: pre;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+q {
+  quotes: none;
+}
+
+q:before,
+q:after {
+  content: '';
+  content: none;
+}
+
+small {
+  font-size: 80%;
+}
+
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+sup {
+  top: -0.5em;
+}
+
+sub {
+  bottom: -0.25em;
+}
+
+svg:not(:root) {
+  overflow: hidden;
+}
+
+figure {
+  margin: 0;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+nav ul,
+nav ol {
+  list-style: none;
+  list-style-image: none;
+  padding: 0;
+  margin: 0;
+}
+
+img {
+  border: 0;
+  -ms-interpolation-mode: bicubic;
+  vertical-align: middle;
+}
+
+/* ==========================================================================
+	Print styles.
+	Inlined to avoid required HTTP connection: h5bp.com/r
+/* ========================================================================== */
+@media print {
+  * {
+    background: transparent !important;
+    color: #000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  a,
+  a:visited {
+    text-decoration: underline;
+  }
+
+  a[href]:after {
+    content: " (" attr(href) ")";
+  }
+
+  abbr[title]:after {
+    content: " (" attr(title) ")";
+  }
+
+  .ir a:after,
+  a[href^="javascript:"]:after,
+  a[href^="#"]:after {
+    content: "";
+  }
+
+  pre,
+  blockquote {
+    border: 1px solid #444444;
+    page-break-inside: avoid;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  tr,
+  img {
+    page-break-inside: avoid;
+  }
+
+  img {
+    max-width: 100% !important;
+  }
+
+  @page {
+    margin: 0.5cm;
+}
+
+  p,
+  h2,
+  h3 {
+    orphans: 3;
+    widows: 3;
+  }
+
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
+}
+/* ==========================================================================
+	Variables
+/* ========================================================================== */
+/* Colors */
+/* Font Sizes */
+/* ==========================================================================
+	Base
+/* ========================================================================== */
+html {
+  height: 100%;
+  font-size: 100%;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+}
+
+html,
+button,
+input,
+select,
+textarea {
+  font-family: Arial, sans-serif;
+  color: #444444;
+}
+
+body {
+  height: 100%;
+  margin: 0;
+  font-size: 1em;
+  line-height: 1.4;
+}
+
+/*	Apply to all elements. In a responsive design, this is almost always a good idea */
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+/* ==========================================================================
+	Links
+/* ========================================================================== */
+a {
+  color: #26527c;
+  text-decoration: underline;
+}
+
+/* Hover styles should also apply to focus so that key accessability is maintained */
+a:focus,
+a:hover {
+  color: #08111a;
+}
+
+/* Addresses `outline` inconsistency between Chrome and other browsers. */
+a:focus {
+  outline: thin dotted;
+}
+
+/* Improves readability when focused and also mouse hovered in all browsers. */
+a:active,
+a:hover {
+  outline: 0;
+}
+
+/* ==========================================================================
+	Typography
+/* ========================================================================== */
+/* Headers */
+h1, h2, h3, h4, h5, h6 {
+  margin: 0 0 1em;
+  line-height: 1.5em;
+}
+
+h1 {
+  font-size: 2em;
+}
+
+h2 {
+  font-size: 1.5em;
+}
+
+h3 {
+  font-size: 1.3em;
+}
+
+h4 {
+  font-size: 1.3em;
+  font-weight: normal;
+}
+
+h5, h6 {
+  font-size: 1.1em;
+}
+
+/* Content Block Elements */
+dl,
+menu,
+ol,
+ul,
+p,
+pre {
+  margin: 0 0 1em;
+}
+
+/* Paragraphs */
+/* Lists */
+menu,
+ol,
+ul {
+  padding: 0 0 0 2em;
+}
+
+/* Selection Colors */
+::-moz-selection {
+  background: #444444;
+  color: white;
+  text-shadow: none;
+}
+
+::selection {
+  background: #444444;
+  color: white;
+  text-shadow: none;
+}
+
+/* =============================================================================
+	General Page Styling
+
+	This should be styles that apply to all sizes of screen, that will include:
+		- Typography, colors, and all generic text stuff not included above
+		- Useful helper classes like button styles
+		- Any re-usable classes that are not screen size dependant
+
+/* ========================================================================== */
+/* Prefixed with tags to override default tag styling for these elemets if .button is added */
+button,
+.button,
+a.button,
+input.button {
+  display: inline-block;
+}
+
+/* Responsive Media Styles */
+.media {
+  /* Set width on this selector based on design and needs */
+}
+
+.media img,
+.media video,
+.media object,
+.media iframe {
+  width: 100%;
+  height: auto;
+}
+
+/* =============================================================================
+	Structural Styles & Media Queries
+
+	Breakpoints:
+		-Less than 320px:	This should all be defined outside of the media queries
+							and will apply small phones.  These should be the most
+							basic styles possiable. These are defined outside of the
+							media queries, "Remember, the lack of a media query is the
+							first media query"
+		-320px to 479px:	These are the slightly older smartphone like the iPhone3
+							BlackBerry's and average Android phones.  Remember that
+							these will build on top of the styles already defined.
+		-480px to 639px:	This is mainly for the iPhone in landscape, but is also an
+							intermediate breakpoint to help fix any odities that come up.
+		-640px to 767px:	This will be newer smart phones like the iPhone4 and high-end
+							Android phones in portrait.
+		-768px to 1024px:	This is the tablet range (except the iPad 3) and high-end
+							smartphones in landscape but might get small laptops and may
+							other devices in the future.
+		-1024px to 1535px:	This is the desktop/tv range where the larges portion of visitors
+							will fall.  In this range we might consider having a more static width
+							layout that will feel more like the standard "old-school" site.
+		-More than 1535px:	This is currently only the iPad3.  But when larger screensizes like this
+							become more common, we might want to have some more robust detection
+							for the resolution media query to deal with the iPad3
+		-High PX Density:	This is mainly for replacing raster graphics on things like the iPad3
+							but could also be used to provide layout changes to take advantage
+							of the larger more pixel packed displays.
+
+/* ========================================================================== */
+/* Less than 320px but will apply at all sizes */
+/* 320px to 479px */
+/* 480px to 639px */
+/* 640px to 767px */
+/* 768px to 1024px */
+/* 1024px to 1534px */
+/* More than 1534px */
+/* High PX Density */
