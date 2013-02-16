@@ -1,0 +1,223 @@
+/* ==========================================================================
+	Imports
+/* ========================================================================== */
+@import 'reset', 'variables';
+
+/* ==========================================================================
+	Base
+/* ========================================================================== */
+html {
+	height: 100%;
+	font-size: 100%;
+	-webkit-text-size-adjust: 100%;
+	-ms-text-size-adjust: 100%;
+}
+html,
+button,
+input,
+select,
+textarea {
+	font-family: Arial, sans-serif;
+	color: $color_body_copy;
+}
+body {
+	height: 100%;
+	margin: 0;
+	font-size: $size_base;
+	line-height: 1.4;
+}
+/*	Apply to all elements. In a responsive design, this is almost always a good idea */
+* {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+/* ==========================================================================
+	Links
+/* ========================================================================== */
+a {
+	color: $color_link;
+	text-decoration: underline;
+}
+/* Hover styles should also apply to focus so that key accessability is maintained */
+a:focus,
+a:hover {
+	color: darken($color_link, 25%);
+}
+/* Addresses `outline` inconsistency between Chrome and other browsers. */
+a:focus {
+	outline: thin dotted;
+}
+/* Improves readability when focused and also mouse hovered in all browsers. */
+a:active,
+a:hover {
+	outline: 0;
+}
+
+/* ==========================================================================
+	Typography
+/* ========================================================================== */
+/* Headers */
+h1, h2, h3, h4, h5, h6 {
+	margin: 0 0 $size_base;
+	line-height: $size_base * 1.5;
+}
+h1 {
+	font-size: $size_base * 2;
+}
+h2 {
+	font-size: $size_base * 1.5;
+}
+h3 {
+	font-size: $size_base * 1.3;
+}
+h4 {
+	font-size: $size_base * 1.3;
+	font-weight: normal;
+}
+h5, h6 {
+	font-size: $size_base * 1.1;
+}
+
+/* Content Block Elements */
+dl,
+menu,
+ol,
+ul,
+p,
+pre {
+	margin: 0 0 $size_base;
+}
+
+/* Paragraphs */
+p {
+
+}
+
+/* Lists */
+menu,
+ol,
+ul {
+	padding: 0 0 0 $size_base * 2;
+}
+
+/* Selection Colors */
+::-moz-selection {
+	background: $color_body_copy;
+	color: $color_opposite;
+	text-shadow: none;
+}
+::selection {
+	background: $color_body_copy;
+	color: $color_opposite;
+	text-shadow: none;
+}
+
+/* =============================================================================
+	General Page Styling
+
+	This should be styles that apply to all sizes of screen, that will include:
+		- Typography, colors, and all generic text stuff not included above
+		- Useful helper classes like button styles
+		- Any re-usable classes that are not screen size dependant
+
+/* ========================================================================== */
+/* Prefixed with tags to override default tag styling for these elemets if .button is added */
+button,
+.button,
+a.button,
+input.button {
+	display: inline-block;
+}
+button:focus,
+.button:focus,
+a.button:focus,
+input.button:focus,
+button:hover,
+.button:hover,
+a.button:hover,
+input.button:hover {
+
+}
+button:active,
+.button:active,
+a.button:active,
+input.button:active {
+
+}
+
+/* Responsive Media Styles */
+.media {
+	/* Set width on this selector based on design and needs */
+}
+.media img,
+.media video,
+.media object,
+.media iframe {
+	width: 100%;
+	height: auto;
+}
+
+/* =============================================================================
+	Structural Styles & Media Queries
+
+	Breakpoints:
+		-Less than 320px:	This should all be defined outside of the media queries
+							and will apply small phones.  These should be the most
+							basic styles possiable. These are defined outside of the
+							media queries, "Remember, the lack of a media query is the
+							first media query"
+		-320px to 479px:	These are the slightly older smartphone like the iPhone3
+							BlackBerry's and average Android phones.  Remember that
+							these will build on top of the styles already defined.
+		-480px to 639px:	This is mainly for the iPhone in landscape, but is also an
+							intermediate breakpoint to help fix any odities that come up.
+		-640px to 767px:	This will be newer smart phones like the iPhone4 and high-end
+							Android phones in portrait.
+		-768px to 1024px:	This is the tablet range (except the iPad 3) and high-end
+							smartphones in landscape but might get small laptops and may
+							other devices in the future.
+		-1024px to 1535px:	This is the desktop/tv range where the larges portion of visitors
+							will fall.  In this range we might consider having a more static width
+							layout that will feel more like the standard "old-school" site.
+		-More than 1535px:	This is currently only the iPad3.  But when larger screensizes like this
+							become more common, we might want to have some more robust detection
+							for the resolution media query to deal with the iPad3
+		-High PX Density:	This is mainly for replacing raster graphics on things like the iPad3
+							but could also be used to provide layout changes to take advantage
+							of the larger more pixel packed displays.
+
+/* ========================================================================== */
+
+/* Less than 320px but will apply at all sizes */
+
+
+/* 320px to 479px */
+@media only screen and (min-width: 320px) {
+
+}
+/* 480px to 639px */
+@media only screen and (min-width: 480px) {
+
+}
+/* 640px to 767px */
+@media only screen and (min-width: 640px) {
+
+}
+/* 768px to 1024px */
+@media only screen and (min-width: 768px) {
+
+}
+/* 1024px to 1534px */
+@media only screen and (min-width: 1024px) {
+
+}
+/* More than 1534px */
+@media only screen and (min-width: 1535px) {
+
+}
+/* High PX Density */
+@media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 144dpi) {
+
+}

@@ -1,0 +1,24 @@
+{
+  "name": "YeoPress-Template",
+  "version": "0.0.1",
+  "description": "A basic template for use in YeoPress",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/wesleytodd/YeoPress.git"
+  },
+  "keywords": [
+    "Yeoman",
+    "Wordpress",
+    "YeoPress",
+    "Template"
+  ],
+  "author": "Wes Todd",
+  "license": "BSD",
+  "devDependencies": {
+    "grunt-contrib-sass": "~0.2.1"
+  }
+}
