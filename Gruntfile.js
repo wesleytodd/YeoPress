@@ -17,7 +17,7 @@ module.exports = function(grunt) {
 			},
 			dev : {
 				files : {
-					'css/all.css' : 'scss/*'
+					'css/global.css' : 'scss/global.scss'
 				},
 				options : {
 					style : 'expanded'
