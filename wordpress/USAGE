@@ -2,4 +2,4 @@ Description:
     This generator creates a basic WordPress site.
 
 Example:
-    yeoman init YeoPress
+    yo wordpress

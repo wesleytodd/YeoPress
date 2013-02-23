@@ -1,6 +1,6 @@
 
 var util      = require('util'),
-	yeoman    = require('yeoman'),
+	yeoman    = require('yeoman-generator'),
 	git       = require('./helpers/git'),
 	prompt    = require('./helpers/prompt'),
 	wordpress = require('./helpers/wordpress'),
