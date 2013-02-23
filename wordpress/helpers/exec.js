@@ -2,6 +2,8 @@ var exec   = require('child_process').exec;
 
 module.exports = execute;
 
+var maxBuffer = 500 * 1024;
+
 function execute(command, messages, options, callback) {
 	if (typeof command == 'undefined' || typeof messages == 'undefined') {
 		throw TypeError('Requires minimum of two arguments, a command and a callback');
@@ -38,8 +40,11 @@ function execute(command, messages, options, callback) {
 		}
 	}
 	if (typeof options == 'undefined') {
-		exec(command, fnc);
+		exec(command, {
+			maxBuffer : maxBuffer
+		}, fnc);
 	} else {
+		options.maxBuffer = options.maxBuffer || maxBuffer;
 		exec(command, options, fnc);
 	}
 }
