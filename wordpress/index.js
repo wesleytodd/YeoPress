@@ -149,9 +149,7 @@ Generator.prototype.basicInstall = function() {
 		var done = this.async(),
 			me = this;
 		this.remote('wordpress', 'wordpress', function(err, remote) {
-			me.recurse(remote.cachePath, function(file, rootdir, subdir, filename) {
-				me.copy(file, path.join(subdir, filename));
-			});
+			remote.directory('.');
 			done();
 		});
 	}
