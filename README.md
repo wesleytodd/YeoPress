@@ -6,14 +6,10 @@ A [Yeoman](https://github.com/yeoman/yeoman) generator for WordPress.  Installs 
 
 Install the generator:
 
-	npm install yeoman-yeopress
+	npm install generator-wordpress
 
 Then in the directory you want to install WordPress:
 
-	yeoman init wordpress
+	yo wordpress
 
-Viola!
-
-## Yo
-
-Of course a new version of yeoman just came out and I had progress on this with the old version.  I will hopefully update this within the week...
+Follow the prompts and viola!
