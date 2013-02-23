@@ -1,8 +1,8 @@
 {
-  "name": "yeoman-yeopress",
-  "version": "0.0.2",
+  "name": "generator-wordpress",
+  "version": "0.1.0",
   "description": "A Yeoman generator for WordPress",
-  "main": "lib/generators/YeoPress/index.js",
+  "main": "wordpress/index.js",
   "scripts": {
     "test": "grunt mocha"
   },
