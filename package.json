@@ -1,23 +1,24 @@
 {
   "name": "generator-wordpress",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "A Yeoman generator for WordPress",
   "keywords": [
-	"yeoman-generator",
-	"wordpress"
+    "yeoman-generator",
+    "wordpress"
   ],
   "main": "wordpress/index.js",
   "scripts": {
-    "test": "grunt mocha"
+    "test": ""
   },
   "author": "Wes Todd",
   "license": "BSD",
   "dependencies": {
     "prompt": "~0.2.9",
-    "yeoman-generator": "~0.10.0"
+    "yeoman-generator": "~0.10.0",
+    "wrench": "~1.4.4"
   },
   "repository": {
     "type": "git",
-	"url": "git://github.com/wesleytodd/YeoPress.git"
+    "url": "git://github.com/wesleytodd/YeoPress.git"
   }
 }

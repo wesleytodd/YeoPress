@@ -4,6 +4,9 @@ var util      = require('util'),
 	git       = require('./helpers/git'),
 	prompt    = require('./helpers/prompt'),
 	wordpress = require('./helpers/wordpress'),
+	exec      = require('./helpers/exec'),
+	wrench    = require('wrench'),
+	fs        = require('fs'),
 	path      = require('path');
 
 module.exports = Generator;
@@ -324,7 +327,7 @@ Generator.prototype.confirm = function() {
 			'|   _   ||   |___ |   |  | ||   |___     |   _   ||   |___     |   |_| ||       |   __ ',
 			'|__| |__||_______||___|  |_||_______|    |__| |__||_______|    |_______||_______|  |__|',
 			''
-		].join('\n');
+		].join('\n').rainbow;
 		console.log(go);
 
 		done();
@@ -406,6 +409,30 @@ Generator.prototype.setupTheme = function() {
 			});
 		} else if (this.theme.type == 'tar') {
 			me.tarball(this.theme.url, path.join(this.contentDir, 'themes', this.theme.dir), done);
+		}
+	}
+};
+
+Generator.prototype.setPermissions = function() {
+	wrench.chmodSyncRecursive('.', 0755);
+	wrench.chmodSyncRecursive(this.contentDir, 0775);
+};
+
+Generator.prototype.initTheme = function() {
+	if (this.theme) {
+		var done = this.async(),
+			themePath = path.join(this.contentDir, 'themes', this.theme.dir),
+			themeInitScript = path.join(themePath, 'yeopress-init');
+		if (fs.existsSync(themeInitScript)) {
+			var oldDir = process.cwd();
+			process.chdir(themePath);
+			exec('./yeopress-init', function(err) {
+				console.log('Theme initalized');
+				process.chdir(oldDir);
+				done();
+			});
+		} else {
+			done();
 		}
 	}
 };

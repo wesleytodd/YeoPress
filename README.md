@@ -6,15 +6,19 @@ The officially un-official [Yeoman](https://github.com/yeoman/yeoman) Generator 
 - Install WordPress as a Git submodule for easy version controled updates
 - Theme init hooks for when you install a new theme
 - Permission setting on install
-- Grunt tasks for some down and dirty WP tasks
+- *Coming Soon* Grunt tasks for some down and dirty WP tasks
 
 ## How To Use
 
-Install the generator:
+If you do not already have the Yeoman toolset installed do so now:
+
+	npm install -g yo grunt-cli bower
+
+Then, in the directory you want to start your new project in, install the generator:
 
 	npm install generator-wordpress
 
-Then in the directory you want to install WordPress:
+And run me:
 
 	yo wordpress
 
