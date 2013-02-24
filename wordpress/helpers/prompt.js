@@ -1,7 +1,7 @@
 
 var prompt = require('prompt');
 
-prompt.message = '['.white + '?'.green + ']'.white + ' ';
+prompt.message = '';
 prompt.delimiter = '';
 
 module.exports = function(prompts, callback) {
@@ -9,7 +9,7 @@ module.exports = function(prompts, callback) {
 	
 	props = {};
 	prompts.forEach(function(v) {
-		v.description = v.description.grey;
+		v.description = v.description.white;
 		props[v.name] = v;
 	});
 
