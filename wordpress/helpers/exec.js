@@ -39,12 +39,16 @@ function execute(command, messages, options, callback) {
 			process.exit();
 		}
 	}
+
 	if (typeof options == 'undefined') {
-		exec(command, {
+		options = {
 			maxBuffer : maxBuffer
-		}, fnc);
+		};
 	} else {
 		options.maxBuffer = options.maxBuffer || maxBuffer;
-		exec(command, options, fnc);
 	}
+	exec(command, options, fnc)
+		.stdout.on('data', function(message) {
+			console.log(message);
+		});
 }
