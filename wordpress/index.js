@@ -414,7 +414,9 @@ Generator.prototype.setupTheme = function() {
 };
 
 Generator.prototype.setPermissions = function() {
+	console.log('Setting Permissions: 0755 on .');
 	wrench.chmodSyncRecursive('.', 0755);
+	console.log('Setting Permissions: 0775 on ' + this.contentDir);
 	wrench.chmodSyncRecursive(this.contentDir, 0775);
 };
 
