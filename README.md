@@ -24,6 +24,8 @@ And run me:
 
 Follow the prompts and WA-BAM!!!!
 
+Or [watch the video](http://www.youtube.com/watch?v=Em-NMCgNhhY).
+
 ## Themes
 
 Custom themes can be installed from GitHub or a Tarball.  Once installed, they are responsible for their own Gruntfile and related tasks.  A basic example template can be found in the [template branch](https://github.com/wesleytodd/YeoPress/tree/template) of this repo.  The example template comes with a few grunt tasks pre-configured:
