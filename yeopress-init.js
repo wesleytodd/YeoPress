@@ -1,5 +1,3 @@
-#! /usr/local/bin/node
-
 var exec = require('child_process').exec;
 
 exec('npm install && jam install', function(err) {
