@@ -15,7 +15,20 @@ module.exports = function(grunt) {
 			}
 		},
 		'jshint' : {
-			all : ['js/*.js']
+			all : ['js/*.js', '!js/modernizr.js', '!js/vendor/**/*.js'],
+			options : {
+				browser: true,
+				curly: false,
+				eqeqeq: false,
+				eqnull: true,
+				expr: true,
+				immed: true,
+				newcap: true,
+				noarg: true,
+				smarttabs: true,
+				sub: true,
+				undef: false
+			}
 		},
 		'sass' : {
 			build : {
