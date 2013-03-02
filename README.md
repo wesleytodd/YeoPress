@@ -24,7 +24,17 @@ And run me:
 
 Follow the prompts and WA-BAM!!!!
 
-## License
+## Themes
+
+Custom themes can be installed from GitHub or a Tarball.  Once installed, they are responsible for their own Gruntfile and related tasks.  A basic example template can be found in the [template branch](https://github.com/wesleytodd/YeoPress/tree/template) of this repo.  The example template comes with a few grunt tasks pre-configured:
+
+- Live Reload
+- Sass
+- JS Hint
+
+Also, the example template uses [Jam](http://jamjs.org) and [Require.js](http://requirejs.org/) for Javascript package management.  All of the above are optional and can be configured however you want for your workflow.
+
+### License
 
 Copyright (c) 2013, Wes Todd
 All rights reserved.

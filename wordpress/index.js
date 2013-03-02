@@ -57,6 +57,26 @@ Generator.prototype.welcome = function() {
 
 };
 
+Generator.prototype.askUrl = function() {
+	var done = this.async(),
+		me = this;
+	prompt([{
+		name : 'url',
+		description : 'What URL will WordPress be installed at (example.com)'
+	}], function(err, input) {
+		if (err) {
+			console.error(err);
+			return;
+		}
+		url = input.url.replace(/\/+$/g, '');
+		if (!/^http[s]?:\/\//.test(url)) {
+			url = 'http://' + url;
+		}
+		this.url = url;
+		done();
+	});
+};
+
 Generator.prototype.askForGit = function() {
 	var done = this.async(),
 		me = this;
@@ -278,6 +298,7 @@ Generator.prototype.confirm = function() {
 	var done = this.async();
 	console.log(); // empty line
 	console.log('----------------------------'.red); // empty line
+	console.log('WordPress URL: ' + this.url);
 	if (this.git) {
 		console.log('Initialize a Git repo: Yes');
 		if (this.submodule) {
@@ -341,7 +362,7 @@ Generator.prototype.setupGit = function() {
 		var done = this.async(),
 			me   = this;
 		git.init(function() {
-			git.addAndCommit('Initial Commit', function() {
+			git.addAndCommit('Initial Commit'.green, function() {
 				done();
 			});
 		});
@@ -352,6 +373,7 @@ Generator.prototype.setupWordPress = function() {
 	var done = this.async(),
 		me   = this;
 	if (this.submodule) {
+		console.log('\nSetting up WordPress submodule, this might take a minute...'.green);
 		wordpress.setupAsSubmodule(me.wpDir, done);
 	} else {
 		this.remote('wordpress', 'wordpress', function(err, remote) {
@@ -392,7 +414,7 @@ Generator.prototype.wpConfig = function() {
 Generator.prototype.wordPressCommit = function() {
 	if (this.git) {
 		var done = this.async();
-		git.addAndCommit('Setup WordPress', function() {
+		git.addAndCommit('Setup WordPress'.green, function() {
 			done();
 		});
 	}
@@ -414,9 +436,9 @@ Generator.prototype.setupTheme = function() {
 };
 
 Generator.prototype.setPermissions = function() {
-	console.log('Setting Permissions: 0755 on .');
+	console.log('Setting Permissions: 0755 on .'.green);
 	wrench.chmodSyncRecursive('.', 0755);
-	console.log('Setting Permissions: 0775 on ' + this.contentDir);
+	console.log(('Setting Permissions: 0775 on ' + this.contentDir).green);
 	wrench.chmodSyncRecursive(this.contentDir, 0775);
 };
 
@@ -424,11 +446,11 @@ Generator.prototype.initTheme = function() {
 	if (this.theme) {
 		var done = this.async(),
 			themePath = path.join(this.contentDir, 'themes', this.theme.dir),
-			themeInitScript = path.join(themePath, 'yeopress-init');
+			themeInitScript = path.join(themePath, 'yeopress-init.js');
 		if (fs.existsSync(themeInitScript)) {
 			var oldDir = process.cwd();
 			process.chdir(themePath);
-			exec('./yeopress-init', function(err) {
+			exec('node ./yeopress-init.js', function(err) {
 				console.log('Theme initalized');
 				process.chdir(oldDir);
 				done();
@@ -442,7 +464,7 @@ Generator.prototype.initTheme = function() {
 Generator.prototype.templateCommit = function() {
 	if (this.git) {
 		var done = this.async();
-		git.addAndCommit('Installed Template', function() {
+		git.addAndCommit('Installed Template'.green, function() {
 			done();
 		});
 	}
