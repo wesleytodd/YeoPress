@@ -1,6 +1,10 @@
 /* ==========================================================================
 	Variables
 /* ========================================================================== */
+/* Directories */
+$theme_dir: '/<%= contentDir %>/themes/test/';
+$images_dir: '/<%= contentDir %>/themes/test/images/';
+
 /* Colors */
 $color_body_copy: #444;
 $color_link: #26527c;

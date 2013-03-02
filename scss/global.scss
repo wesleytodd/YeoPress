@@ -25,6 +25,7 @@ body {
 	margin: 0;
 	font-size: $size_base;
 	line-height: 1.4;
+	background: #e1e1e1;
 }
 /*	Apply to all elements. In a responsive design, this is almost always a good idea */
 * {
@@ -40,16 +41,13 @@ a {
 	color: $color_link;
 	text-decoration: underline;
 }
-/* Hover styles should also apply to focus so that key accessability is maintained */
 a:focus,
 a:hover {
 	color: darken($color_link, 25%);
 }
-/* Addresses `outline` inconsistency between Chrome and other browsers. */
 a:focus {
 	outline: thin dotted;
 }
-/* Improves readability when focused and also mouse hovered in all browsers. */
 a:active,
 a:hover {
 	outline: 0;
@@ -115,13 +113,7 @@ ul {
 }
 
 /* =============================================================================
-	General Page Styling
-
-	This should be styles that apply to all sizes of screen, that will include:
-		- Typography, colors, and all generic text stuff not included above
-		- Useful helper classes like button styles
-		- Any re-usable classes that are not screen size dependant
-
+	Helper Classes
 /* ========================================================================== */
 /* Prefixed with tags to override default tag styling for these elemets if .button is added */
 button,
@@ -159,65 +151,232 @@ input.button:active {
 	height: auto;
 }
 
+/* Clear Fix */
+.clearfix {
+	&:before,
+	&:after {
+		content: " ";
+		display: table;
+	}
+	&:after {
+		clear: both;
+	}
+}
+
+/* Floats */
+.floatleft {
+	float: left;
+}
+.floatright {
+	float: right;
+}
+
 /* =============================================================================
-	Structural Styles & Media Queries
-
-	Breakpoints:
-		-Less than 320px:	This should all be defined outside of the media queries
-							and will apply small phones.  These should be the most
-							basic styles possiable. These are defined outside of the
-							media queries, "Remember, the lack of a media query is the
-							first media query"
-		-320px to 479px:	These are the slightly older smartphone like the iPhone3
-							BlackBerry's and average Android phones.  Remember that
-							these will build on top of the styles already defined.
-		-480px to 639px:	This is mainly for the iPhone in landscape, but is also an
-							intermediate breakpoint to help fix any odities that come up.
-		-640px to 767px:	This will be newer smart phones like the iPhone4 and high-end
-							Android phones in portrait.
-		-768px to 1024px:	This is the tablet range (except the iPad 3) and high-end
-							smartphones in landscape but might get small laptops and may
-							other devices in the future.
-		-1024px to 1535px:	This is the desktop/tv range where the larges portion of visitors
-							will fall.  In this range we might consider having a more static width
-							layout that will feel more like the standard "old-school" site.
-		-More than 1535px:	This is currently only the iPad3.  But when larger screensizes like this
-							become more common, we might want to have some more robust detection
-							for the resolution media query to deal with the iPad3
-		-High PX Density:	This is mainly for replacing raster graphics on things like the iPad3
-							but could also be used to provide layout changes to take advantage
-							of the larger more pixel packed displays.
-
+	Structural Styles, Media Queries & Page Styling
 /* ========================================================================== */
 
 /* Less than 320px but will apply at all sizes */
+#page-wrap {
+	width: 90%;
+	margin: 0 auto;
+	-webkit-box-shadow: 0 0 $size_base * 3 0 #444;
+	box-shadow: 0 0 $size_base * 3 0 #444;
+}
+#page-header {
+	padding: $size_base;
+	background: url($images_dir + '/black_lozenge.png');
+}
+#page-logo {
+	color: $color_opposite;
 
+	a {
+		color: $color_opposite;
+	}
+}
+#page-header ul {
+	list-style: none;
+	padding: 0;
+
+	li {
+		cursor: pointer;
+		padding: $size_base / 2 $size_base;
+		margin: 0 0 $size_base / 2;
+
+		-webkit-border-radius: $size_base * 2;
+		border-radius: $size_base * 2;
+
+		background: #298cba; /* Old browsers */
+		background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzI5OGNiYSIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMxZDYzODUiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+		background: -moz-linear-gradient(top,  #298cba 0%, #1d6385 100%); /* FF3.6+ */
+		background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#298cba), color-stop(100%,#1d6385)); /* Chrome,Safari4+ */
+		background: -webkit-linear-gradient(top,  #298cba 0%,#1d6385 100%); /* Chrome10+,Safari5.1+ */
+		background: -o-linear-gradient(top,  #298cba 0%,#1d6385 100%); /* Opera 11.10+ */
+		background: -ms-linear-gradient(top,  #298cba 0%,#1d6385 100%); /* IE10+ */
+		background: linear-gradient(to bottom,  #298cba 0%,#1d6385 100%); /* W3C */
+
+		.lt-ie9 & {
+			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#298cba', endColorstr='#1d6385',GradientType=0 ); /* IE6-8 */
+		}
+
+		a {
+			color: #fff;
+			text-decoration: none;
+		}
+
+		&:hover a {
+			color: $color_body_copy;
+		}
+	}
+}
+
+/* Content */
+#content-wrap {
+	padding: $size_base;
+	background: #fff;
+}
+.article {
+	margin-bottom: $size_base;
+	border-bottom: 1px solid #444;
+}
+.article-header {
+	margin-bottom: $size_base;
+	padding-bottom: $size_base;
+	border-bottom: 1px solid #444;
+}
+.article-title {
+	margin-bottom: 0;
+
+	a {
+		text-decoration: none;
+	}
+}
+.article-info {
+	font-size: .825em;
+}
+
+/* Sidebar */
+#page-sidebar {
+	background: #eee;
+	padding: $size_base;
+
+	-webkit-border-radius: $size_base;
+	border-radius: $size_base;
+
+	& > ul {
+		list-style: none;
+		padding: 0;
+	}
+}
+
+.search-form {
+	background: url($images_dir + '/black_lozenge.png');
+	overflow: hidden;
+	padding: $size_base;
+	margin-bottom: $size_base;
+
+	-webkit-border-radius: $size_base;
+	border-radius: $size_base;
+
+	.input-wrap {
+		float: left;
+
+		label {
+			display: none;
+		}
+		input {
+			width: 100%;
+		}
+	}
+	.search {
+		width: 75%;
+		margin-right: 3%;
+	}
+	.submit {
+		width: 22%;
+	}
+}
+
+/* Footer */
+#page-footer {
+	width: 90%;
+	margin: 0 auto;
+	padding: $size_base 0;
+}
 
 /* 320px to 479px */
 @media only screen and (min-width: 320px) {
 
 }
+
 /* 480px to 639px */
 @media only screen and (min-width: 480px) {
-
+	#page-header ul {
+		overflow: auto;
+		li {
+			float: left;
+		}
+	}
 }
+
 /* 640px to 767px */
 @media only screen and (min-width: 640px) {
 
 }
+
 /* 768px to 1024px */
 @media only screen and (min-width: 768px) {
-
+	#page-header {
+		padding: $size_base  $size_base * 2;
+	}
+	#content-wrap {
+		overflow: auto;
+	}
+	#page-content {
+		float: left;
+		width: 55%;
+	}
+	#page-sidebar {
+		float: right;
+		width: 40%;
+	}
+	.search-form {
+		.search {
+			width: 70%;
+		}
+		.submit {
+			width: 27%;
+		}
+	}
 }
+
 /* 1024px to 1534px */
 @media only screen and (min-width: 1024px) {
-
+	#page-wrap {
+		width: 80%;
+	}
+	#page-content {
+		width: 65%;
+		padding: $size_base;
+	}
+	#page-sidebar {
+		width: 31%;
+	}
+	#page-footer {
+		width: 80%;
+	}
 }
+
 /* More than 1534px */
 @media only screen and (min-width: 1535px) {
 
 }
+
 /* High PX Density */
 @media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 144dpi) {
-
+	#page-header {
+		background: url($images_dir + '/black_lozenge_@2X.png');
+	}
+	.search-form {
+		background: url($images_dir + '/black_lozenge@2X.png');
+	}
 }

@@ -1,7 +1,7 @@
 <?php get_header(); ?>
-    <article id="error-404" >
+	<div id="page-content">
 		<h1>Error 404</h1>
 		<?php get_search_form(); ?>
-	</article>
+	</div>
 	<?php get_sidebar(); ?>
 <?php get_footer(); ?>

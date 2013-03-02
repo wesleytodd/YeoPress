@@ -1,9 +1,9 @@
-<form action="<?php bloginfo('siteurl'); ?>" class="search-form" method="get">
-    <div class="input_wrap search">
-        <label for="input_s" class="screen-reader-text">Search for:</label>
-        <input type="search" id="input_s" name="s" />
+<form action="<?php bloginfo('siteurl'); ?>" class="search-form">
+    <div class="input-wrap search">
+        <label for="input-s" class="screen-reader-text">Search for:</label>
+        <input type="search" id="input-s" name="s" />
     </div>
-    <div class="input_wrap submit">
+    <div class="input-wrap submit">
         <input type="submit" value="Search" class="button" />
 	</div>
 </form>
