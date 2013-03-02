@@ -184,7 +184,7 @@ input.button:active {
 }
 #page-header {
 	padding: $size_base;
-	background: url($images_dir + '/black_lozenge.png');
+	background: url($images_dir + 'black_lozenge.png');
 }
 #page-logo {
 	color: $color_opposite;
@@ -269,7 +269,7 @@ input.button:active {
 }
 
 .search-form {
-	background: url($images_dir + '/black_lozenge.png');
+	background: url($images_dir + 'black_lozenge.png');
 	overflow: hidden;
 	padding: $size_base;
 	margin-bottom: $size_base;
@@ -374,9 +374,9 @@ input.button:active {
 /* High PX Density */
 @media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 144dpi) {
 	#page-header {
-		background: url($images_dir + '/black_lozenge_@2X.png');
+		background: url($images_dir + 'black_lozenge_@2X.png');
 	}
 	.search-form {
-		background: url($images_dir + '/black_lozenge@2X.png');
+		background: url($images_dir + 'black_lozenge@2X.png');
 	}
 }
