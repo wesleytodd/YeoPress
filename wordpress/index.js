@@ -68,11 +68,11 @@ Generator.prototype.askUrl = function() {
 			console.error(err);
 			return;
 		}
-		url = input.url.replace(/\/+$/g, '');
+		var url = input.url.replace(/\/+$/g, '');
 		if (!/^http[s]?:\/\//.test(url)) {
 			url = 'http://' + url;
 		}
-		this.url = url;
+		me.url = url;
 		done();
 	});
 };
