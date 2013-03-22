@@ -66,7 +66,6 @@ Generator.prototype.askUrl = function() {
 	}], function(err, input) {
 		if (err) {
 			console.error(err);
-			return;
 		}
 		var url = input.url.replace(/\/+$/g, '');
 		if (!/^http[s]?:\/\//.test(url)) {
@@ -87,7 +86,6 @@ Generator.prototype.askForGit = function() {
 	}], function(err, input) {
 		if (err) {
 			console.error(err);
-			return;
 		}
 		if (input.git.toUpperCase() == 'Y') {
 			me.git = true;
@@ -109,7 +107,6 @@ Generator.prototype.askForSubmodule = function() {
 		}], function(err, input) {
 			if (err) {
 				console.error(err);
-				return;
 			}
 			if (input.submodule.toUpperCase() == 'Y') {
 				me.submodule = true;
@@ -133,7 +130,6 @@ Generator.prototype.askForCustomDirs = function() {
 		}], function(err, input) {
 			if (err) {
 				console.error(err);
-				return;
 			}
 			if (input.customDir.toUpperCase() == 'Y') {
 				me.customDirs = true;
@@ -163,7 +159,6 @@ Generator.prototype.askForWPInstallDir = function() {
 		], function(err, input) {
 			if (err) {
 				console.error(err);
-				return;
 			}
 			me.wpDir = input.wpDir;
 			me.contentDir = input.contentDir;
@@ -203,7 +198,6 @@ Generator.prototype.askForConfigSettings = function() {
 	], function(err, input) {
 		if (err) {
 			console.error(err);
-			return;
 		}
 		me.db = {
 			prefix : input.tablePrefix,
@@ -226,7 +220,6 @@ Generator.prototype.askForTheme = function() {
 	}], function(err, input) {
 		if (err) {
 			console.error(err);
-			return;
 		}
 		if (input.theme.toUpperCase() == 'Y') {
 			prompt([{
@@ -331,7 +324,6 @@ Generator.prototype.confirm = function() {
 	}], function(err, input) {
 		if (err) {
 			console.error(err);
-			return;
 		}
 		if (input.correct.toUpperCase() != 'Y') {
 			console.log('Aborting, please run the generator again to correct the input.');
