@@ -7,7 +7,8 @@ var util      = require('util'),
 	exec      = require('./helpers/exec'),
 	wrench    = require('wrench'),
 	fs        = require('fs'),
-	path      = require('path');
+	path      = require('path'),
+	mysql     = require('mysql');
 
 module.exports = Generator;
 
@@ -348,12 +349,12 @@ Generator.prototype.confirm = function() {
 
 };
 
-
 Generator.prototype.setupGit = function() {
 	if (this.git) {
 		var done = this.async(),
 			me   = this;
 		git.init(function() {
+			me.template('.gitignore', '.gitignore');
 			git.addAndCommit('Initial Commit'.green, function() {
 				done();
 			});
@@ -412,6 +413,34 @@ Generator.prototype.wordPressCommit = function() {
 	}
 };
 
+Generator.prototype.checkAndCreateDatabase = function() {
+	var done = this.async(),
+		me = this;
+	var connection = mysql.createConnection({
+		host     : this.db.host,
+		user     : this.db.user,
+		password : this.db.pass
+	});
+	connection.connect(function(err) {
+		if (err) {
+			console.error('Error connecting to database!'.red);
+			console.error(err);
+			done();
+		}
+		connection.query('CREATE DATABASE IF NOT EXISTS ' + mysql.escapeId(me.db.name), function(err, rows, fields) {
+			if (err) {
+				console.error('Error creating database!'.red);
+				console.error(err);
+				done();
+			}
+			connection.end(function() {
+				console.log('Database Exists!');
+				done();
+			});
+		});
+	});
+};
+
 Generator.prototype.setupTheme = function() {
 	if (this.theme) {
 		var done = this.async(),
@@ -436,16 +465,23 @@ Generator.prototype.setPermissions = function() {
 
 Generator.prototype.initTheme = function() {
 	if (this.theme) {
-		var done = this.async(),
+		console.log('Setting Up Theme'.green);
+		var me = this,
+			done = this.async(),
 			themePath = path.join(this.contentDir, 'themes', this.theme.dir),
-			themeInitScript = path.join(themePath, 'yeopress-init.js');
-		if (fs.existsSync(themeInitScript)) {
+			themePackageJson = path.join(themePath, 'package.json');
+		if (fs.existsSync(themePackageJson)) {
 			var oldDir = process.cwd();
 			process.chdir(themePath);
-			exec('node ./yeopress-init.js', function(err) {
-				console.log('Theme initalized');
-				process.chdir(oldDir);
-				done();
+			exec('npm install', function(err) {
+				if (fs.existsSync('Gruntfile.js')) {
+					exec('grunt setup', function(err) {
+						console.log('Theme setup!'.green);
+						done();
+					});
+				} else {
+					done();
+				}
 			});
 		} else {
 			done();

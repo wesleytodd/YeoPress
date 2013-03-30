@@ -36,7 +36,7 @@ function execute(command, messages, options, callback) {
 			} else {
 				console.error(err);
 			}
-			process.exit();
+			callback(arguments);
 		}
 	}
 
