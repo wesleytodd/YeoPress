@@ -354,7 +354,7 @@ Generator.prototype.setupGit = function() {
 		var done = this.async(),
 			me   = this;
 		git.init(function() {
-			me.template('.gitignore', '.gitignore');
+			me.template('gitignore.tmpl', '.gitignore');
 			git.addAndCommit('Initial Commit'.green, function() {
 				done();
 			});
