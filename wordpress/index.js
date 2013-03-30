@@ -349,12 +349,16 @@ Generator.prototype.confirm = function() {
 
 };
 
+Generator.prototype.addIgnore = function() {
+	if (this.git) {
+		this.copy('gitignore.tmpl', '.gitignore');
+	}
+};
+
 Generator.prototype.setupGit = function() {
 	if (this.git) {
-		var done = this.async(),
-			me   = this;
+		var done = this.async();
 		git.init(function() {
-			me.template('gitignore.tmpl', '.gitignore');
 			git.addAndCommit('Initial Commit'.green, function() {
 				done();
 			});
@@ -456,13 +460,6 @@ Generator.prototype.setupTheme = function() {
 	}
 };
 
-Generator.prototype.setPermissions = function() {
-	console.log('Setting Permissions: 0755 on .'.green);
-	wrench.chmodSyncRecursive('.', 0755);
-	console.log(('Setting Permissions: 0775 on ' + this.contentDir).green);
-	wrench.chmodSyncRecursive(this.contentDir, 0775);
-};
-
 Generator.prototype.initTheme = function() {
 	if (this.theme) {
 		console.log('Setting Up Theme'.green);
@@ -477,9 +474,11 @@ Generator.prototype.initTheme = function() {
 				if (fs.existsSync('Gruntfile.js')) {
 					exec('grunt setup', function(err) {
 						console.log('Theme setup!'.green);
+						process.chdir(oldDir);
 						done();
 					});
 				} else {
+					process.chdir(oldDir);
 					done();
 				}
 			});
@@ -487,6 +486,13 @@ Generator.prototype.initTheme = function() {
 			done();
 		}
 	}
+};
+
+Generator.prototype.setPermissions = function() {
+	console.log('Setting Permissions: 0755 on .'.green);
+	wrench.chmodSyncRecursive('.', 0755);
+	console.log(('Setting Permissions: 0775 on ' + this.contentDir).green);
+	wrench.chmodSyncRecursive(this.contentDir, 0775);
 };
 
 Generator.prototype.templateCommit = function() {
