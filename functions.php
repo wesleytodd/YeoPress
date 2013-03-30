@@ -12,7 +12,7 @@ function theme_enqueue_scripts(){
 	wp_enqueue_script('global');
 
 	wp_register_script('livereload', '<%= url %>:35729/livereload.js?snipver=1', null, false, true);
-	wp_enqueue_script('global');
+	wp_enqueue_script('livereload');
 
 	wp_enqueue_style('global', get_bloginfo('template_url') . '/css/global.css');
 }
