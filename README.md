@@ -24,7 +24,7 @@ And run me:
 
 Follow the prompts and WA-BAM!!!!
 
-Or [watch the video](http://www.youtube.com/watch?v=Em-NMCgNhhY).
+Or [watch the video](http://www.youtube.com/watch?v=Em-NMCgNhhY).  tl;dr?  Watch the [shorter video](http://www.youtube.com/watch?v=WSG0P5VpSUk).
 
 ## Themes
 
