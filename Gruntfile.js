@@ -56,4 +56,15 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 	grunt.loadNpmTasks('grunt-contrib-livereload');
 	grunt.loadNpmTasks('grunt-regarde');
+
+	grunt.registerTask('setup', function() {
+		var exec = require('child_process').exec;
+		exec('jam install && sass scss/global.scss css/global.css', function(err) {
+			if (err) {
+				console.error(err);
+			}
+		}).stdout.on('data', function(message) {
+			console.log(message);
+		});
+	});
 };
