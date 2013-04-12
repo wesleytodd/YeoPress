@@ -1,5 +1,7 @@
 # YeoPress
 
+![image](http://wesleytodd.com/wp-content/uploads/2013/04/yeopress.jpg)
+
 The officially un-official [Yeoman](https://github.com/yeoman/yeoman) Generator for [WordPress](http://wordpress.org/).  I magically take you from scratching your head wondering where to start, all the way to running the famous 5-minute install.  While I am optimized for a workflow using Git, I have configuration options to WOW you.  If you do use Git, I can *git* you off the ground just by following a couple of prompts.  Have a custom base theme you always start your projects off with?  You can install that to, either stright from GitHub or by pointing me to a tarball.  Other things I do:
 
 - Custom directory configuration
@@ -22,17 +24,26 @@ And run me:
 
 	yo wordpress
 
-Follow the prompts and WA-BAM!!!!
+Follow the prompts and WA-BAM....ASCII art!!!!
 
-Or [watch the video](http://www.youtube.com/watch?v=Em-NMCgNhhY).  tl;dr?  Watch the [shorter video](http://www.youtube.com/watch?v=WSG0P5VpSUk).
+~[image](http://wesleytodd.com/wp-content/uploads/2013/04/yeopress-ascii-art.png)
+
+### Visual Learner??
+
+[Watch the video](http://www.youtube.com/watch?v=Em-NMCgNhhY).
+
+ADD Visual Learner?  [Watch the shorter video](http://www.youtube.com/watch?v=WSG0P5VpSUk).
 
 ## Themes
 
 Custom themes can be installed from GitHub or a Tarball.  Once installed, they are responsible for their own Gruntfile and related tasks.  A basic example template can be found in the [template branch](https://github.com/wesleytodd/YeoPress/tree/template) of this repo.  The example template comes with a few grunt tasks pre-configured:
 
-- Live Reload
-- Sass
-- JS Hint
+- Regarde ([grunt-regarde](https://npmjs.org/package/grunt-regarde))
+- Live Reload ([grunt-contrib-livereload](https://npmjs.org/package/grunt-contrib-livereload))
+- Sass ([grunt-contrib-sass](https://npmjs.org/package/grunt-contrib-sass))
+- JSHint ([grunt-contrib-jshint](https://npmjs.org/package/grunt-contrib-jshint))
+- Bower ([grunt-bower-requirejs](https://npmjs.org/package/grunt-bower-requirejs))
+- RequireJS ([grunt-contrib-requirejs](https://npmjs.org/package/grunt-contrib-requirejs))
 
 Also, the example template uses [Jam](http://jamjs.org) and [Require.js](http://requirejs.org/) for Javascript package management.  All of the above are optional and can be configured however you want for your workflow.
 
