@@ -34,6 +34,8 @@ Follow the prompts and WA-BAM....ASCII art!!!!
 
 ADD Visual Learner?  [Watch the shorter video](http://www.youtube.com/watch?v=WSG0P5VpSUk).
 
+[Also see the wiki](https://github.com/wesleytodd/YeoPress/wiki)
+
 ## Themes
 
 Custom themes can be installed from GitHub or a Tarball.  Once installed, they are responsible for their own Gruntfile and related tasks.  A basic example template can be found in the [template branch](https://github.com/wesleytodd/YeoPress/tree/template) of this repo.  The example template comes with a few grunt tasks pre-configured:
@@ -45,7 +47,9 @@ Custom themes can be installed from GitHub or a Tarball.  Once installed, they a
 - Bower ([grunt-bower-requirejs](https://npmjs.org/package/grunt-bower-requirejs))
 - RequireJS ([grunt-contrib-requirejs](https://npmjs.org/package/grunt-contrib-requirejs))
 
-### License
+[More information on themes](https://github.com/wesleytodd/YeoPress/wiki/Themes)
+
+## License
 
 Copyright (c) 2013, Wes Todd
 All rights reserved.
