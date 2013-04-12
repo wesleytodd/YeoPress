@@ -2,10 +2,10 @@
 
 # YeoPress
 
-The officially un-official [Yeoman](https://github.com/yeoman/yeoman) Generator for [WordPress](http://wordpress.org/).  I magically take you from scratching your head wondering where to start, all the way to running the famous 5-minute install.  While I am optimized for a workflow using Git, I have configuration options to WOW you.  If you do use Git, I can *git* you off the ground just by following a couple of prompts.  Have a custom base theme you always start your projects off with?  You can install that to, either stright from GitHub or by pointing me to a tarball.  Other things I do:
+The officially un-official [Yeoman](https://github.com/yeoman/yeoman) Generator for [WordPress](http://wordpress.org/).  I magically take you from scratching your head wondering where to start, all the way to running the famous 5-minute install.  While I am optimized for a workflow using Git, I have configuration options to WOW you.  If you do use Git, I can *git* you off the ground just by following a couple of prompts.  Have a custom base theme you always start your projects off with?  You can install that to, either straight from GitHub or by pointing me to a tarball.  Other things I do:
 
 - Custom directory configuration
-- Install WordPress as a Git submodule for easy version controled updates
+- Install WordPress as a Git submodule for easy version controlled updates
 - Theme init hooks for when you install a new theme
 - Permission setting on install
 - *Coming Soon* Grunt tasks for some other WP tasks
