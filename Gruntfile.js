@@ -1,6 +1,6 @@
 module.exports = function(grunt) {
 	grunt.initConfig({
-		'regarde' : {
+		regarde : {
 			sass : {
 				files : ['scss/**/*.scss'],
 				tasks : ['sass:dev', 'livereload']
@@ -14,7 +14,7 @@ module.exports = function(grunt) {
 				tasks : ['livereload']
 			}
 		},
-		'jshint' : {
+		jshint : {
 			all : ['js/*.js', '!js/modernizr.js', '!js/vendor/**/*.js'],
 			options : {
 				browser: true,
@@ -30,7 +30,7 @@ module.exports = function(grunt) {
 				undef: false
 			}
 		},
-		'sass' : {
+		sass : {
 			build : {
 				files : {
 					'css/global.css' : 'scss/global.scss'
@@ -47,6 +47,21 @@ module.exports = function(grunt) {
 					style : 'expanded'
 				}
 			}
+		},
+		bower : {
+			all : {
+				rjsConfig : 'js/global.js'
+			}
+		},
+		requirejs : {
+			compile : {
+				options : {
+					name : 'global',
+					baseUrl : 'js',
+					mainConfigFile : 'js/global.js',
+					out : 'js/optimized.js'
+				}
+			}
 		}
 	});
 
@@ -56,15 +71,19 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 	grunt.loadNpmTasks('grunt-contrib-livereload');
 	grunt.loadNpmTasks('grunt-regarde');
+	grunt.loadNpmTasks('grunt-bower-requirejs');
+	grunt.loadNpmTasks('grunt-contrib-requirejs');
 
 	grunt.registerTask('setup', function() {
-		var exec = require('child_process').exec;
-		exec('jam install && sass scss/global.scss css/global.css', function(err) {
-			if (err) {
-				console.error(err);
-			}
-		}).stdout.on('data', function(message) {
-			console.log(message);
+		var done = this.async();
+		var bower = require('bower').commands;
+		bower.install().on('end', function(data) {
+			done();
+		}).on('data', function(data) {
+			console.log(data);
+		}).on('error', function(err) {
+			console.error(err);
+			done();
 		});
 	});
 };
