@@ -1,6 +1,6 @@
-# YeoPress
-
 ![image](http://wesleytodd.com/wp-content/uploads/2013/04/yeopress.jpg)
+
+# YeoPress
 
 The officially un-official [Yeoman](https://github.com/yeoman/yeoman) Generator for [WordPress](http://wordpress.org/).  I magically take you from scratching your head wondering where to start, all the way to running the famous 5-minute install.  While I am optimized for a workflow using Git, I have configuration options to WOW you.  If you do use Git, I can *git* you off the ground just by following a couple of prompts.  Have a custom base theme you always start your projects off with?  You can install that to, either stright from GitHub or by pointing me to a tarball.  Other things I do:
 
@@ -8,7 +8,7 @@ The officially un-official [Yeoman](https://github.com/yeoman/yeoman) Generator 
 - Install WordPress as a Git submodule for easy version controled updates
 - Theme init hooks for when you install a new theme
 - Permission setting on install
-- *Coming Soon* Grunt tasks for some down and dirty WP tasks
+- *Coming Soon* Grunt tasks for some other WP tasks
 
 ## How To Use
 
@@ -26,7 +26,7 @@ And run me:
 
 Follow the prompts and WA-BAM....ASCII art!!!!
 
-~[image](http://wesleytodd.com/wp-content/uploads/2013/04/yeopress-ascii-art.png)
+![image](http://wesleytodd.com/wp-content/uploads/2013/04/yeopress-ascii-art.png)
 
 ### Visual Learner??
 
@@ -44,8 +44,6 @@ Custom themes can be installed from GitHub or a Tarball.  Once installed, they a
 - JSHint ([grunt-contrib-jshint](https://npmjs.org/package/grunt-contrib-jshint))
 - Bower ([grunt-bower-requirejs](https://npmjs.org/package/grunt-bower-requirejs))
 - RequireJS ([grunt-contrib-requirejs](https://npmjs.org/package/grunt-contrib-requirejs))
-
-Also, the example template uses [Jam](http://jamjs.org) and [Require.js](http://requirejs.org/) for Javascript package management.  All of the above are optional and can be configured however you want for your workflow.
 
 ### License
 
