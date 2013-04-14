@@ -18,7 +18,7 @@ If you do not already have the Yeoman toolset installed do so now:
 
 Then, in the directory you want to start your new project in, install the generator:
 
-	npm install generator-wordpress
+	npm install -g generator-wordpress
 
 And run me:
 
