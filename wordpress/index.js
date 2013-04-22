@@ -1,4 +1,3 @@
-
 var util      = require('util'),
 	yeoman    = require('yeoman-generator'),
 	git       = require('./helpers/git'),
@@ -115,6 +114,24 @@ Generator.prototype.askForSubmodule = function() {
 			} else {
 				me.submodule = false;
 			}
+			done();
+		});
+	}
+};
+
+Generator.prototype.askForVersion = function() {
+	if (!this.submodule) {
+		var done = this.async(),
+			me = this;
+		prompt([{
+			name : 'wpversion',
+			description : 'What version of WordPress would you like to install?',
+			default : 'master'
+		}], function(err, input) {
+			if (err) {
+				console.error(err);
+			}
+			me.wpversion = input.wpversion;
 			done();
 		});
 	}
@@ -299,6 +316,7 @@ Generator.prototype.confirm = function() {
 			console.log('Install WordPress as a Git submodule: Yes');
 		} else {
 			console.log('Install WordPress as a Git submodule: No');
+			console.log('Install WordPress version: ' + this.wpversion);
 		}
 	} else {
 		console.log('Initialize a Git repo: No');
@@ -373,7 +391,7 @@ Generator.prototype.setupWordPress = function() {
 		console.log('\nSetting up WordPress submodule, this might take a minute...'.green);
 		wordpress.setupAsSubmodule(me.wpDir, done);
 	} else {
-		this.remote('wordpress', 'wordpress', function(err, remote) {
+		this.remote('wordpress', 'wordpress', me.wpversion, function(err, remote) {
 			remote.directory('.', me.wpDir);
 			done();
 		});
