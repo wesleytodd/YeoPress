@@ -120,21 +120,21 @@ Generator.prototype.askForSubmodule = function() {
 };
 
 Generator.prototype.askForVersion = function() {
-	if (!this.submodule) {
-		var done = this.async(),
-			me = this;
+	var done = this.async(),
+		me = this;
+	wordpress.getCurrentVersion(function(ver) {
 		prompt([{
 			name : 'wpversion',
 			description : 'What version of WordPress would you like to install?',
-			default : 'master'
+			default : ver 
 		}], function(err, input) {
 			if (err) {
 				console.error(err);
 			}
-			me.wpversion = input.wpversion;
+			me.wpVersion = input.wpversion;
 			done();
 		});
-	}
+	});
 };
 
 Generator.prototype.askForCustomDirs = function() {
@@ -389,9 +389,9 @@ Generator.prototype.setupWordPress = function() {
 		me   = this;
 	if (this.submodule) {
 		console.log('\nSetting up WordPress submodule, this might take a minute...'.green);
-		wordpress.setupAsSubmodule(me.wpDir, done);
+		wordpress.setupAsSubmodule(me.wpDir, me.wpVersion, done);
 	} else {
-		this.remote('wordpress', 'wordpress', me.wpversion, function(err, remote) {
+		this.remote('wordpress', 'wordpress', me.wpVersion, function(err, remote) {
 			remote.directory('.', me.wpDir);
 			done();
 		});

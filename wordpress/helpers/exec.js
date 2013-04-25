@@ -47,8 +47,8 @@ function execute(command, messages, options, callback) {
 	} else {
 		options.maxBuffer = options.maxBuffer || maxBuffer;
 	}
-	exec(command, options, fnc)
-		.stdout.on('data', function(message) {
+	exec(command, options, fnc);
+		/*.stdout.on('data', function(message) {
 			console.log(message);
-		});
+		});*/
 }

@@ -1,6 +1,6 @@
 {
   "name": "generator-wordpress",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "A Yeoman generator for WordPress",
   "keywords": [
     "yeoman-generator",

@@ -7,12 +7,10 @@ var wordpressRepo = "git://github.com/WordPress/WordPress.git";
 var wordpressArchive = "https://github.com/WordPress/WordPress/archive/";
 var saltURL = "https://api.wordpress.org/secret-key/1.1/salt/";
 
-module.exports.setupAsSubmodule = function(location, done) {
+module.exports.setupAsSubmodule = function(location, ver, done) {
 	git.submoduleAdd(wordpressRepo, location, function() {
-		module.exports.getCurrentVersion(function(ver) {
-			module.exports.checkoutVersion(location, ver, function() {
-				git.addAndCommit('Added WordPress ' + ver + ' as a submodule @ ./' + location, done);
-			});
+		module.exports.checkoutVersion(location, ver, function() {
+			git.addAndCommit('Added WordPress ' + ver + ' as a submodule @ ./' + location, done);
 		});
 	});
 };
@@ -27,7 +25,7 @@ module.exports.updateVersion = function(location, done) {
 
 module.exports.getCurrentVersion = function(done) {
 	var me = this;
-	var latestVersion = '3.5';
+	var latestVersion = '3.5.1';
 	exec('git ls-remote --tags ' + wordpressRepo + ' | tail -n 1', function(err, stdout, stderr){
 		var pattern = /\d\.\d\.\d/ig;
 		var match = pattern.exec(stdout);
