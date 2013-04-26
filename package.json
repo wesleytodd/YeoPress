@@ -16,6 +16,10 @@
   "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-contrib-sass": "~0.2.2",
+    "grunt-contrib-jshint": "~0.1.1", 
+    "grunt-contrib-cssmin": "~0.6.0", 
+    "grunt-contrib-imagemin": "~0.1.3",
+    "grunt-svgmin": "~0.1.0",
     "grunt-contrib-jshint": "~0.1.1",
     "grunt-regarde": "~0.1.1",
     "grunt-contrib-livereload": "~0.1.0",
