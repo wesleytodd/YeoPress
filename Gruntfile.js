@@ -54,7 +54,7 @@ module.exports = function(grunt) {
 			}
 		},
 		requirejs : {
-			compile : {
+			build : {
 				options : {
 					name : 'global',
 					baseUrl : 'js',
@@ -62,10 +62,51 @@ module.exports = function(grunt) {
 					out : 'js/optimized.js'
 				}
 			}
-		}
+		},
+		imagemin : {
+            build : {
+                files : [{
+                    expand: true,
+                    cwd: 'images',
+                    src: '{,*/}*.{png,jpg,jpeg}',
+                    dest: 'images'
+                }]
+            }
+        },
+        svgmin: {
+           build : {
+                files: [{
+                    expand: true,
+                    cwd: 'images',
+                    src: '{,*/}*.svg',
+                    dest: 'images'
+                }]
+            }
+        },
+        cssmin: {
+            build: {
+                expand: true,
+			    cwd: 'css/',
+			    src: ['*.css', '!*-min.css'],
+			    dest: 'css/',
+			    ext: '-min.css'
+            }
+        } 
+
+	});
 	});
 
-	grunt.registerTask('default', ['livereload-start', 'regarde']);
+	grunt.registerTask('default', [
+		'livereload-start', 
+		'regarde'
+ 	]);
+
+	grunt.registerTask('build', [ 
+        'cssmin',
+        'imagemin',
+        'svgmin',
+        'requirejs' 
+    ]);
 
 	grunt.loadNpmTasks('grunt-contrib-sass');
 	grunt.loadNpmTasks('grunt-contrib-jshint');
