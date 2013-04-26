@@ -6,7 +6,7 @@ var https = require('https'),
 	EventEmitter = require('events').EventEmitter,
 	wordpressRepo = "git://github.com/WordPress/WordPress.git";
 
-function getSaltKeys() {
+function getSaltKeys(callback) {
 	var ee = new EventEmitter(),
 		keys = '';
 	https.get("https://api.wordpress.org/secret-key/1.1/salt/", function(res) {
@@ -16,10 +16,13 @@ function getSaltKeys() {
 			ee.emit('end', keys);
 		});
 	});
+	if (typeof callback === 'function') {
+		ee.on('end', callback);
+	}
 	return ee;
 }
 
-function getCurrentVersion() {
+function getCurrentVersion(callback) {
 	var ee = new EventEmitter(),
 		latestVersion = '3.5.1';
 
@@ -34,6 +37,10 @@ function getCurrentVersion() {
 		}
 		ee.emit('close', latestVersion);
 	});
+
+	if (typeof callback === 'function') {
+		ee.on('close', callback);
+	}
 
 	return ee;
 };
@@ -82,7 +89,7 @@ function getDbCredentials() {
 	return ee;
 };
 
-function createDBifNotExists() {
+function createDBifNotExists(callback) {
 	var ee = new EventEmitter();
 
 	getDbCredentials().on('done', function(db) {
@@ -106,6 +113,10 @@ function createDBifNotExists() {
 		});
 
 	});
+
+	if (typeof callback === 'function') {
+		ee.on('done', callback);
+	}
 
 	return ee;
 };
@@ -162,6 +173,7 @@ function getContentDir() {
 };
 
 module.exports = {
+	repo : wordpressRepo,
 	getSaltKeys : getSaltKeys,
 	getCurrentVersion : getCurrentVersion,
 	getDbCredentials : getDbCredentials,

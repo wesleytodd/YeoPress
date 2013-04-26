@@ -23,7 +23,7 @@ module.exports = function execute(command, args, options, messages) {
 
 	if (typeof messages === 'undefined') messages = {};
 
-	if (typeof messages.start !== 'undefined') console.log(messages.start.green);
+	if (typeof messages.start !== 'undefined') console.log(messages.start);
 
 	var p = spawn(command, args, options);
 
