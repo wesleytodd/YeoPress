@@ -25,7 +25,7 @@ function Generator(args, options, config) {
 util.inherits(Generator, yeoman.generators.Base);
 
 /**================================
- * Easy as 1, 2, 3...err....4, 5, 6, 7 and maybe 8
+ * Easy as 1, 2, 3...err....9 maybe 10 or 11
  **===============================*/
 
 // Ask the user what they want done
@@ -65,7 +65,8 @@ Generator.prototype.gitIsTheShit = function() {
 
 };
 
-Generator.prototype.installWP = function() {
+// Install wordpress
+Generator.prototype.wordWhatUp = function() {
 
 	var done = this.async(),
 		me   = this;
@@ -92,7 +93,8 @@ Generator.prototype.installWP = function() {
 
 };
 
-Generator.prototype.setupCustomDirs = function() {
+// Setup custom directory structure
+Generator.prototype.somethingsDifferent = function() {
 
 	if (this.userInput.customDirs) {
 
@@ -110,7 +112,8 @@ Generator.prototype.setupCustomDirs = function() {
 
 };
 
-Generator.prototype.wpConfig = function() {
+// wp-config.php
+Generator.prototype.muHaHaHaConfig = function() {
 
 	var done = this.async(),
 		me   = this;
@@ -123,7 +126,8 @@ Generator.prototype.wpConfig = function() {
 
 };
 
-Generator.prototype.checkAndCreateDatabase = function() {
+// Check that the database exists, create it otherwise
+Generator.prototype.hazBaseData = function() {
 
 	var done = this.async();
 	wordpress.createDBifNotExists(done).on('error', function(err) {
@@ -134,7 +138,8 @@ Generator.prototype.checkAndCreateDatabase = function() {
 
 };
 
-Generator.prototype.setPermissions = function() {
+// Set some permissions
+Generator.prototype.youAreNotAllowd = function() {
 
 	console.log('Setting Permissions: 0755 on .'.green);
 	wrench.chmodSyncRecursive('.', 0755);
@@ -143,7 +148,8 @@ Generator.prototype.setPermissions = function() {
 
 };
 
-Generator.prototype.wordPressCommit = function() {
+// Commit the wordpress stuff
+Generator.prototype.commitThisToMemory = function() {
 
 	if (this.userInput.useGit) {
 		var done = this.async();
@@ -152,14 +158,43 @@ Generator.prototype.wordPressCommit = function() {
 
 };
 
-
 // Install the theme
 Generator.prototype.dumbledoreHasStyle = function() {
-	
+
+	if (this.userInput.theme) {
+		wordpress.installTheme(this, this.userInput, this.async());
+	}
+
+};
+
+// Setup theme
+Generator.prototype.dummyYouHaveToPlugItInFirst = function() {
+
+	if (this.userInput.theme) {
+		wordpress.setupTheme(this, this.userInput, this.async());
+	}
+
+};
+
+// Commit again with the template
+Generator.prototype.gitMeMOARCommits = function() {
+
+	if (this.userInput.git) {
+		var done = this.async();
+		git.addAndCommit('Installed Template'.green, function() {
+			done();
+		});
+	}
+
+};
+
+// All done
+Generator.prototype.oopsIPeedMyself = function() {
+	console.log('All Done!!'.green);
 };
 
 /**================================
- * Where the actualy magic happens
+ * The prompt code is ulgy...so I put it at the bottom
  **===============================*/
 
 // Calls the prompt method
@@ -296,63 +331,3 @@ function confirmInput(done) {
 function logConfirmation(msg, val) {
 	console.log(msg.bold.grey + ': '.bold.grey + val.cyan);
 };
-
-
-/*
-Generator.prototype.setupTheme = function() {
-	if (this.theme) {
-		var done = this.async(),
-			me   = this;
-		if (this.theme.type == 'git') {
-			me.remote(this.theme.user, this.theme.repo, this.theme.branch, function(err, remote) {
-				remote.directory('.', path.join(me.contentDir, 'themes', me.theme.dir));
-				done();
-			});
-		} else if (this.theme.type == 'tar') {
-			me.tarball(this.theme.url, path.join(this.contentDir, 'themes', this.theme.dir), done);
-		}
-	}
-};
-
-Generator.prototype.initTheme = function() {
-	if (this.theme) {
-		console.log('Setting Up Theme'.green);
-		var me = this,
-			done = this.async(),
-			themePath = path.join(this.contentDir, 'themes', this.theme.dir),
-			themePackageJson = path.join(themePath, 'package.json');
-		if (fs.existsSync(themePackageJson)) {
-			var oldDir = process.cwd();
-			process.chdir(themePath);
-			exec('npm install', function(err) {
-				if (fs.existsSync('Gruntfile.js')) {
-					exec('grunt setup', function(err) {
-						console.log('Theme setup!'.green);
-						process.chdir(oldDir);
-						done();
-					});
-				} else {
-					process.chdir(oldDir);
-					done();
-				}
-			});
-		} else {
-			done();
-		}
-	}
-};
-
-Generator.prototype.templateCommit = function() {
-	if (this.git) {
-		var done = this.async();
-		git.addAndCommit('Installed Template'.green, function() {
-			done();
-		});
-	}
-};
-
-Generator.prototype.done = function() {
-	console.log('All Done!!'.green);
-};
-
-*/

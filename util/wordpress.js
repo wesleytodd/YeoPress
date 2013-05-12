@@ -172,6 +172,49 @@ function getContentDir() {
 	return ee;
 };
 
+function installTheme(generator, config, done) {
+
+	if (config.themeType == 'git') {
+		generator.remote(config.user, config.repo, config.branch, function(err, remote) {
+			remote.directory('.', path.join(config.contentDir, 'themes', config.themeDir));
+			done();
+		});
+	} else if (config.themeType == 'tar') {
+		generator.tarball(config.tarballUrl, path.join(config.contentDir, 'themes', config.themeDir), done);
+	}
+
+};
+
+function setupTheme(generator, config, done) {
+	
+	console.log('Setting Up Theme'.green);
+
+	var themePath = path.join(config.contentDir, 'themes', config.themeDir),
+		themePackageJson = path.join(themePath, 'package.json');
+
+	if (fs.existsSync(themePackageJson)) {
+		var oldDir = process.cwd();
+		process.chdir(themePath);
+		exec('npm install', function(err) {
+			if (fs.existsSync('Gruntfile.js')) {
+				exec('grunt setup', function(err) {
+					console.log('Theme setup!'.green);
+					process.chdir(oldDir);
+					done();
+				});
+			} else {
+				console.log('Gruntfile.js missing!'.red);
+				process.chdir(oldDir);
+				done();
+			}
+		});
+	} else {
+		console.log('package.json missing!'.red);
+		done();
+	}
+
+};
+
 module.exports = {
 	repo : wordpressRepo,
 	getSaltKeys : getSaltKeys,
@@ -179,5 +222,7 @@ module.exports = {
 	getDbCredentials : getDbCredentials,
 	createDBifNotExists : createDBifNotExists,
 	loadConfig : loadConfig,
-	getContentDir : getContentDir
+	getContentDir : getContentDir,
+	installTheme : installTheme,
+	setupTheme : setupTheme
 };

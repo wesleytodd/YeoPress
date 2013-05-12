@@ -4,7 +4,10 @@
   "description": "A Yeoman generator for WordPress",
   "keywords": [
     "yeoman-generator",
-    "wordpress"
+    "wordpress",
+	"yeoman",
+	"generator",
+	"cli"
   ],
   "main": "wordpress/index.js",
   "scripts": {

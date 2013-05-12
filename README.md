@@ -1,4 +1,4 @@
-![image](http://wesleytodd.com/wp-content/uploads/2013/04/yeopress.jpg)
+![image](http://wesleytodd.com/images/yeopress.jpg)
 
 # YeoPress
 
@@ -26,7 +26,7 @@ And run me:
 
 Follow the prompts and WA-BAM....ASCII art!!!!
 
-![image](http://wesleytodd.com/wp-content/uploads/2013/04/yeopress-ascii-art.png)
+![image](http://wesleytodd.com/images/yeopress-ascii-art.png)
 
 ### Visual Learner??
 

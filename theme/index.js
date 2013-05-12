@@ -4,14 +4,10 @@
 
 // Requirements
 var util         = require('util'),
-	fs           = require('fs'),
-	path         = require('path'),
 	yeoman       = require('yeoman-generator'),
-	wrench       = require('wrench'),
-	git          = require('../util/git'),
 	prompt       = require('../util/prompt'),
 	wordpress    = require('../util/wordpress'),
-	spawn        = require('../util/spawn'),
+	prompts      = require('../wordpress/prompts'),
 	art          = require('../util/art');
 
 
@@ -27,7 +23,60 @@ util.inherits(Generator, yeoman.generators.Base);
 // Prompts
 Generator.prototype.themePrompts = function() {
 
+	var done = this.async();
+
 	// Display welcome message
 	console.log(art.wp);
-	
+
+	// Object for user input
+	this.userInput = {};
+
+	// Do the prompts
+	prompt([prompts.theme], this.userInput, function(i) {
+		if (i.theme) {
+			prompt([prompts.themeDir, prompts.themeType], this.userInput, function(i) {
+				var nextPrompts = [];
+				switch(i.themeType) {
+					case 'git' :
+						nextPrompts = [
+							prompts.themeGitUser,
+							prompts.themeGitRepo,
+							prompts.themeGitBranch
+						];
+						break;
+					case 'tar' :
+						nextPrompts = [
+							prompts.themeTarUrl
+						];
+						break;
+				}
+				prompt(nextPrompts, input, function() {
+					done();
+				});
+			});
+		} else {
+			done();
+		}
+	});
+
 };
+
+Generator.prototype.installTheme = function() {
+
+	if (this.userInput.theme) {
+		wordpress.installTheme(this, this.userInput, this.async());
+	}
+
+};
+
+Generator.prototype.setupTheme = function() {
+
+	if (this.userInput.theme) {
+		wordpress.setupTheme(this, this.userInput, this.async());
+	}
+
+}
+
+Generator.prototype.setupTheme = function() {
+	console.log('Theme installed. Have fun styling!!'.green)
+}
