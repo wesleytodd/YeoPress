@@ -42,4 +42,4 @@ module.exports = function execute(command, args, options, messages) {
 	});
 
 	return p;
-}
+};

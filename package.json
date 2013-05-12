@@ -1,6 +1,6 @@
 {
   "name": "generator-wordpress",
-  "version": "0.2.6",
+  "version": "1.0.0",
   "description": "A Yeoman generator for WordPress",
   "keywords": [
     "yeoman-generator",
@@ -10,9 +10,6 @@
 	"cli"
   ],
   "main": "wordpress/index.js",
-  "scripts": {
-    "test": ""
-  },
   "author": "Wes Todd",
   "license": "BSD",
   "dependencies": {

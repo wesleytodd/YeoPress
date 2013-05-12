@@ -10,7 +10,7 @@ module.exports = {
 
 	url : {
 		name : 'url',
-		description : 'URL WordPress will be installed at (example.com):',
+		description : 'URL WordPress will be installed at (ex. example.com):',
 		required : true,
 		before : function(value) {
 			value = value.replace(/\/+$/g, '');

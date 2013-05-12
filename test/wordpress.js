@@ -12,3 +12,6 @@ wordpress.getDbCredentials().on('done', function(creds) {
 wordpress.getContentDir().on('done', function(dir) {
 	console.log(dir);
 });
+wordpress.activateTheme('yeopress', function() {
+	console.log(arguments);
+});

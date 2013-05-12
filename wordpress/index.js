@@ -51,11 +51,12 @@ Generator.prototype.justIgnoreMe = function() {
 // Git setup
 Generator.prototype.gitIsTheShit = function() {
 
-	// This one might take a while
-	var done = this.async();
-
 	// Using Git?  Init it...
 	if (this.userInput.useGit) {
+
+		// This one might take a while
+		var done = this.async();
+
 		git.init(function() {
 			git.addAllAndCommit('Initial Commit', function() {
 				done();
@@ -139,6 +140,9 @@ Generator.prototype.hazBaseData = function() {
 };
 
 // Set some permissions
+/* @TODO Thinking that maybe permissions should be left up to the user 
+   BUT, it seems that the theme stuff needs some permissions set to work....
+*/
 Generator.prototype.youAreNotAllowd = function() {
 
 	console.log('Setting Permissions: 0755 on .'.green);
@@ -147,6 +151,7 @@ Generator.prototype.youAreNotAllowd = function() {
 	wrench.chmodSyncRecursive(this.userInput.contentDir, 0775);
 
 };
+/**/
 
 // Commit the wordpress stuff
 Generator.prototype.commitThisToMemory = function() {
@@ -158,11 +163,20 @@ Generator.prototype.commitThisToMemory = function() {
 
 };
 
-// Install the theme
+// Install and activate the theme
 Generator.prototype.dumbledoreHasStyle = function() {
 
 	if (this.userInput.theme) {
-		wordpress.installTheme(this, this.userInput, this.async());
+		var done = this.async()
+			me = this;
+
+		wordpress.installTheme(this, this.userInput, function() {
+			/* @TODO You need to run the install before doing this
+			   see if I can get yeopress to do that.
+		    */
+			//wordpress.activateTheme(me.userInput.themeDir, done);
+			done();
+		});
 	}
 
 };

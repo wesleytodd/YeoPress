@@ -1,5 +1,6 @@
 var https = require('https'),
 	fs = require('fs'),
+	path = require('path'),
 	mysql = require('mysql'),
 	exec = require('child_process').exec,
 	git = require('./git'),
@@ -20,7 +21,7 @@ function getSaltKeys(callback) {
 		ee.on('end', callback);
 	}
 	return ee;
-}
+};
 
 function getCurrentVersion(callback) {
 	var ee = new EventEmitter(),
@@ -76,14 +77,16 @@ function getDbCredentials() {
 	var ee = new EventEmitter();
 
 	loadConfig().on('done', function(contents) {
-		var db = {};
-		db.name = contents.match(/define\(["']DB_NAME["'],[\s]*["'](.*)["']\)/)[1];
-		db.user = contents.match(/define\(["']DB_USER["'],[\s]*["'](.*)["']\)/)[1];
-		db.pass = contents.match(/define\(["']DB_PASSWORD["'],[\s]*["'](.*)["']\)/)[1];
-		db.host = contents.match(/define\(["']DB_HOST["'],[\s]*["'](.*)["']\)/)[1];
+		var db    = {};
+		db.name   = contents.match(/define\(["']DB_NAME["'],[\s]*["'](.*)["']\)/)[1];
+		db.user   = contents.match(/define\(["']DB_USER["'],[\s]*["'](.*)["']\)/)[1];
+		db.pass   = contents.match(/define\(["']DB_PASSWORD["'],[\s]*["'](.*)["']\)/)[1];
+		db.host   = contents.match(/define\(["']DB_HOST["'],[\s]*["'](.*)["']\)/)[1];
+		db.prefix = contents.match(/\$table_prefix[\s]*=[\s]*["'](.*)["']/)[1];
+
 		ee.emit('done', db);
 	}).on('error', function(err) {
-		ee.emit('error', ee);
+		ee.emit('error', err);
 	});
 
 	return ee;
@@ -127,16 +130,16 @@ function getContentDir() {
 	function checkSimpleContentLocations() {
 		fs.exists('wp-content', function(exists) {
 			if (exists) {
-				fs.realpath('wp-content', function(err, path) {
-					if (err) erroree.emit('error', err);
-					ee.emit('done', path);
+				fs.realpath('wp-content', function(err, p) {
+					if (err) return ee.emit('error', err);
+					ee.emit('done', path.relative('.', p));
 				});
 			} else {
 				fs.exists('content', function(exists) {
 					if (exists) {
-						fs.realpath('content', function(err, path) {
+						fs.realpath('content', function(err, p) {
 							if (err) erroree.emit('error', err);
-							ee.emit('done', path);
+							ee.emit('done', path.relative('.', p));
 						});
 					} else {
 						ee.emit('error', 'Cannot determine content directory.');
@@ -215,6 +218,46 @@ function setupTheme(generator, config, done) {
 
 };
 
+function activateTheme(themeName, callback) {
+	var ee = new EventEmitter();
+
+	getDbCredentials().on('done', function(db) {
+
+		var connection = mysql.createConnection({
+			host     : db.host,
+			user     : db.user,
+			password : db.pass,
+			database : db.name
+		});
+
+		connection.connect(function(err) {
+			if (err) return ee.emit('error', err);
+
+			var q = [
+				"UPDATE " + db.prefix + "options",
+				"SET option_value =  "+ mysql.escape(themeName),
+				"WHERE option_name = 'template'",
+				"OR option_name = 'stylesheet'"	
+			].join('\n');
+
+			connection.query(q, function(err, rows, fields) {
+				if (err) return ee.emit('error', err);
+				connection.end(function() {
+					ee.emit('done');
+				});
+			});
+
+		});
+
+	});
+
+	if (typeof callback === 'function') {
+		ee.on('done', callback);
+	}
+
+	return ee;
+};
+
 module.exports = {
 	repo : wordpressRepo,
 	getSaltKeys : getSaltKeys,
@@ -224,5 +267,6 @@ module.exports = {
 	loadConfig : loadConfig,
 	getContentDir : getContentDir,
 	installTheme : installTheme,
-	setupTheme : setupTheme
+	setupTheme : setupTheme,
+	activateTheme : activateTheme
 };

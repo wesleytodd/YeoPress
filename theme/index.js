@@ -4,11 +4,12 @@
 
 // Requirements
 var util         = require('util'),
-	yeoman       = require('yeoman-generator'),
-	prompt       = require('../util/prompt'),
-	wordpress    = require('../util/wordpress'),
-	prompts      = require('../wordpress/prompts'),
-	art          = require('../util/art');
+	yeoman    = require('yeoman-generator'),
+	path      = require('path'),
+	prompt    = require('../util/prompt'),
+	wordpress = require('../util/wordpress'),
+	prompts   = require('../wordpress/prompts'),
+	art       = require('../util/art');
 
 
 // Export the module
@@ -23,7 +24,8 @@ util.inherits(Generator, yeoman.generators.Base);
 // Prompts
 Generator.prototype.themePrompts = function() {
 
-	var done = this.async();
+	var done = this.async()
+		me = this;
 
 	// Display welcome message
 	console.log(art.wp);
@@ -32,51 +34,53 @@ Generator.prototype.themePrompts = function() {
 	this.userInput = {};
 
 	// Do the prompts
-	prompt([prompts.theme], this.userInput, function(i) {
-		if (i.theme) {
-			prompt([prompts.themeDir, prompts.themeType], this.userInput, function(i) {
-				var nextPrompts = [];
-				switch(i.themeType) {
-					case 'git' :
-						nextPrompts = [
-							prompts.themeGitUser,
-							prompts.themeGitRepo,
-							prompts.themeGitBranch
-						];
-						break;
-					case 'tar' :
-						nextPrompts = [
-							prompts.themeTarUrl
-						];
-						break;
-				}
-				prompt(nextPrompts, input, function() {
-					done();
-				});
-			});
-		} else {
-			done();
+	prompt([prompts.themeDir, prompts.themeType], this.userInput, function(i) {
+		var nextPrompts = [];
+		switch(i.themeType) {
+			case 'git' :
+				nextPrompts = [
+					prompts.themeGitUser,
+					prompts.themeGitRepo,
+					prompts.themeGitBranch
+				];
+				break;
+			case 'tar' :
+				nextPrompts = [
+					prompts.themeTarUrl
+				];
+				break;
 		}
+		prompt(nextPrompts, me.userInput, function() {
+			done();
+		});
 	});
 
 };
 
+// Install theme
 Generator.prototype.installTheme = function() {
 
-	if (this.userInput.theme) {
-		wordpress.installTheme(this, this.userInput, this.async());
-	}
+	var done = this.async(),
+		me = this;
+
+	wordpress.getContentDir().on('done', function(contentDir) {
+		me.userInput.contentDir = contentDir;
+		wordpress.installTheme(me, me.userInput, done);
+	});
 
 };
 
+// Run theme setup task
 Generator.prototype.setupTheme = function() {
+	wordpress.setupTheme(this, this.userInput, this.async());
+};
 
-	if (this.userInput.theme) {
-		wordpress.setupTheme(this, this.userInput, this.async());
-	}
+// Activate theme
+Generator.prototype.activateTheme = function() {
+	wordpress.activateTheme(this.userInput.themeDir, this.async());
+};
 
-}
-
-Generator.prototype.setupTheme = function() {
-	console.log('Theme installed. Have fun styling!!'.green)
-}
+// Done
+Generator.prototype.allDone = function() {
+	console.log('Theme installed and activated. Have fun styling!!'.green)
+};

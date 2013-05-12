@@ -39,4 +39,4 @@ module.exports = function(prompts, obj, callback) {
 
 	return ee;
 
-}
+};
