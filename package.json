@@ -1,6 +1,6 @@
 {
   "name": "YeoPress-Template",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A basic template for use in YeoPress",
   "scripts": {
     "test": ""
@@ -21,6 +21,8 @@
     "grunt-contrib-livereload": "~0.1.0",
     "grunt-bower-requirejs": "~0.4.1",
     "grunt-contrib-requirejs": "~0.4.0",
-    "bower": "~0.8.6"
+    "bower": "~0.8.6",
+    "grunt-contrib-imagemin": "~0.1.4",
+    "grunt-svgmin": "~0.1.0"
   }
 }

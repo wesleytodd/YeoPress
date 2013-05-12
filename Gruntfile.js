@@ -1,5 +1,8 @@
 module.exports = function(grunt) {
+
 	grunt.initConfig({
+
+		// Watches for changes and runs tasks
 		regarde : {
 			sass : {
 				files : ['scss/**/*.scss'],
@@ -14,8 +17,10 @@ module.exports = function(grunt) {
 				tasks : ['livereload']
 			}
 		},
+
+		// JsHint your javascript
 		jshint : {
-			all : ['js/*.js', '!js/modernizr.js', '!js/vendor/**/*.js'],
+			all : ['js/*.js', '!js/modernizr.js', '!js/*.min.js', '!js/vendor/**/*.js'],
 			options : {
 				browser: true,
 				curly: false,
@@ -30,51 +35,109 @@ module.exports = function(grunt) {
 				undef: false
 			}
 		},
+
+		// Dev and production build for sass
 		sass : {
-			build : {
-				files : {
-					'css/global.css' : 'scss/global.scss'
-				},
+			production : {
+				files : [
+					{
+						src : ['**/*.scss', '!**/_*.scss'],
+						cwd : 'scss',
+						dest : 'css',
+						ext : '.css',
+						expand : true
+					}
+				],
 				options : {
 					style : 'compressed'
 				}
 			},
 			dev : {
-				files : {
-					'css/global.css' : 'scss/global.scss'
-				},
+				files : [
+					{
+						src : ['**/*.scss', '!**/_*.scss'],
+						cwd : 'scss',
+						dest : 'css',
+						ext : '.css',
+						expand : true
+					}
+				],
 				options : {
 					style : 'expanded'
 				}
 			}
 		},
+
+		// Bower task sets up require config
 		bower : {
 			all : {
 				rjsConfig : 'js/global.js'
 			}
 		},
+
+		// Require config
 		requirejs : {
-			compile : {
+			production : {
 				options : {
 					name : 'global',
 					baseUrl : 'js',
 					mainConfigFile : 'js/global.js',
-					out : 'js/optimized.js'
+					out : 'js/optimized.min.js'
 				}
 			}
-		}
+		},
+
+		// Image min
+		imagemin : {
+			production : {
+				files : [
+					{
+						expand: true,
+						cwd: 'images',
+						src: '**/*.{png,jpg,jpeg}',
+						dest: 'images'
+					}
+				]
+			}
+		},
+
+		// SVG min
+		svgmin: {
+			production : {
+				files: [
+					{
+						expand: true,
+						cwd: 'images',
+						src: '**/*.svg',
+						dest: 'images'
+					}
+				]
+			}
+		},
+
 	});
 
+	// Default task
 	grunt.registerTask('default', ['livereload-start', 'regarde']);
 
+	// Build task
+	grunt.registerTask('build', ['jshint', 'sass:production', 'imagemin:production', 'svgmin:production', 'requirejs:production']);
+
+	// Template Setup Task
+	grunt.registerTask('setup', ['sass:dev', 'bower-install'])
+
+	// Load up tasks
 	grunt.loadNpmTasks('grunt-contrib-sass');
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 	grunt.loadNpmTasks('grunt-contrib-livereload');
 	grunt.loadNpmTasks('grunt-regarde');
 	grunt.loadNpmTasks('grunt-bower-requirejs');
 	grunt.loadNpmTasks('grunt-contrib-requirejs');
+	grunt.loadNpmTasks('grunt-contrib-imagemin');
+	grunt.loadNpmTasks('grunt-svgmin');
 
-	grunt.registerTask('setup', function() {
+	// Run bower install
+	grunt.registerTask('bower-install', function() {
 		var done = this.async();
 		var bower = require('bower').commands;
 		bower.install().on('end', function(data) {
@@ -86,4 +149,5 @@ module.exports = function(grunt) {
 			done();
 		});
 	});
+
 };

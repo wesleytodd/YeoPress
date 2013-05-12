@@ -2,8 +2,8 @@
 	Variables
 /* ========================================================================== */
 /* Directories */
-$theme_dir: '/<%= contentDir %>/themes/<%= theme.dir %>/';
-$images_dir: '/<%= contentDir %>/themes/<%= theme.dir %>/images/';
+$theme_dir: '/<%= userInput.contentDir %>/themes/<%= userInput.themeDir %>/';
+$images_dir: '/<%= userInput.contentDir %>/themes/<%= userInput.themeDir %>/images/';
 
 /* Colors */
 $color_body_copy: #444;

@@ -36,3 +36,17 @@ What we really wanted was just the part that reads `vendor/jquery/jquery`, so ju
 	$ grunt requirejs
 
 The second task, `requirejs` is used to build an optimized require file.  By default the optimized file is output to `js/optimized.js`, but this can be changed in the `Gruntfile`.  For more information on how to configure this setting see [here](https://npmjs.org/package/grunt-contrib-requirejs) and [here](http://requirejs.org/docs/optimization.html).
+
+## Build Task
+
+	$ grunt build
+
+This task builds an optimized version of the theme for production.  It runs the following tasks:
+
+- jshint
+- sass:production
+- imagemin:production
+- svgmin:production
+- requirejs:production
+
+For the image min tasks, the files are saved directly over the original files.  The sass production builds minified css for the live site in the css directory.  The only one that will take some configuration and a change to your php is the requirejs task.  This task generates optimized files using the `r.js` tool, and comes packaged to output one file called `optimized.min.js` which you would then need to enqueue through the WordPress `functions.php` file.
