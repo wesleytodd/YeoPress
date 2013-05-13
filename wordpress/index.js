@@ -51,17 +51,19 @@ Generator.prototype.justIgnoreMe = function() {
 // Git setup
 Generator.prototype.gitIsTheShit = function() {
 
+	var done = this.async();
+
 	// Using Git?  Init it...
 	if (this.userInput.useGit) {
 
-		// This one might take a while
-		var done = this.async();
 
 		git.init(function() {
 			git.addAllAndCommit('Initial Commit', function() {
 				done();
 			});
 		});
+	} else {
+		done();
 	}
 
 };
@@ -97,10 +99,10 @@ Generator.prototype.wordWhatUp = function() {
 // Setup custom directory structure
 Generator.prototype.somethingsDifferent = function() {
 
-	if (this.userInput.customDirs) {
+	var me = this,
+		done = this.async();
 
-		var me = this,
-			done = this.async();
+	if (this.userInput.customDirs) {
 
 		this.template('index.php.tmpl', 'index.php');
 
@@ -109,6 +111,8 @@ Generator.prototype.somethingsDifferent = function() {
 			done();
 		});
 
+	} else {
+		done();
 	}
 
 };
@@ -156,9 +160,17 @@ Generator.prototype.youAreNotAllowd = function() {
 // Commit the wordpress stuff
 Generator.prototype.commitThisToMemory = function() {
 
+	var done = this.async();
+
 	if (this.userInput.useGit) {
-		var done = this.async();
-		git.addAllAndCommit('Setup WordPress', done);
+		git.addAllAndCommit('Setup WordPress', function() {
+			done();
+		}).on('error', function(e) {
+			console.error(e);
+			done();
+		});
+	} else {
+		done();
 	}
 
 };
@@ -166,10 +178,10 @@ Generator.prototype.commitThisToMemory = function() {
 // Install and activate the theme
 Generator.prototype.dumbledoreHasStyle = function() {
 
-	if (this.userInput.theme) {
-		var done = this.async()
-			me = this;
+	var done = this.async()
+		me = this;
 
+	if (this.userInput.theme) {
 		wordpress.installTheme(this, this.userInput, function() {
 			/* @TODO You need to run the install before doing this
 			   see if I can get yeopress to do that.
@@ -177,6 +189,8 @@ Generator.prototype.dumbledoreHasStyle = function() {
 			//wordpress.activateTheme(me.userInput.themeDir, done);
 			done();
 		});
+	} else {
+		done();
 	}
 
 };
@@ -193,11 +207,14 @@ Generator.prototype.dummyYouHaveToPlugItInFirst = function() {
 // Commit again with the template
 Generator.prototype.gitMeMOARCommits = function() {
 
+	var done = this.async();
+
 	if (this.userInput.git) {
-		var done = this.async();
-		git.addAndCommit('Installed Template'.green, function() {
+		git.addAllAndCommit('Installed Template', function() {
 			done();
 		});
+	} else {
+		done();
 	}
 
 };

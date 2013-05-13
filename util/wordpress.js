@@ -64,7 +64,7 @@ function loadConfig() {
 				if (exists) {
 					readConfig('../wp-config.php');
 				} else {
-					return ee.emit('error', 'Config file does not exist.');
+					ee.emit('error', 'Config file does not exist.');
 				}
 			});
 		}
@@ -115,6 +115,8 @@ function createDBifNotExists(callback) {
 
 		});
 
+	}).on('error', function(err) {
+		ee.emit('error', err);
 	});
 
 	if (typeof callback === 'function') {
