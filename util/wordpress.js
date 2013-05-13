@@ -160,7 +160,7 @@ function getContentDir() {
 
 				fs.exists(stdout, function(exists) {
 					if (exists) {
-						ee.emit('done', stdout);
+						ee.emit('done', path.relative('.', stdout));
 					} else {
 						checkSimpleContentLocations();
 					}
