@@ -1,32 +1,29 @@
-![image](http://wesleytodd.com/wp-content/uploads/2013/04/yeopress.jpg)
+![image](http://wesleytodd.com/images/yeopress.jpg)
 
 # YeoPress
 
-The officially un-official [Yeoman](https://github.com/yeoman/yeoman) Generator for [WordPress](http://wordpress.org/).  I magically take you from scratching your head wondering where to start, all the way to running the famous 5-minute install.  While I am optimized for a workflow using Git, I have configuration options to WOW you.  If you do use Git, I can *git* you off the ground just by following a couple of prompts.  Have a custom base theme you always start your projects off with?  You can install that to, either straight from GitHub or by pointing me to a tarball.  Other things I do:
+The officially un-official [Yeoman](https://github.com/yeoman/yeoman) Generator for [WordPress](http://wordpress.org/).  I magically take you from scratching your head wondering where to start, all the way to running the famous 5-minute install.  I have configuration options that will WOW you.  If you use Git, I can *git* you off the ground with WordPress as a submodule just by following a couple of prompts.  Have a custom base theme you always start your projects off with?  You can install that to, either stright from GitHub or by pointing me to a tarball.  Other things I do:
 
 - Custom directory configuration
-- Install WordPress as a Git submodule for easy version controlled updates
-- Theme init hooks for when you install a new theme
+- Install WordPress as a Git submodule for easy version controled updates
+- Theme init hook for when you install a new theme
 - Permission setting on install
+- Create your database, all you have to do is make me a user
 - *Coming Soon* Grunt tasks for some other WP tasks
 
 ## How To Use
 
-If you do not already have the Yeoman toolset installed do so now:
+If you do not already have the Yeoman toolset installed do so now, and might as well install me at the same time:
 
-	npm install -g yo grunt-cli bower
-
-Then, in the directory you want to start your new project in, install the generator:
-
-	npm install -g generator-wordpress
+	npm install -g yo generator-wordpress
 
 And run me:
 
 	yo wordpress
 
-Follow the prompts and WA-BAM....ASCII art!!!!
+Follow my prompts and WA-BAM....ASCII art!!!!
 
-![image](http://wesleytodd.com/wp-content/uploads/2013/04/yeopress-ascii-art.png)
+![image](http://wesleytodd.com/images/yeopress-ascii-art.png)
 
 ### Visual Learner??
 
@@ -48,6 +45,16 @@ Custom themes can be installed from GitHub or a Tarball.  Once installed, they a
 - RequireJS ([grunt-contrib-requirejs](https://npmjs.org/package/grunt-contrib-requirejs))
 
 [More information on themes](https://github.com/wesleytodd/YeoPress/wiki/Themes)
+
+## Versions
+
+- **1.0.0:** Re-written from the ground up to be more flexiable.  Refactored checks for database existance, improved the theme installation process, added a separate theme install generator.  There are some API changes that are not reflected in the videos, but they should be minimal.
+- **0.2.7:** Added version question.
+- **0.2.6:** Mostly Bug fixes.
+- **0.2.5:** Fixed gitignore issue with npm.
+- **0.2.4:** Added database creation check and changed theme setup process.
+- **0.2.3:** Warnings were halting execution, fixed that.
+- **0.2.2:** Url bug in confirmation.
 
 ## License
 

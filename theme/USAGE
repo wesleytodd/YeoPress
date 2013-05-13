@@ -1,0 +1,5 @@
+Description:
+    This generator installs a theme
+
+Example:
+    yo wordpress:theme

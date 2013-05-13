@@ -1,527 +1,364 @@
-var util      = require('util'),
-	yeoman    = require('yeoman-generator'),
-	git       = require('./helpers/git'),
-	prompt    = require('./helpers/prompt'),
-	wordpress = require('./helpers/wordpress'),
-	exec      = require('./helpers/exec'),
-	wrench    = require('wrench'),
-	fs        = require('fs'),
-	path      = require('path'),
-	mysql     = require('mysql');
+/**================================
+ * Setting up the basics
+ **===============================*/
 
+// Requirements
+var util         = require('util'),
+	fs           = require('fs'),
+	path         = require('path'),
+	yeoman       = require('yeoman-generator'),
+	wrench       = require('wrench'),
+	git          = require('../util/git'),
+	prompt       = require('../util/prompt'),
+	wordpress    = require('../util/wordpress'),
+	spawn        = require('../util/spawn'),
+	art          = require('../util/art'),
+	prompts      = require('./prompts');
+
+// Export the module
 module.exports = Generator;
 
+// Extend the base generator
 function Generator(args, options, config) {
 	yeoman.generators.Base.apply(this, arguments);
 };
-
 util.inherits(Generator, yeoman.generators.Base);
 
-Generator.prototype.welcome = function() {
+/**================================
+ * Easy as 1, 2, 3...err....9 maybe 10 or 11
+ **===============================*/
+
+// Ask the user what they want done
+Generator.prototype.ohTellMeWhatYouWantWhatYouReallyReallyWant = function() {
+
+	// Display welcome message
+	console.log(art.wp);
 	
-	var welcome = [
-		'',
-		'                  YeoPress'.red.bold,
-		'',
-		'              ..::::::::::::..             '.grey,
-		'          .:::'.grey + '    ' + ':::::::'.cyan + '    ' + ':::..         '.grey,
-		'        .:'.grey + '    ' + ':::::::::::::::'.cyan + '    ' + ':..       '.grey,
-		'      .:'.grey + '   ' + ':::::::::::::::::::::'.cyan + '   ' + ':.      '.grey,
-		'     .:'.grey + '  ' + '::::::::::::::::::::::'.cyan + '     ' + ':..    '.grey,
-		'    .:'.grey + '  ' + '::::::::::::::::::::::'.cyan + '       ' + '::.   '.grey,
-		'   .:'.grey + '         ' + '::'.cyan + '          ' + '::::'.cyan + '        ' + ':..  '.grey,
-		'  .:'.grey + '       ' + '::::::::'.cyan + '     ' + ':::::::'.cyan + '        ' + ':.  '.grey,
-		'  :'.grey + '  ' + ':'.cyan + '      ' + ':::::::'.cyan + '      ' + ':::::::'.cyan + '     ' + ':'.cyan + '  ' + ':. '.grey,
-		' .:'.grey + '  ' + '::'.cyan + '     ' + '::::::::'.cyan + '     ' + ':::::::'.cyan + '    ' + '::'.cyan + '  ' + ':. '.grey,
-		' ::'.grey + '  ' + ':::'.cyan + '     ' + ':::::::'.cyan + '      ' + ':::::::'.cyan + '   ' + '::'.cyan + '  ' + ':: '.grey,
-		' :'.grey + '  ' + '::::'.cyan + '     ' + '::::::::'.cyan + '     ' + ':::::::'.cyan + '   ' + ':::'.cyan + ' ' + ':: '.grey,
-		' ::'.grey + ' ' + ':::::'.cyan + '     ' + ':::::::'.cyan + '      ' + '::::::'.cyan + '  ' + '::::'.cyan + ' ' + ':: '.grey,
-		' ::'.grey + '  ' + '::::'.cyan + '     ' + '::::::'.cyan + '       ' + '::::::'.cyan + ' ' + '::::'.cyan + '  ' + ':. '.grey,
-		' .:'.grey + '  ' + ':::::'.cyan + '     ' + ':::::'.cyan + ' ' + '::'.cyan + '     ' + '::::'.cyan + '  ' + '::::'.cyan + '  ' + ':. '.grey,
-		'  :'.grey + '  ' + '::::::'.cyan + '     ' + ':::'.cyan + ' ' + ':::'.cyan + '     ' + '::::'.cyan + ' ' + ':::::'.cyan + '  ' + ':. '.grey,
-		'  .:'.grey + '  ' + ':::::'.cyan + '     ' + '::'.cyan + '  ' + '::::'.cyan + '     ' + '::'.cyan + '  ' + '::::'.cyan + '  ' + ':.  '.grey,
-		'   .:'.grey + '  ' + ':::::'.cyan + '     ' + ':'.cyan + ' ' + '::::::'.cyan + '    ' + '::'.cyan + ' ' + '::::'.cyan + '  ' + '::.  '.grey,
-		'   .::'.grey + '  ' + '::::'.cyan + '       ' + '::::::'.cyan + '       ' + ':::'.cyan + '  ' + '::.   '.grey,
-		'     .:'.grey + '  ' + '::::'.cyan + '     ' + '::::::::'.cyan + '     ' + ':::'.cyan + '  ' + '::.    '.grey,
-		'      .:'.grey + '   ' + '::'.cyan + '     ' + '::::::::'.cyan + '    ' + '::'.cyan + '   ' + ':.      '.grey,
-		'       .::'.grey + '       ' + '::::::::::'.cyan + '      ' + '::.       '.grey,
-		'         ..::'.grey + '     ' + ':::::::'.cyan + '     ' + '::..         '.grey,
-		'            ..:::'.grey + '         ' + ':::..            '.grey,
-		'                ...:::::...                '.grey,
-		'',
-		'       A Yeoman Generator For WordPress'.red,
-		''
-	].join('\n');
-
-	console.log(welcome);
+	// Get the input
+	getInput.call(this, this.async());
 
 };
 
-Generator.prototype.askUrl = function() {
-	var done = this.async(),
-		me = this;
-	prompt([{
-		name : 'url',
-		description : 'What URL will WordPress be installed at (example.com)'
-	}], function(err, input) {
-		if (err) {
-			console.error(err);
-		}
-		var url = input.url.replace(/\/+$/g, '');
-		if (!/^http[s]?:\/\//.test(url)) {
-			url = 'http://' + url;
-		}
-		me.url = url;
-		done();
-	});
-};
-
-Generator.prototype.askForGit = function() {
-	var done = this.async(),
-		me = this;
-	prompt([{
-		name : 'git',
-		description : 'Would you like to initalize a Git repository?',
-		default : 'Y'
-	}], function(err, input) {
-		if (err) {
-			console.error(err);
-		}
-		if (input.git.toUpperCase() == 'Y') {
-			me.git = true;
-		} else {
-			me.git = false;
-		}
-		done();
-	});
-};
-
-Generator.prototype.askForSubmodule = function() {
-	if (this.git) {
-		var done = this.async(),
-			me = this;
-		prompt([{
-			name : 'submodule',
-			description : 'Would you like to install WordPress as a submodule?',
-			default : 'N'
-		}], function(err, input) {
-			if (err) {
-				console.error(err);
-			}
-			if (input.submodule.toUpperCase() == 'Y') {
-				me.submodule = true;
-				me.customDirs = true;
-			} else {
-				me.submodule = false;
-			}
-			done();
-		});
-	}
-};
-
-Generator.prototype.askForVersion = function() {
-	var done = this.async(),
-		me = this;
-	wordpress.getCurrentVersion(function(ver) {
-		prompt([{
-			name : 'wpversion',
-			description : 'What version of WordPress would you like to install?',
-			default : ver 
-		}], function(err, input) {
-			if (err) {
-				console.error(err);
-			}
-			me.wpVersion = input.wpversion;
-			done();
-		});
-	});
-};
-
-Generator.prototype.askForCustomDirs = function() {
-	if (typeof this.customDirs === 'undefined') {
-		var done = this.async(),
-			me = this;
-		prompt([{
-			name : 'customDir',
-			description : 'Would you like to install WordPress with the custom directory structure?',
-			default : 'N'
-		}], function(err, input) {
-			if (err) {
-				console.error(err);
-			}
-			if (input.customDir.toUpperCase() == 'Y') {
-				me.customDirs = true;
-			} else {
-				me.customDirs = false;
-			}
-			done();
-		});
-	}
-};
-
-Generator.prototype.askForWPInstallDir = function() {
-	if (this.customDirs) {
-		var done = this.async(),
-			me = this;
-		prompt([
-			{
-				name : 'wpDir',
-				description : 'WordPress install directory:',
-				default : 'wordpress'
-			},
-			{
-				name : 'contentDir',
-				description : 'WordPress content directory:',
-				default : 'content'
-			}
-		], function(err, input) {
-			if (err) {
-				console.error(err);
-			}
-			me.wpDir = input.wpDir;
-			me.contentDir = input.contentDir;
-			done();
-		});
-	} else {
-		this.wpDir = '.';
-		this.contentDir = 'wp-content';
-	}
-};
-
-Generator.prototype.askForConfigSettings = function() {
-	var done = this.async(),
-		me = this;
-	prompt([
-		{
-			name : 'tablePrefix',
-			description : 'Table prefix:',
-			default : 'wp_'
-		}, {
-			name : 'dbHost',
-			description : 'Database host:',
-			default : 'localhost'
-		}, {
-			name : 'dbName',
-			description : 'Database name:',
-			default : ''
-		}, {
-			name : 'dbUser',
-			description : 'Database user:',
-			default : ''
-		}, {
-			name : 'dbPass',
-			description : 'Database password:',
-			default : ''
-		}
-	], function(err, input) {
-		if (err) {
-			console.error(err);
-		}
-		me.db = {
-			prefix : input.tablePrefix,
-			host : input.dbHost,
-			name : input.dbName,
-			user : input.dbUser,
-			pass : input.dbPass
-		};
-		done();
-	});
-};
-
-Generator.prototype.askForTheme = function() {
-	var done = this.async(),
-		me = this;
-	prompt([{
-		name : 'theme',
-		description : 'Install a custom theme?',
-		default : 'Y'
-	}], function(err, input) {
-		if (err) {
-			console.error(err);
-		}
-		if (input.theme.toUpperCase() == 'Y') {
-			prompt([{
-				name : 'type',
-				description : 'Theme source type (git/tar):',
-				default : 'git'
-			}], function(err, input) {
-				if (input.type.toLowerCase() == 'git') {
-					prompt([
-						{
-							name : 'dir',
-							description : 'Destination directory (ex. twentytwelve):',
-							default : ''
-						},
-						{
-							name : 'user',
-							description : 'GitHub username:',
-							default : 'wesleytodd'
-						},
-						{
-							name : 'repo',
-							description : 'GitHub repository name:',
-							default : 'YeoPress'
-						},
-						{
-							name : 'branch',
-							description : 'Repository branch:',
-							default : 'template'
-						}
-					], function(err, input) {
-						me.theme = {
-							type : 'git',
-							dir : input.dir,
-							user : input.user,
-							repo : input.repo,
-							branch : input.branch
-						};
-						done();
-					});
-				} else if (input.type.toLowerCase() == 'tar') {
-					prompt([
-						{
-							name : 'dir',
-							description : 'Destination directory (ex. twentytwelve):',
-							default : ''
-						},
-						{
-							name : 'url',
-							description : 'Remote tarball url (ex. https://github.com/user/repo/tarball/master):',
-							default : ''
-						}
-					], function(err, input) {
-						me.theme = {
-							type : 'tar',
-							dir : input.dir,
-							url : input.url
-						};
-						done();
-					});
-				}
-			});
-		} else {
-			done();
-		}
-	});
-};
-
-Generator.prototype.confirm = function() {
-	var done = this.async();
-	console.log(); // empty line
-	console.log('----------------------------'.red); // empty line
-	console.log('WordPress URL: ' + this.url);
-	if (this.git) {
-		console.log('Initialize a Git repo: Yes');
-		if (this.submodule) {
-			console.log('Install WordPress as a Git submodule: Yes');
-		} else {
-			console.log('Install WordPress as a Git submodule: No');
-			console.log('Install WordPress version: ' + this.wpversion);
-		}
-	} else {
-		console.log('Initialize a Git repo: No');
-	}
-	console.log('WordPress install directory: ' + this.wpDir);
-	if (this.customDirs) {
-		console.log('WordPress content directory: ' + this.contentDir);
-	}
-	console.log('Database table prefix: ' + this.db.prefix);
-	console.log('Database host: ' + this.db.host);
-	console.log('Database name: ' + this.db.name);
-	console.log('Database user: ' + this.db.user);
-	console.log('Database password: ' + this.db.pass);
-	if (this.theme) {
-		console.log('Theme install directory: ' + path.join(this.contentDir, 'themes', this.theme.dir));
-	}
-
-	console.log('----------------------------'.red); // empty line
-	console.log(); // empty line
-	prompt([{
-			name : 'correct',
-			description : 'Does everything look correct?',
-			default : 'Y'
-	}], function(err, input) {
-		if (err) {
-			console.error(err);
-		}
-		if (input.correct.toUpperCase() != 'Y') {
-			console.log('Aborting, please run the generator again to correct the input.');
-			process.exit();
-		}
-
-		var go = [
-			'',
-			' __   __  _______  ______    _______      _     _  _______      _______  _______    __ ',
-			'|  | |  ||       ||    _ |  |       |    | | _ | ||       |    |       ||       |  |  |',
-			'|  |_|  ||    ___||   | ||  |    ___|    | || || ||    ___|    |    ___||   _   |  |  |',
-			'|       ||   |___ |   |_||_ |   |___     |       ||   |___     |   | __ |  | |  |  |  |',
-			'|       ||    ___||    __  ||    ___|    |       ||    ___|    |   ||  ||  |_|  |  |__|',
-			'|   _   ||   |___ |   |  | ||   |___     |   _   ||   |___     |   |_| ||       |   __ ',
-			'|__| |__||_______||___|  |_||_______|    |__| |__||_______|    |_______||_______|  |__|',
-			''
-		].join('\n').rainbow;
-		console.log(go);
-
-		done();
-	});
-
-};
-
-Generator.prototype.addIgnore = function() {
-	if (this.git) {
+// .gitingore
+Generator.prototype.justIgnoreMe = function() {
+	
+	if (this.userInput.useGit) {
 		this.copy('gitignore.tmpl', '.gitignore');
 	}
+
 };
 
-Generator.prototype.setupGit = function() {
-	if (this.git) {
-		var done = this.async();
+// Git setup
+Generator.prototype.gitIsTheShit = function() {
+
+	var done = this.async();
+
+	// Using Git?  Init it...
+	if (this.userInput.useGit) {
+
+
 		git.init(function() {
-			git.addAndCommit('Initial Commit'.green, function() {
+			git.addAllAndCommit('Initial Commit', function() {
 				done();
 			});
 		});
+	} else {
+		done();
 	}
+
 };
 
-Generator.prototype.setupWordPress = function() {
+// Install wordpress
+Generator.prototype.wordWhatUp = function() {
+
 	var done = this.async(),
 		me   = this;
-	if (this.submodule) {
-		console.log('\nSetting up WordPress submodule, this might take a minute...'.green);
-		wordpress.setupAsSubmodule(me.wpDir, me.wpVersion, done);
+
+	if (this.userInput.submodule) {
+
+		git.submoduleAdd(wordpress.repo, this.userInput.wpDir, function() {
+			var cwd = process.cwd();
+			process.chdir(me.userInput.wpDir);
+			git.checkout([me.userInput.wpVer], function() {
+				process.chdir(cwd);
+				done();
+			});
+		});
+
 	} else {
-		this.remote('wordpress', 'wordpress', me.wpVersion, function(err, remote) {
-			remote.directory('.', me.wpDir);
+
+		this.remote('wordpress', 'wordpress', this.userInput.wpVer, function(err, remote) {
+			remote.directory('.', me.userInput.wpDir);
 			done();
 		});
+
 	}
+
 };
 
-Generator.prototype.setupContentDir = function() {
-	if (this.customDirs) {
-		var me = this,
-			done = this.async();
+// Setup custom directory structure
+Generator.prototype.somethingsDifferent = function() {
+
+	var me = this,
+		done = this.async();
+
+	if (this.userInput.customDirs) {
+
+		this.template('index.php.tmpl', 'index.php');
+
 		this.remote('wordpress', 'wordpress', function(err, remote) {
-			remote.directory('wp-content', me.contentDir);
+			remote.directory('wp-content', me.userInput.contentDir);
 			done();
 		});
+
+	} else {
+		done();
 	}
+
 };
 
-Generator.prototype.setupIndex = function() {
-	if (this.customDirs) {
-		this.template('index.php', 'index.php');
-	}
-};
+// wp-config.php
+Generator.prototype.muHaHaHaConfig = function() {
 
-Generator.prototype.wpConfig = function() {
 	var done = this.async(),
 		me   = this;
 
 	wordpress.getSaltKeys(function(saltKeys) {
-		me.saltKeys = saltKeys;
-		me.template('wp-config.php', 'wp-config.php');
+		me.userInput.saltKeys = saltKeys;
+		me.template('wp-config.php.tmpl', 'wp-config.php');
 		done();
 	});
+
 };
 
-Generator.prototype.wordPressCommit = function() {
-	if (this.git) {
-		var done = this.async();
-		git.addAndCommit('Setup WordPress'.green, function() {
+// Check that the database exists, create it otherwise
+Generator.prototype.hazBaseData = function() {
+
+	var done = this.async();
+	wordpress.createDBifNotExists(done).on('error', function(err) {
+		console.log('Database does not exist, or crendetials are wrong!'.red);
+		console.log('Make sure you create the database and update the credentials in the wp-config.php');
+		done();
+	});
+
+};
+
+// Set some permissions
+/* @TODO Thinking that maybe permissions should be left up to the user 
+   BUT, it seems that the theme stuff needs some permissions set to work....
+*/
+Generator.prototype.youAreNotAllowd = function() {
+
+	console.log('Setting Permissions: 0755 on .'.green);
+	wrench.chmodSyncRecursive('.', 0755);
+	console.log(('Setting Permissions: 0775 on ' + this.userInput.contentDir).green);
+	wrench.chmodSyncRecursive(this.userInput.contentDir, 0775);
+
+};
+/**/
+
+// Commit the wordpress stuff
+Generator.prototype.commitThisToMemory = function() {
+
+	var done = this.async();
+
+	if (this.userInput.useGit) {
+		git.addAllAndCommit('Setup WordPress', function() {
+			done();
+		}).on('error', function(e) {
+			console.error(e);
 			done();
 		});
+	} else {
+		done();
 	}
+
 };
 
-Generator.prototype.checkAndCreateDatabase = function() {
-	var done = this.async(),
+// Install and activate the theme
+Generator.prototype.dumbledoreHasStyle = function() {
+
+	var done = this.async()
 		me = this;
-	var connection = mysql.createConnection({
-		host     : this.db.host,
-		user     : this.db.user,
-		password : this.db.pass
-	});
-	connection.connect(function(err) {
-		if (err) {
-			console.error('Error connecting to database!'.red);
-			console.error(err);
+
+	if (this.userInput.theme) {
+		wordpress.installTheme(this, this.userInput, function() {
+			/* @TODO You need to run the install before doing this
+			   see if I can get yeopress to do that.
+		    */
+			//wordpress.activateTheme(me.userInput.themeDir, done);
 			done();
-		}
-		connection.query('CREATE DATABASE IF NOT EXISTS ' + mysql.escapeId(me.db.name), function(err, rows, fields) {
-			if (err) {
-				console.error('Error creating database!'.red);
-				console.error(err);
-				done();
+		});
+	} else {
+		done();
+	}
+
+};
+
+// Setup theme
+Generator.prototype.dummyYouHaveToPlugItInFirst = function() {
+
+	if (this.userInput.theme) {
+		wordpress.setupTheme(this, this.userInput, this.async());
+	}
+
+};
+
+// Commit again with the template
+Generator.prototype.gitMeMOARCommits = function() {
+
+	var done = this.async();
+
+	if (this.userInput.git) {
+		git.addAllAndCommit('Installed Template', function() {
+			done();
+		});
+	} else {
+		done();
+	}
+
+};
+
+// All done
+Generator.prototype.oopsIPeedMyself = function() {
+	console.log('All Done!!'.green);
+};
+
+/**================================
+ * The prompt code is ulgy...so I put it at the bottom
+ **===============================*/
+
+// Calls the prompt method
+// This can be called recursivly if the user messes up the input
+function getInput(done) {
+	var me = this;
+	promptForData(function(input) {
+		me.userInput = input;
+		confirmInput.call(me, done);
+	});
+};
+
+// Diaply the prompts and get the information
+var promptForData = function(done) {
+
+	// All the data will be attached to this object
+	var input = {};
+
+	wordpress.getCurrentVersion(function(ver) {
+		prompt([
+			prompts.url,
+			{
+				name : 'wpVer',
+				description : 'WordPress Version:',
+				required : true,
+				default : ver 
+			},
+			prompts.tablePrefix,
+			prompts.dbHost,
+			prompts.dbName,
+			prompts.dbUser,
+			prompts.dbPass,
+			prompts.useGit
+		], input, function(i) {
+			if (i.useGit) {
+				prompt([prompts.submodule], input, function(i) {
+					if (i.submodule) {
+						input.customDirs = true;
+					}
+					customDir();
+				});
+			} else {
+				customDir();
 			}
-			connection.end(function() {
-				console.log('Database Exists!');
-				done();
-			});
 		});
 	});
-};
 
-Generator.prototype.setupTheme = function() {
-	if (this.theme) {
-		var done = this.async(),
-			me   = this;
-		if (this.theme.type == 'git') {
-			me.remote(this.theme.user, this.theme.repo, this.theme.branch, function(err, remote) {
-				remote.directory('.', path.join(me.contentDir, 'themes', me.theme.dir));
-				done();
-			});
-		} else if (this.theme.type == 'tar') {
-			me.tarball(this.theme.url, path.join(this.contentDir, 'themes', this.theme.dir), done);
-		}
-	}
-};
-
-Generator.prototype.initTheme = function() {
-	if (this.theme) {
-		console.log('Setting Up Theme'.green);
-		var me = this,
-			done = this.async(),
-			themePath = path.join(this.contentDir, 'themes', this.theme.dir),
-			themePackageJson = path.join(themePath, 'package.json');
-		if (fs.existsSync(themePackageJson)) {
-			var oldDir = process.cwd();
-			process.chdir(themePath);
-			exec('npm install', function(err) {
-				if (fs.existsSync('Gruntfile.js')) {
-					exec('grunt setup', function(err) {
-						console.log('Theme setup!'.green);
-						process.chdir(oldDir);
-						done();
-					});
+	function customDir() {
+		if (!input.customDirs) {
+			prompt([prompts.customDirs], input, function(i) {
+				if (i.customDirs) {
+					customInstallLocations();
 				} else {
-					process.chdir(oldDir);
-					done();
+					input.wpDir = '.';
+					input.contentDir = 'wp-content';
+					installTheme();
 				}
 			});
 		} else {
-			done();
+			customInstallLocations();
 		}
 	}
-};
 
-Generator.prototype.setPermissions = function() {
-	console.log('Setting Permissions: 0755 on .'.green);
-	wrench.chmodSyncRecursive('.', 0755);
-	console.log(('Setting Permissions: 0775 on ' + this.contentDir).green);
-	wrench.chmodSyncRecursive(this.contentDir, 0775);
-};
+	function customInstallLocations() {
+		prompt([prompts.wpDir, prompts.contentDir], input, function() {
+			installTheme();
+		});
+	}
 
-Generator.prototype.templateCommit = function() {
-	if (this.git) {
-		var done = this.async();
-		git.addAndCommit('Installed Template'.green, function() {
-			done();
+	function installTheme() {
+		prompt([prompts.theme], input, function(i) {
+			if (i.theme) {
+				prompt([prompts.themeDir, prompts.themeType], input, function(i) {
+					var nextPrompts = [];
+					switch(i.themeType) {
+						case 'git' :
+							nextPrompts = [
+								prompts.themeGitUser,
+								prompts.themeGitRepo,
+								prompts.themeGitBranch
+							];
+							break;
+						case 'tar' :
+							nextPrompts = [
+								prompts.themeTarUrl
+							];
+							break;
+					}
+					prompt(nextPrompts, input, function() {
+						done(input);
+					});
+				});
+			} else {
+				done(input);
+			}
 		});
 	}
 };
 
-Generator.prototype.done = function() {
-	console.log('All Done!!'.green);
+function confirmInput(done) {
+
+	var me  = this;
+
+	console.log('\n----------------------------'.red);
+
+	logConfirmation('WordPress URL', this.userInput.url);
+	logConfirmation('Database table prefix', this.userInput.tablePrefix);
+	logConfirmation('Database host', this.userInput.dbHost);
+	logConfirmation('Database name', this.userInput.dbName);
+	logConfirmation('Database user', this.userInput.dbUser);
+	logConfirmation('Database password', this.userInput.dbPass);
+	logConfirmation('WordPress install directory', this.userInput.wpDir);
+	logConfirmation('WordPress content directory', this.userInput.contentDir);
+	logConfirmation('Initialize a Git repo', ((this.userInput.useGit) ? 'Yes' : 'No'));
+	logConfirmation('Install WordPress as a Git submodule', ((this.userInput.submodule) ? 'Yes' : 'No'));
+	if (this.userInput.theme) {
+		logConfirmation('Theme install directory', path.join(this.userInput.contentDir, 'themes', this.userInput.themeDir));
+	}
+
+	console.log('----------------------------'.red);
+
+	prompt([prompts.correct], null, function(input) {
+		if (!input.correct) {
+			console.log(art.wawa);
+			getInput.call(me, done);
+		} else {
+			console.log(art.go);
+			done();
+		}
+	});
+
+};
+
+function logConfirmation(msg, val) {
+	console.log(msg.bold.grey + ': '.bold.grey + val.cyan);
 };

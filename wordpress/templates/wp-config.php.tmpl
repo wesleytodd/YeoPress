@@ -16,16 +16,16 @@
 
 // ** MySQL settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
-define('DB_NAME', '<%= db.name %>');
+define('DB_NAME', '<%= userInput.dbName %>');
 
 /** MySQL database username */
-define('DB_USER', '<%= db.user %>');
+define('DB_USER', '<%= userInput.dbUser %>');
 
 /** MySQL database password */
-define('DB_PASSWORD', '<%= db.pass %>');
+define('DB_PASSWORD', '<%= userInput.dbPass %>');
 
 /** MySQL hostname */
-define('DB_HOST', '<%= db.host %>');
+define('DB_HOST', '<%= userInput.dbHost %>');
 
 /** Database Charset to use in creating database tables. */
 define('DB_CHARSET', 'utf8');
@@ -42,7 +42,7 @@ define('DB_COLLATE', '');
  *
  * @since 2.6.0
  */
-<%= saltKeys %>
+<%= userInput.saltKeys %>
 /**#@-*/
 
 /**
@@ -51,7 +51,7 @@ define('DB_COLLATE', '');
  * You can have multiple installations in one database if you give each a unique
  * prefix. Only numbers, letters, and underscores please!
  */
-$table_prefix  = '<%= db.prefix %>';
+$table_prefix  = '<%= userInput.tablePrefix %>';
 
 /**
  * WordPress Localized Language, defaults to English.
@@ -63,16 +63,16 @@ $table_prefix  = '<%= db.prefix %>';
  */
 define('WPLANG', '');
 
-<% if (customDirs) { %>
+<% if (userInput.customDirs) { %>
 /**
  * Set custom paths
  *
  * These are required because wordpress is installed in a subdirectory.
  */
-define('WP_SITEURL', 'http://' . $_SERVER['SERVER_NAME'] . '/<%= wpDir %>');
+define('WP_SITEURL', 'http://' . $_SERVER['SERVER_NAME'] . '/<%= userInput.wpDir %>');
 define('WP_HOME',    'http://' . $_SERVER['SERVER_NAME']);
-define('WP_CONTENT_DIR', __dir__ . '/<%= contentDir %>');
-define('WP_CONTENT_URL', 'http://' . $_SERVER['SERVER_NAME'] . '/<%= contentDir %>');
+define('WP_CONTENT_DIR', __dir__ . '/<%= userInput.contentDir %>');
+define('WP_CONTENT_URL', 'http://' . $_SERVER['SERVER_NAME'] . '/<%= userInput.contentDir %>');
 
 /**
  * Disable external requests
