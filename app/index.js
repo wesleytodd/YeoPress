@@ -34,26 +34,6 @@ Generator.prototype.ohTellMeWhatYouWantWhatYouReallyReallyWant = function() {
 	// Display welcome message
 	console.log(art.wp);
 	
-	console.log([
-		'',
-		'*********************************************************************',
-		'*****************************  ' + 'WARNING'.red + '  *****************************',
-		'*********************************************************************',
-		'',
-		'Due to a bug in Yeoman, generators might fail every once in a while.',
-		'If this happens to you try to run the generator again, and it should',
-		'work, maybe.  For more information go here:',
-		'',
-		'https://github.com/yeoman/generator/pull/221',
-		'https://github.com/yeoman/generator/issues/233',
-		'https://github.com/wesleytodd/YeoPress/issues/10',
-		'',
-		'*********************************************************************',
-		'*********************************************************************',
-		'',
-		''
-	].join('\n'));
-
 	// Get the input
 	getInput.call(this, this.async());
 
@@ -280,6 +260,12 @@ var promptForData = function(done) {
 			prompts.dbPass,
 			prompts.useGit
 		], input, function(i) {
+			var port = i.url.match(/:[\d]+$/);
+			if (typeof port[0] !== 'undefined') {
+				input.port = port[0];
+			} else {
+				input.port = '';
+			}
 			if (i.useGit) {
 				prompt([prompts.submodule], input, function(i) {
 					if (i.submodule) {

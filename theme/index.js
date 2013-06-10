@@ -8,7 +8,7 @@ var util         = require('util'),
 	path      = require('path'),
 	prompt    = require('../util/prompt'),
 	wordpress = require('../util/wordpress'),
-	prompts   = require('../wordpress/prompts'),
+	prompts   = require('../app/prompts'),
 	art       = require('../util/art');
 
 
