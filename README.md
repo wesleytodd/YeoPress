@@ -2,10 +2,10 @@
 
 # YeoPress
 
-The officially un-official [Yeoman](https://github.com/yeoman/yeoman) Generator for [WordPress](http://wordpress.org/).  I magically take you from scratching your head wondering where to start, all the way to running the famous 5-minute install.  I have configuration options that will WOW you.  If you use Git, I can *git* you off the ground with WordPress as a submodule just by following a couple of prompts.  Have a custom base theme you always start your projects off with?  You can install that to, either stright from GitHub or by pointing me to a tarball.  Other things I do:
+The officially un-official [Yeoman](https://github.com/yeoman/yeoman) Generator for [WordPress](http://wordpress.org/).  I magically take you from scratching your head wondering where to start, all the way to running the famous 5-minute install.  I have configuration options that will WOW you.  If you use Git, I can *git* you off the ground with WordPress as a submodule just by following a couple of prompts.  Have a custom base theme you always start your projects off with?  You can install that to, either straight from GitHub or by pointing me to a tarball.  Other things I do:
 
 - Custom directory configuration
-- Install WordPress as a Git submodule for easy version controled updates
+- Install WordPress as a Git submodule for easy version controlled updates
 - Theme init hook for when you install a new theme
 - Permission setting on install
 - Create your database, all you have to do is make me a user
@@ -46,9 +46,18 @@ Custom themes can be installed from GitHub or a Tarball.  Once installed, they a
 
 [More information on themes](https://github.com/wesleytodd/YeoPress/wiki/Themes)
 
+## Contributions
+
+Contributing to YeoPress is simple.  A Vargrant configuration is bundled with these files, so to get a test server up and running requires a single command.  Make sure you have VirtualBox and Vagrant installed, then run:
+
+	$ vagrant up
+
+Vagrant will provision a new virtual machine, setup everything you need to run WordPress and Yeoman.  The virtual machine has port `8080` forwarding to the test site which is located in `test/site`.  So to check things in the browser, you an simple open `http://localhost:8080` and you should see your WP install.
+
 ## Versions
 
-- **1.0.0:** Re-written from the ground up to be more flexiable.  Refactored checks for database existance, improved the theme installation process, added a separate theme install generator.  There are some API changes that are not reflected in the videos, but they should be minimal.
+- **1.0.3:** Added support for alternate port configurations and changed things for compatibility with updates in yeoman-generator.
+- **1.0.0:** Re-written from the ground up to be more flexible.  Refactored checks for database existence, improved the theme installation process, added a separate theme install generator.  There are some API changes that are not reflected in the videos, but they should be minimal.
 - **0.2.7:** Added version question.
 - **0.2.6:** Mostly Bug fixes.
 - **0.2.5:** Fixed gitignore issue with npm.
