@@ -51,19 +51,16 @@ Generator.prototype.justIgnoreMe = function() {
 // Git setup
 Generator.prototype.gitIsTheShit = function() {
 
-	var done = this.async();
-
 	// Using Git?  Init it...
 	if (this.userInput.useGit) {
 
+		var done = this.async();
 
 		git.init(function() {
 			git.addAllAndCommit('Initial Commit', function() {
 				done();
 			});
 		});
-	} else {
-		done();
 	}
 
 };
@@ -99,20 +96,18 @@ Generator.prototype.wordWhatUp = function() {
 // Setup custom directory structure
 Generator.prototype.somethingsDifferent = function() {
 
-	var me = this,
-		done = this.async();
-
 	if (this.userInput.customDirs) {
+
+		var me = this,
+			done = this.async();
 
 		this.template('index.php.tmpl', 'index.php');
 
-		this.remote('wordpress', 'wordpress', function(err, remote) {
+		this.remote('wordpress', 'wordpress', this.userInput.wpVer, function(err, remote) {
 			remote.directory('wp-content', me.userInput.contentDir);
 			done();
 		});
 
-	} else {
-		done();
 	}
 
 };
@@ -135,6 +130,7 @@ Generator.prototype.muHaHaHaConfig = function() {
 Generator.prototype.hazBaseData = function() {
 
 	var done = this.async();
+
 	wordpress.createDBifNotExists(done).on('error', function(err) {
 		console.log('Database does not exist, or crendetials are wrong!'.red);
 		console.log('Make sure you create the database and update the credentials in the wp-config.php');
@@ -151,6 +147,7 @@ Generator.prototype.youAreNotAllowd = function() {
 
 	console.log('Setting Permissions: 0755 on .'.green);
 	wrench.chmodSyncRecursive('.', 0755);
+
 	console.log(('Setting Permissions: 0775 on ' + this.userInput.contentDir).green);
 	wrench.chmodSyncRecursive(this.userInput.contentDir, 0775);
 
@@ -160,17 +157,18 @@ Generator.prototype.youAreNotAllowd = function() {
 // Commit the wordpress stuff
 Generator.prototype.commitThisToMemory = function() {
 
-	var done = this.async();
 
 	if (this.userInput.useGit) {
+
+		var done = this.async();
+
 		git.addAllAndCommit('Setup WordPress', function() {
 			done();
 		}).on('error', function(e) {
 			console.error(e);
 			done();
 		});
-	} else {
-		done();
+
 	}
 
 };
@@ -178,10 +176,11 @@ Generator.prototype.commitThisToMemory = function() {
 // Install and activate the theme
 Generator.prototype.dumbledoreHasStyle = function() {
 
-	var done = this.async()
-		me = this;
-
 	if (this.userInput.theme) {
+
+		var done = this.async()
+			me = this;
+
 		wordpress.installTheme(this, this.userInput, function() {
 			/* @TODO You need to run the install before doing this
 			   see if I can get yeopress to do that.
@@ -189,8 +188,7 @@ Generator.prototype.dumbledoreHasStyle = function() {
 			//wordpress.activateTheme(me.userInput.themeDir, done);
 			done();
 		});
-	} else {
-		done();
+
 	}
 
 };
@@ -207,14 +205,15 @@ Generator.prototype.dummyYouHaveToPlugItInFirst = function() {
 // Commit again with the template
 Generator.prototype.gitMeMOARCommits = function() {
 
-	var done = this.async();
 
 	if (this.userInput.git) {
+
+		var done = this.async();
+
 		git.addAllAndCommit('Installed Template', function() {
 			done();
 		});
-	} else {
-		done();
+
 	}
 
 };
@@ -261,7 +260,7 @@ var promptForData = function(done) {
 			prompts.useGit
 		], input, function(i) {
 			var port = i.url.match(/:[\d]+$/);
-			if (typeof port[0] !== 'undefined') {
+			if (port !== null) {
 				input.port = port[0];
 			} else {
 				input.port = '';
