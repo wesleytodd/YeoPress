@@ -21,6 +21,13 @@ module.exports = {
 		}
 	},
 
+	wpVer : {
+		name : 'wpVer',
+		description : 'WordPress Version:',
+		required : true,
+		advanced : true
+	},
+
 	tablePrefix : {
 		name : 'tablePrefix',
 		description : 'Table prefix:',
@@ -56,7 +63,7 @@ module.exports = {
 	useGit : {
 		name : 'useGit',
 		description : 'Use Git?',
-		default : 'Y',
+		default : 'N',
 		pattern : boolRegex,
 		before : boolFilter
 	},

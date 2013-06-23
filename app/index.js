@@ -21,6 +21,9 @@ module.exports = Generator;
 // Extend the base generator
 function Generator(args, options, config) {
 	yeoman.generators.Base.apply(this, arguments);
+	if (typeof options.advanced !== 'undefined' && options.advanced) {
+		prompt.advanced();
+	}
 };
 util.inherits(Generator, yeoman.generators.Base);
 
@@ -231,7 +234,7 @@ Generator.prototype.oopsIPeedMyself = function() {
 // This can be called recursivly if the user messes up the input
 function getInput(done) {
 	var me = this;
-	promptForData(function(input) {
+	promptForData.call(me, function(input) {
 		me.userInput = input;
 		confirmInput.call(me, done);
 	});
@@ -241,22 +244,21 @@ function getInput(done) {
 var promptForData = function(done) {
 
 	// All the data will be attached to this object
-	var input = {};
+	var input = {},
+		me = this;
 
 	wordpress.getCurrentVersion(function(ver) {
+		prompts.wpVer.default = ver;
+		input.wpVer = ver;
+
 		prompt([
 			prompts.url,
-			{
-				name : 'wpVer',
-				description : 'WordPress Version:',
-				required : true,
-				default : ver 
-			},
 			prompts.tablePrefix,
 			prompts.dbHost,
 			prompts.dbName,
 			prompts.dbUser,
 			prompts.dbPass,
+			prompts.wpVer,
 			prompts.useGit
 		], input, function(i) {
 			var port = i.url.match(/:[\d]+$/);
@@ -342,6 +344,7 @@ function confirmInput(done) {
 	logConfirmation('Database name', this.userInput.dbName);
 	logConfirmation('Database user', this.userInput.dbUser);
 	logConfirmation('Database password', this.userInput.dbPass);
+	logConfirmation('WordPress version', this.userInput.wpVer);
 	logConfirmation('WordPress install directory', this.userInput.wpDir);
 	logConfirmation('WordPress content directory', this.userInput.contentDir);
 	logConfirmation('Initialize a Git repo', ((this.userInput.useGit) ? 'Yes' : 'No'));

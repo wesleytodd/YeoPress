@@ -9,8 +9,18 @@ module.exports = function(prompts, obj, callback) {
 
 	if (!util.isArray(prompts)) prompts = [prompts];
 	
+	var p = [];
+	prompt.override = {};
 	for (var i in prompts) {
 		prompts[i].description = prompts[i].description.white;
+
+		if (prompts[i].advanced && advanced) {
+			p.push(prompts[i]);
+		} else if (typeof prompts[i].advanced === 'undefined' || !prompts[i].advanced) {
+			p.push(prompts[i]);
+		} else {
+			prompt.override[prompts[i].name] = prompts[i].default;
+		}
 	}
 
 	var ee = new EventEmitter();
@@ -18,12 +28,12 @@ module.exports = function(prompts, obj, callback) {
 	prompt.start();
 
 	if (typeof obj === 'undefined' || obj === null){
-		prompt.get(prompts, function(err, input) {
+		prompt.get(p, function(err, input) {
 			if (err) return ee.emit('error', err);
 			ee.emit('done', input);
 		});
 	} else {
-		prompt.addProperties(obj, prompts, function(err) {
+		prompt.addProperties(obj, p, function(err) {
 			if (err) return ee.emit('error', err);
 			ee.emit('done', obj);
 		});
@@ -40,3 +50,9 @@ module.exports = function(prompts, obj, callback) {
 	return ee;
 
 };
+
+// Turn on advanced prompts?
+var advanced = false;
+module.exports.advanced = function() {
+	advanced = true;
+}
