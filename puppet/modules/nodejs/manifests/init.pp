@@ -1,6 +1,6 @@
 class nodejs
 {
-	$nodeVersion = "v0.10.10"
+	$nodeVersion = "v0.10.12"
 	$nodeRepo = "https://github.com/joyent/node.git"
 
 	exec
@@ -40,6 +40,7 @@ class nodejs
 		"make-install-node":
 			cwd => "/home/vagrant/node-source",
 			command => "sudo make install",
-			require => Exec["make-node"]
+			require => Exec["make-node"],
+			timeout => 0
 	}
 }
