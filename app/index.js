@@ -68,6 +68,17 @@ Generator.prototype.gitIsTheShit = function() {
 
 };
 
+// Setup Vagrant config
+Generator.prototype.heIsSuchAVagrant = function() {
+
+	if (this.userInput.useVagrant) {
+		console.log('Setting Up Vagrant'.green);
+		this.template('Vagrantfile', 'Vagrantfile');
+		this.directory('puppet', 'puppet');
+	}
+
+};
+
 // Install wordpress
 Generator.prototype.wordWhatUp = function() {
 
@@ -259,6 +270,7 @@ var promptForData = function(done) {
 			prompts.dbUser,
 			prompts.dbPass,
 			prompts.wpVer,
+			prompts.useVagrant,
 			prompts.useGit
 		], input, function(i) {
 			var port = i.url.match(/:[\d]+$/);

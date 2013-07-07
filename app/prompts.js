@@ -147,6 +147,16 @@ module.exports = {
 		required : true
 	},
 
+	useVagrant : {
+		name : 'useVagrant',
+		description : 'Use Vagrant?',
+		required : true,
+		advanced : true,
+		default : 'N',
+		pattern : boolRegex,
+		before : boolFilter
+	},
+
 	correct : {
 		name : 'correct',
 		description : 'Does everything look correct?',

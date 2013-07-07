@@ -27,7 +27,7 @@ function getCurrentVersion(callback) {
 	var ee = new EventEmitter(),
 		latestVersion = '3.5.1';
 
-	git.listRemoteTags(wordpressRepo).on('data', function(tagsList) {
+	git.listRemoteTags(wordpressRepo).on('close', function(tagsList) {
 		tagList = '' + tagsList;
 		tagList = tagList.split('\n');
 		tagList.pop();
@@ -41,6 +41,7 @@ function getCurrentVersion(callback) {
 
 	if (typeof callback === 'function') {
 		ee.on('close', callback);
+		ee.on('error', callback);
 	}
 
 	return ee;

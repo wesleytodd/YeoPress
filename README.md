@@ -9,6 +9,7 @@ The officially un-official [Yeoman](https://github.com/yeoman/yeoman) Generator 
 - Theme init hook for when you install a new theme
 - Permission setting on install
 - Create your database, all you have to do is make me a user
+- Built in Vagrant configuration
 - *Coming Soon* Grunt tasks for some other WP tasks
 
 ## How To Use
@@ -45,33 +46,3 @@ Custom themes can be installed from GitHub or a Tarball.  Once installed, they a
 - RequireJS ([grunt-contrib-requirejs](https://npmjs.org/package/grunt-contrib-requirejs))
 
 [More information on themes](https://github.com/wesleytodd/YeoPress/wiki/Themes)
-
-## Contributions
-
-Contributing to YeoPress is simple.  A Vargrant configuration is bundled with these files, so to get a test server up and running requires a single command.  Make sure you have VirtualBox and Vagrant installed, then run:
-
-	$ vagrant up
-
-Vagrant will provision a new virtual machine, setup everything you need to run WordPress and Yeoman.  The virtual machine has port `8080` forwarding to the test site which is located in `test/site`.  So to check things in the browser, you an simple open `http://localhost:8080` and you should see your WP install.
-
-## Versions
-
-- **1.0.3:** Added support for alternate port configurations and changed things for compatibility with updates in yeoman-generator.
-- **1.0.0:** Re-written from the ground up to be more flexible.  Refactored checks for database existence, improved the theme installation process, added a separate theme install generator.  There are some API changes that are not reflected in the videos, but they should be minimal.
-- **0.2.7:** Added version question.
-- **0.2.6:** Mostly Bug fixes.
-- **0.2.5:** Fixed gitignore issue with npm.
-- **0.2.4:** Added database creation check and changed theme setup process.
-- **0.2.3:** Warnings were halting execution, fixed that.
-- **0.2.2:** Url bug in confirmation.
-
-## License
-
-Copyright (c) 2013, Wes Todd
-All rights reserved.
-
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-
-Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.

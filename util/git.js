@@ -126,12 +126,16 @@ function submoduleAddInitAndUpdate(repo, path) {
 };
 
 function listRemoteTags(repo) {
-	var eventEmitter = new EventEmitter();
+	var eventEmitter = new EventEmitter(),
+		data = '';
 	spawn('git', ['ls-remote', '--tags', repo], {
 		error : 'Failed to get remote tags'
 	}).on('error', function(err) {
 		eventEmitter.emit('error', err);
+	}).on('close', function() {
+		eventEmitter.emit('close', data);
 	}).stdout.on('data', function(d) {
+		data += d;
 		eventEmitter.emit('data', d);
 	});
 	return eventEmitter;
