@@ -14,17 +14,21 @@ The officially un-official [Yeoman](https://github.com/yeoman/yeoman) Generator 
 
 ## How To Use
 
-If you do not already have the Yeoman toolset installed do so now, and might as well install me at the same time:
+If you do not already have the Yeoman toolset installed do so now, and might as well install me at the same time *(NOTE: don't type the `$`)*:
 
-	npm install -g yo generator-wordpress
+	$ npm install -g yo generator-wordpress
 
 And run me:
 
-	yo wordpress
+	$ yo wordpress
 
 Follow my prompts and WA-BAM....ASCII art!!!!
 
 ![image](http://wesleytodd.com/images/yeopress-ascii-art.png)
+
+Newly added in version 1.0.4 is the `advanced` flag, which enables a few extra prompts.  These prompts allow you to use some extra features like the Vagrant integration and manually specifying the WP version.  To enable the advanced options run the generator like this:
+
+	$ yo wordpress --advanced
 
 ### Visual Learner??
 
