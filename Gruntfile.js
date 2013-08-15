@@ -3,18 +3,26 @@ module.exports = function(grunt) {
 	grunt.initConfig({
 
 		// Watches for changes and runs tasks
-		regarde : {
+		watch : {
 			sass : {
 				files : ['scss/**/*.scss'],
-				tasks : ['sass:dev', 'livereload']
+				tasks : ['sass:dev'],
+				options : {
+					livereload : true
+				}
 			},
 			js : {
 				files : ['js/**/*.js'],
-				tasks : ['jshint', 'livereload']
+				tasks : ['jshint'],
+				options : {
+					livereload : true
+				}
 			},
 			php : {
 				files : ['**/*.php'],
-				tasks : ['livereload']
+				options : {
+					livereload : true
+				}
 			}
 		},
 
@@ -118,7 +126,7 @@ module.exports = function(grunt) {
 	});
 
 	// Default task
-	grunt.registerTask('default', ['livereload-start', 'regarde']);
+	grunt.registerTask('default', ['watch']);
 
 	// Build task
 	grunt.registerTask('build', ['jshint', 'sass:production', 'imagemin:production', 'svgmin:production', 'requirejs:production']);
@@ -129,8 +137,7 @@ module.exports = function(grunt) {
 	// Load up tasks
 	grunt.loadNpmTasks('grunt-contrib-sass');
 	grunt.loadNpmTasks('grunt-contrib-jshint');
-	grunt.loadNpmTasks('grunt-contrib-livereload');
-	grunt.loadNpmTasks('grunt-regarde');
+	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-bower-requirejs');
 	grunt.loadNpmTasks('grunt-contrib-requirejs');
 	grunt.loadNpmTasks('grunt-contrib-imagemin');
