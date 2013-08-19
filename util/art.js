@@ -1,4 +1,4 @@
-require('colors');
+require('chalk');
 
 module.exports = {
 	wp : [

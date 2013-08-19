@@ -1,13 +1,13 @@
 {
   "name": "generator-wordpress",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "A Yeoman generator for WordPress",
   "keywords": [
     "yeoman-generator",
     "wordpress",
-	"yeoman",
-	"generator",
-	"cli"
+    "yeoman",
+    "generator",
+    "cli"
   ],
   "main": "app/index.js",
   "author": "Wes Todd",
@@ -17,7 +17,7 @@
     "yeoman-generator": "~0.10.0",
     "wrench": "~1.4.4",
     "mysql": "~2.0.0-alpha7",
-    "colors": "~0.6.1"
+    "chalk": "~0.2.0"
   },
   "repository": {
     "type": "git",
