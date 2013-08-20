@@ -1,7 +1,7 @@
 var spawn = require('child_process').spawn,
 	util = require('util');
 
-require('colors');
+require('chalk');
 
 module.exports = function execute(command, args, options, messages) {
 
