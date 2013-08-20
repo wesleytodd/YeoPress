@@ -4,7 +4,6 @@ node_modules
 
 # Ignore configuration and automatically generated cruft
 wp-config.php
-sitemap.xml
 *.log
 .sass-cache
 
@@ -15,3 +14,27 @@ sitemap.xml
 .DS_Store?
 ehthumbs.db
 Thumbs.db
+
+# WordPress + popular plugin generated — adapted from:
+# https://github.com/github/gitignore/blob/master/WordPress.gitignore
+<% if (userInput.customDirs) { %>
+<%= userInput.contentDir %>/advanced-cache.php
+<%= userInput.contentDir %>/backup-db/
+<%= userInput.contentDir %>/backups/
+<%= userInput.contentDir %>/blogs.dir/
+<%= userInput.contentDir %>/cache/
+<%= userInput.contentDir %>/uploads/
+<%= userInput.contentDir %>/upgrade/
+<%= userInput.contentDir %>/wp-cache-config.php
+<% } else { %>
+wp-content/advanced-cache.php
+wp-content/backup-db/
+wp-content/backups/
+wp-content/blogs.dir/
+wp-content/cache/
+wp-content/uploads/
+wp-content/upgrade/
+wp-content/wp-cache-config.php
+<% } %>
+sitemap.xml
+sitemap.xml.gz
