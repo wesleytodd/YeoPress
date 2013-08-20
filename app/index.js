@@ -42,7 +42,7 @@ Generator.prototype.ohTellMeWhatYouWantWhatYouReallyReallyWant = function() {
 
 };
 
-// .gitingore
+// .gitignore
 Generator.prototype.justIgnoreMe = function() {
 	
 	if (this.userInput.useGit) {
