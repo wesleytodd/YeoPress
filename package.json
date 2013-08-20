@@ -17,7 +17,8 @@
     "yeoman-generator": "~0.10.0",
     "wrench": "~1.4.4",
     "mysql": "~2.0.0-alpha7",
-    "colors": "~0.6.1"
+    "colors": "~0.6.1",
+	"grunt-contrib-watch": "~0.5.1"
   },
   "repository": {
     "type": "git",
