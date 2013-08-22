@@ -1,0 +1,21 @@
+<IfModule mod_ssl.c>
+  SSLRandomSeed startup builtin
+  SSLRandomSeed startup file:/dev/urandom 512
+  SSLRandomSeed connect builtin
+  SSLRandomSeed connect file:/dev/urandom 512
+
+  AddType application/x-x509-ca-cert .crt
+  AddType application/x-pkcs7-crl    .crl
+
+  SSLPassPhraseDialog  builtin
+  SSLSessionCache shmcb:<%= @session_cache %>
+  SSLSessionCacheTimeout 300
+<% if @ssl_compression -%>
+  SSLCompression Off
+<% end -%>
+  SSLMutex <%= @ssl_mutex %>
+  SSLCryptoDevice builtin
+  SSLHonorCipherOrder On
+  SSLCipherSuite HIGH:MEDIUM:!aNULL:!MD5
+  SSLProtocol all -SSLv2
+</IfModule>

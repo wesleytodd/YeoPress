@@ -24,9 +24,6 @@ Vagrant.configure("2") do |config|
 	puppet.module_path = "puppet/modules"
   end
 
-  # Enable Remote MySQL Access
-  config.vm.provision :shell, :path => "puppet/scripts/enable_remote_mysql_access.sh"
-
   # Synced Folder
   config.vm.synced_folder "test/site", "/home/vagrant/www"
   config.vm.synced_folder ".", "/home/vagrant/generator-wordpress"

@@ -1,6 +1,6 @@
 class nodejs
 {
-	$nodeVersion = "v0.10.12"
+	$nodeVersion = "v0.10.17"
 	$nodeRepo = "https://github.com/joyent/node.git"
 
 	exec

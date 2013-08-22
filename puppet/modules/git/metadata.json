@@ -1,0 +1,29 @@
+{
+  "name": "maestrodev-git",
+  "version": "1.0.1",
+  "source": "http://github.com/maestrodev/puppet-git",
+  "author": "maestrodev",
+  "license": "Apache License, Version 2.0",
+  "summary": "MaestroDev Git",
+  "description": "Install and configure Git client",
+  "project_page": "http://github.com/maestrodev/puppet-git",
+  "dependencies": [
+
+  ],
+  "types": [
+
+  ],
+  "checksums": {
+    "Gemfile": "ac67347df113bffcbf8da161e41eccd6",
+    "Gemfile.lock": "5f312a55ce9c01cb735b72751ce4a34b",
+    "LICENSE": "1c27e7509536dde10c12b66f290cc8f3",
+    "Modulefile": "84977267906384fe58430025ca036d3f",
+    "README.md": "5732b6673dc11aca7b67c82b4e868537",
+    "Rakefile": "31adafa1c0ed7d932985b6d1af89ecff",
+    "manifests/init.pp": "f39da32f8c49906e7cfcd2d792ccd0d7",
+    "manifests/resource/config.pp": "ef29e3a518671a903ed57bd49f7e274f",
+    "spec/classes/git_spec.rb": "74025a2057a155ba615e4f8f47abae97",
+    "spec/spec_helper.rb": "12bcab41088eb048322292d48c7f49f8",
+    "templates/gitconfig.erb": "466ec891ec4fe0ff9f8fac7e05294d71"
+  }
+}
