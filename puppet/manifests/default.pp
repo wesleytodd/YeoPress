@@ -61,3 +61,15 @@ include git
 
 # Node
 include nodejs
+exec {
+	'yo':
+		command => 'sudo npm install -g yo',
+		require => Exec['make-install-node'],
+		timeout => 0;
+}
+exec {
+	'link-yeopress':
+		cwd => '/home/vagrant/generator-wordpress',
+		command => 'sudo npm link',
+		require => Exec['yo'];
+}
