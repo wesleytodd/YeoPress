@@ -1,0 +1,14 @@
+<% if @scriptalias -%>
+
+  ## Script alias directives
+  ScriptAlias /cgi-bin/ "<%= @scriptalias %>/"
+  <Directory "<%= @scriptalias %>">
+    AllowOverride None
+    Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+    Order allow,deny
+    Allow from all
+<% if @ssl -%>
+    SSLOptions +StdEnvVars
+<% end -%>
+  </Directory>
+<% end -%>

@@ -1,0 +1,8 @@
+<% if @aliases and ! @aliases.empty? -%>
+  ## Alias declarations for resources outside the DocumentRoot
+  <%- Array(@aliases).each do |alias_statement| -%>
+    <%- if alias_statement["alias"] != '' and alias_statement["path"] != ''-%>
+  Alias <%= alias_statement["alias"] %> <%= alias_statement["path"] %>
+    <%- end -%>
+  <%- end -%>
+<% end -%>
