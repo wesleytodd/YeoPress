@@ -4,7 +4,8 @@ var git = require('../util/git')
 	test = require('./lib/runner');
 
 // cd into test dir
-process.chdir('test/site');
+fs.mkdirSync('test/tmp');
+process.chdir('test/tmp');
 
 // These tests are dependant on eachother, so the order matters
 // I know this is bad...but it wasn't worth the effort to make each standalone
@@ -29,11 +30,13 @@ test('Should checkout a new branch or a repository', function(done) {
 });
 
 test('Should add files to be committed', function(done) {
-	git.add().on('close', function() {
-		fs.readFile('.git/index', {encoding:'utf8'}, function(err, content) {
-			if (err) throw err;
-			assert((content.indexOf('.gitkeep') !== -1), 'Did not correctly stage files');
-			done();
+	fs.writeFile('test1.txt', 'Test file', function() {
+		git.add().on('close', function() {
+			fs.readFile('.git/index', {encoding:'utf8'}, function(err, content) {
+				if (err) throw err;
+				assert((content.indexOf('test1.txt') !== -1), 'Did not correctly stage files');
+				done();
+			});
 		});
 	});
 });
@@ -49,7 +52,7 @@ test('Should commit added files', function(done) {
 });
 
 test('Should add and commit new files', function(done) {
-	fs.writeFile('test.txt', 'Test file', function() {
+	fs.writeFile('test2.txt', 'Test file', function() {
 		git.addAllAndCommit('Test Add and Commit').on('close', function() {
 			fs.readFile('.git/COMMIT_EDITMSG', {encoding:'utf8'}, function(err, content) {
 				if (err) throw err;

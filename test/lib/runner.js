@@ -42,12 +42,14 @@ var totalsMessage = function() {
 
 var test = function(title, fnc, timeout) {
 	allTests.push(function(done) {
-		var to = setTimeout(function() {
-			errorMessage(title, {
-				message : 'Test timed out'
-			});
-			d.dispose();
-		}, timeout || testTimeout);
+		if ((timeout || testTimeout) !== -1) {
+			to = setTimeout(function() {
+				errorMessage(title, {
+					message : 'Test timed out'
+				});
+				d.dispose();
+			}, timeout || testTimeout);
+		}
 
 		var doneCalled = false;
 		var doneFnc = function() {

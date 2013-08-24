@@ -159,11 +159,15 @@ Generator.prototype.hazBaseData = function() {
 */
 Generator.prototype.youAreNotAllowd = function() {
 
-	console.log('Setting Permissions: 0755 on .'.green);
-	wrench.chmodSyncRecursive('.', 0755);
+	if (fs.existsSync('.')) {
+		console.log('Setting Permissions: 0755 on .'.green);
+		wrench.chmodSyncRecursive('.', 0755);
+	}
 
-	console.log(('Setting Permissions: 0775 on ' + this.userInput.contentDir).green);
-	wrench.chmodSyncRecursive(this.userInput.contentDir, 0775);
+	if (fs.existsSync(this.userInput.contentDir)) {
+		console.log(('Setting Permissions: 0775 on ' + this.userInput.contentDir).green);
+		wrench.chmodSyncRecursive(this.userInput.contentDir, 0775);
+	}
 
 };
 /**/
