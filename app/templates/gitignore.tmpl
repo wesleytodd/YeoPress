@@ -1,3 +1,9 @@
+<% contentDir = userInput.contentDir;
+if (userInput.wpDir == '.') {
+	wpDir = '';
+} else {
+	wpDir = userInput.wpDir;
+} %>
 # As Yeoman assumes the usage of Bower and Grunt, ignore the below:
 bower_components
 node_modules
