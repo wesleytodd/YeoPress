@@ -284,13 +284,25 @@ var promptForData = function(done) {
 					if (i.submodule) {
 						input.customDirs = true;
 					}
-					customDir();
+					ignoreWPCore();
 				});
 			} else {
-				customDir();
+				ignoreWPCore();
 			}
 		});
 	});
+
+	function ignoreWPCore() {
+		if (input.useGit && !input.submodule) {
+			prompt([prompts.ignoreWPCore], input, function() {
+				customDir();
+			});
+		}
+
+		else {
+			customDir();
+		}
+	}
 
 	function customDir() {
 		if (!input.customDirs) {

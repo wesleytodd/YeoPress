@@ -98,6 +98,14 @@ module.exports = {
 		default : 'content'
 	},
 
+	ignoreWPCore : {
+		name : 'ignoreWPCore',
+		description : 'Add WordPress Core files to .gitignore?',
+		default : 'N',
+		pattern : boolRegex,
+		before : boolFilter
+	},
+
 	theme : {
 		name : 'theme',
 		description : 'Install a custom theme?',
