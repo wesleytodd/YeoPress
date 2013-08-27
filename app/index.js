@@ -288,13 +288,25 @@ var promptForData = function(done) {
 					if (i.submodule) {
 						input.customDirs = true;
 					}
-					customDir();
+					ignoreWPCore();
 				});
 			} else {
-				customDir();
+				ignoreWPCore();
 			}
 		});
 	});
+
+	function ignoreWPCore() {
+		if (input.useGit && !input.submodule) {
+			prompt([prompts.ignoreWPCore], input, function() {
+				customDir();
+			});
+		}
+
+		else {
+			customDir();
+		}
+	}
 
 	function customDir() {
 		if (!input.customDirs) {
@@ -365,6 +377,7 @@ function confirmInput(done) {
 	logConfirmation('WordPress content directory', this.userInput.contentDir);
 	logConfirmation('Initialize a Git repo', ((this.userInput.useGit) ? 'Yes' : 'No'));
 	logConfirmation('Install WordPress as a Git submodule', ((this.userInput.submodule) ? 'Yes' : 'No'));
+	logConfirmation('Add WordPress Core files to .gitignore?', ((this.userInput.ignoreWPCore) ? 'Yes' : 'No'));
 	if (this.userInput.theme) {
 		logConfirmation('Theme install directory', path.join(this.userInput.contentDir, 'themes', this.userInput.themeDir));
 	}

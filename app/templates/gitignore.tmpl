@@ -1,10 +1,15 @@
+<% contentDir = userInput.contentDir;
+if (userInput.wpDir == '.') {
+	wpDir = '';
+} else {
+	wpDir = userInput.wpDir;
+} %>
 # As Yeoman assumes the usage of Bower and Grunt, ignore the below:
 bower_components
 node_modules
 
 # Ignore configuration and automatically generated cruft
 wp-config.php
-sitemap.xml
 *.log
 .sass-cache
 
@@ -15,3 +20,59 @@ sitemap.xml
 .DS_Store?
 ehthumbs.db
 Thumbs.db
+
+# WordPress + popular plugin generated — adapted from:
+# https://github.com/github/gitignore/blob/master/WordPress.gitignore
+
+<%= userInput.contentDir %>/advanced-cache.php
+<%= userInput.contentDir %>/backup-db/
+<%= userInput.contentDir %>/backups/
+<%= userInput.contentDir %>/blogs.dir/
+<%= userInput.contentDir %>/cache/
+<%= userInput.contentDir %>/wp-content/index.php
+<%= userInput.contentDir %>/wp-content/plugins/index.php
+<%= userInput.contentDir %>/wp-content/themes/index.php
+<%= userInput.contentDir %>/uploads/
+<%= userInput.contentDir %>/upgrade/
+<%= userInput.contentDir %>/wp-cache-config.php
+sitemap.xml
+sitemap.xml.gz
+<% if (userInput.ignoreWPCore) { %>
+# WordPress Core
+<%= wpDir %>/db-config.php
+<%= wpDir %>/index.php
+<%= wpDir %>/license.txt
+<%= wpDir %>/readme.html
+<%= wpDir %>/wp-activate.php
+<%= wpDir %>/wp-app.php
+<%= wpDir %>/wp-atom.php
+<%= wpDir %>/wp-blog-header.php
+<%= wpDir %>/wp-comments-post.php
+<%= wpDir %>/wp-commentsrss2.php
+<%= wpDir %>/wp-config-sample.php
+<%= wpDir %>/wp-cron.php
+<%= wpDir %>/wp-feed.php
+<%= wpDir %>/wp-links-opml.php
+<%= wpDir %>/wp-load.php
+<%= wpDir %>/wp-login.php
+<%= wpDir %>/wp-mail.php
+<%= wpDir %>/wp-rdf.php
+<%= wpDir %>/wp-rss.php
+<%= wpDir %>/wp-rss2.php
+<%= wpDir %>/wp-pass.php
+<%= wpDir %>/wp-register.php
+<%= wpDir %>/wp-settings.php
+<%= wpDir %>/wp-signup.php
+<%= wpDir %>/wp-trackback.php
+<%= wpDir %>/xmlrpc.php
+<%= wpDir %>/wp-admin
+<%= wpDir %>/wp-includes
+<%= wpDir %>/wp-content/index.php
+<%= wpDir %>/wp-content/plugins/hello.php
+<%= wpDir %>/wp-content/plugins/index.php
+<%= wpDir %>/wp-content/themes/index.php
+<%= wpDir %>/wp-content/themes/twentyten
+<%= wpDir %>/wp-content/themes/twentyeleven
+<%= wpDir %>/wp-content/themes/twentytwelve
+<%= wpDir %>/wp-content/themes/twentythirteen
+<% } %>
