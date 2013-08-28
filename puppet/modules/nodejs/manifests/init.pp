@@ -8,7 +8,8 @@ class nodejs
 		"clone-node-repo":
 			cwd => "/home/vagrant",
 			command => "git clone $nodeRepo node-source",
-			require => Package["git"]
+			require => Package["git"],
+			timeout => 0
 	}
 
 	exec
