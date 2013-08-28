@@ -1,0 +1,35 @@
+{
+  "checksums": {
+    "manifests/pear/config.pp": "5c95dd016ea6afc49032ff7e6b5f3d84",
+    "spec/classes/php_spec.rb": "d9413b818824e2c16d2098ba05d740c9",
+    "manifests/spec.pp": "54e08deee642afe3d738450de38eb50d",
+    "spec/spec_helper.rb": "bd78135840ec04e608abb37b5c8d72b6",
+    "manifests/pecl/module.pp": "ba2a78656cf494d61c6cf81ca7f67b6b",
+    "README.rdoc": "9b31cd52dd25d8ea9a75da1f8691eb19",
+    "manifests/params.pp": "136577ebb6ca5e566736c83967fd3cc8",
+    "Modulefile": "743e868efeffbdaceb093d617b4b50d5",
+    "manifests/pear/module.pp": "48810a4435dd153d8e9abaf10bbf1d67",
+    "manifests/init.pp": "73978239f8181cbf48e68d6941b50f51",
+    "Rakefile": "db67bde0625f9c5f11fed4f117befe1e",
+    "manifests/module.pp": "30df0962a84cf9f89eb15743ea5817c6",
+    "templates/spec.erb": "95554a191230174b3ba5942f8d8d5b1e",
+    "manifests/pear.pp": "06976eca104070449450ab4e4a63b1e1"
+  },
+  "license": "Apache2",
+  "types": [
+
+  ],
+  "version": "2.0.8",
+  "dependencies": [
+    {
+      "version_requirement": ">= 2.0.0",
+      "name": "example42/puppi"
+    }
+  ],
+  "summary": "Puppet module for php",
+  "source": "https://github.com/example42/puppet-php",
+  "description": "This module installs and manages php. Check README.rdoc for details. Puppi is required for some common functions: you can install them without using the whole module. Monitor and firewall dependencies are needed only if the relevant features are enabled",
+  "author": "Alessandro Franceschi",
+  "name": "example42-php",
+  "project_page": "http://www.example42.com"
+}

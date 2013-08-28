@@ -1,0 +1,15 @@
+Debian:
+  package_check:
+    command: '/usr/bin/dpkg --get-selections apache2'
+    stdout: !ruby/regexp '/^apache2\s+install$/'
+  service_check:
+    command: '/usr/sbin/service apache2 status'
+    stdout: ''
+RedHat:
+  package_check:
+    command: 'rpm -q httpd'
+    stdout: !ruby/regexp '/httpd/'
+  service_check:
+    command: '/sbin/service httpd status'
+    stdout: ''
+

@@ -1,6 +1,6 @@
 class nodejs
 {
-	$nodeVersion = "v0.10.12"
+	$nodeVersion = "v0.10.17"
 	$nodeRepo = "https://github.com/joyent/node.git"
 
 	exec
@@ -8,7 +8,8 @@ class nodejs
 		"clone-node-repo":
 			cwd => "/home/vagrant",
 			command => "git clone $nodeRepo node-source",
-			require => Package["git"]
+			require => Package["git"],
+			timeout => 0
 	}
 
 	exec

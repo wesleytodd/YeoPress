@@ -1,0 +1,43 @@
+# ************************************
+# Vhost template in module puppetlabs-apache
+# Managed by Puppet
+# ************************************
+
+<VirtualHost <%= @nvh_addr_port %>>
+  ServerName <%= @servername_real %>
+<% if @serveradmin -%>
+  ServerAdmin <%= @serveradmin %>
+<% end -%>
+
+  ## Vhost docroot
+<% if @virtual_docroot -%>
+  VirtualDocumentRoot <%= @virtual_docroot %>
+<% else -%>
+  DocumentRoot <%= @docroot %>
+<% end -%>
+<%= scope.function_template(['apache/vhost/_aliases.erb']) -%>
+
+  ## Directories, there should at least be a declaration for <%= @docroot %>
+<%= scope.function_template(['apache/vhost/_directories.erb']) -%>
+
+  ## Logging
+<% if @error_log -%>
+  ErrorLog <%= @error_log_destination %>
+<% end -%>
+  LogLevel warn
+  ServerSignature Off
+<% if @access_log -%>
+  CustomLog <%= @access_log_destination %> <%= @_access_log_format %>
+<% end -%>
+<%= scope.function_template(['apache/vhost/_block.erb']) -%>
+<%= scope.function_template(['apache/vhost/_proxy.erb']) -%>
+<%= scope.function_template(['apache/vhost/_rack.erb']) -%>
+<%= scope.function_template(['apache/vhost/_redirect.erb']) -%>
+<%= scope.function_template(['apache/vhost/_rewrite.erb']) -%>
+<%= scope.function_template(['apache/vhost/_scriptalias.erb']) -%>
+<%= scope.function_template(['apache/vhost/_serveralias.erb']) -%>
+<%= scope.function_template(['apache/vhost/_setenv.erb']) -%>
+<%= scope.function_template(['apache/vhost/_ssl.erb']) -%>
+<%= scope.function_template(['apache/vhost/_requestheader.erb']) -%>
+<%= scope.function_template(['apache/vhost/_custom_fragment.erb']) -%>
+</VirtualHost>
