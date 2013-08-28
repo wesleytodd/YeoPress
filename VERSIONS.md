@@ -1,5 +1,6 @@
 ## Versions
 
+- **1.1.0:** New puppet configuration, optionally ignore WP core files, started getting some test coverage, added a more robust gitignore file and moved over to chalk for command line colors.
 - **1.0.5 && 1.0.6:** Trying to fix colors
 - **1.0.4:** Vagrant configuration
 - **1.0.3:** Added support for alternate port configurations and changed things for compatibility with updates in yeoman-generator.
