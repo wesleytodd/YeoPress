@@ -24,12 +24,6 @@ Vagrant.configure("2") do |config|
 	puppet.module_path = "puppet/modules"
   end
 
-  # Enable Remote MySQL Access
-  config.vm.provision :shell, :path => "puppet/scripts/enable_remote_mysql_access.sh"
-
-  # Create dagabase and user
-  config.vm.provision :shell, :path => "puppet/scripts/create_mysql_user_database.sh"
-
   # Synced Folder
   config.vm.synced_folder ".", "/home/vagrant/www"
 
