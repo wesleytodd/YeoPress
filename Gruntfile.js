@@ -1,8 +1,18 @@
 module.exports = function(grunt) {
+
+	// Configuration
 	grunt.initConfig({
 		clean: {
 			site: ['test/site/*', 'test/site/.*', '!test/site/.gitkeep'],
-			test: ['test/tmp']
+			test: ['test/tmp'],
+			cache: {
+				options: {force: true},
+				src: [
+					// Wordpress
+					process.env.HOME + '/.yeoman/cache/wordpress',
+					// Yeopress default theme
+					process.env.HOME + 'wesleytodd/YeoPress']
+			}
 		},
 		test: {
 			unit: {
@@ -15,9 +25,8 @@ module.exports = function(grunt) {
 		}
 	});
 
+	// Load external tasks
 	grunt.loadNpmTasks('grunt-contrib-clean');
-
-	grunt.registerTask('default', ['clean:test', 'test']);
 
 	// Test runner task
 	grunt.registerMultiTask('test', function() {

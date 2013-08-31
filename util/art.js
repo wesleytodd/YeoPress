@@ -1,38 +1,38 @@
-require('chalk');
+var chalk = require('chalk');
 
 module.exports = {
 	wp : [
-		'   ',
-		'                     YeoPress'.red.bold,
-		'   ',
-		'                 ..::::::::::::..             '.grey,
-		'             .:::'.grey + '   ' + '::::::::::'.cyan + '   ' + '::..         '.grey,
-		'           .:'.grey + '    ' + ':::::::::::::::'.cyan + '    ' + ':..       '.grey,
-		'         .:'.grey + '   ' + ':::::::::::::::::::::'.cyan + '   ' + ':.      '.grey,
-		'        .:'.grey + '  ' + '::::::::::::::::::::::'.cyan + '     ' + ':..    '.grey,
-		'       .:'.grey + '  ' + '::::::::::::::::::::::'.cyan + '       ' + '::.   '.grey,
-		'      .:'.grey + '         ' + '::'.cyan + '          ' + '::::'.cyan + '        ' + ':..  '.grey,
-		'     .:'.grey + '       ' + '::::::::'.cyan + '     ' + ':::::::'.cyan + '        ' + ':.  '.grey,
-		'     :'.grey + '  ' + ':'.cyan + '      ' + ':::::::'.cyan + '      ' + ':::::::'.cyan + '     ' + ':'.cyan + '  ' + ':. '.grey,
-		'    .:'.grey + '  ' + '::'.cyan + '     ' + '::::::::'.cyan + '     ' + ':::::::'.cyan + '    ' + '::'.cyan + '  ' + ':. '.grey,
-		'    ::'.grey + ' ' + '::::'.cyan + '     ' + ':::::::'.cyan + '      ' + ':::::::'.cyan + '   ' + ':::'.cyan + ' ' + ':: '.grey,
-		'    ::'.grey + ' ' + '::::'.cyan + '     ' + '::::::::'.cyan + '     ' + ':::::::'.cyan + '   ' + ':::'.cyan + ' ' + ':: '.grey,
-		'    ::'.grey + ' ' + ':::::'.cyan + '     ' + ':::::::'.cyan + '      ' + '::::::'.cyan + '  ' + '::::'.cyan + ' ' + ':: '.grey,
-		'    ::'.grey + ' ' + ':::::'.cyan + '     ' + '::::::'.cyan + '       ' + '::::::'.cyan + ' ' + ':::::'.cyan + ' ' + ':. '.grey,
-		'    .:'.grey + '  ' + ':::::'.cyan + '     ' + ':::::'.cyan + ' ' + '::'.cyan + '     ' + '::::'.cyan + '  ' + '::::'.cyan + '  ' + ':. '.grey,
-		'     :'.grey + '  ' + '::::::'.cyan + '     ' + ':::'.cyan + ' ' + ':::'.cyan + '     ' + '::::'.cyan + ' ' + ':::::'.cyan + '  ' + ':. '.grey,
-		'     .:'.grey + '  ' + ':::::'.cyan + '     ' + '::'.cyan + '  ' + '::::'.cyan + '     ' + '::'.cyan + '  ' + '::::'.cyan + '  ' + ':.  '.grey,
-		'      .:'.grey + '  ' + ':::::'.cyan + '     ' + ':'.cyan + ' ' + '::::::'.cyan + '    ' + '::'.cyan + ' ' + '::::'.cyan + '  ' + '::.  '.grey,
-		'      .::'.grey + '  ' + '::::'.cyan + '       ' + '::::::'.cyan + '       ' + ':::'.cyan + '  ' + '::.   '.grey,
-		'        .:'.grey + '  ' + '::::'.cyan + '     ' + '::::::::'.cyan + '     ' + ':::'.cyan + '  ' + '::.    '.grey,
-		'         .:'.grey + '   ' + '::'.cyan + '     ' + '::::::::'.cyan + '    ' + '::'.cyan + '   ' + ':.      '.grey,
-		'          .::'.grey + '       ' + '::::::::::'.cyan + '      ' + '::.       '.grey,
-		'            ..::'.grey + '     ' + ':::::::'.cyan + '     ' + '::..         '.grey,
-		'               ..:::'.grey + '         ' + ':::..            '.grey,
-		'                   ...:::::...                '.grey,
-		'   ',
+		'',
+		chalk.bold.red('                     YeoPress'),
+		'',
+		chalk.grey('                 ..::::::::::::..'),
+		chalk.grey('             .:::   ')  + chalk.cyan('::::::::::')                          + chalk.grey('   ::..'),
+		chalk.grey('           .:    ')     + chalk.cyan(':::::::::::::::')                     + chalk.grey('    :..'),
+		chalk.grey('         .:   ')        + chalk.cyan(':::::::::::::::::::::')               + chalk.grey('   :.'),
+		chalk.grey('        .:  ')          + chalk.cyan('::::::::::::::::::::::')              + chalk.grey('     :..'),
+		chalk.grey('       .:  ')           + chalk.cyan('::::::::::::::::::::::')              + chalk.grey('       ::.'),
+		chalk.grey('      .:         ')     + chalk.cyan(':::          :::')                    + chalk.grey('        :..'),
+		chalk.grey('     .:       ')        + chalk.cyan('::::::::     :::::::')                + chalk.grey('        :.'),
+		chalk.grey('     :  ')              + chalk.cyan(':      :::::::      :::::::     :')   + chalk.grey('  :.'),
+		chalk.grey('    .:  ')              + chalk.cyan('::     ::::::::     :::::::    ::')   + chalk.grey('  :.'),
+		chalk.grey('    :: ')               + chalk.cyan('::::     :::::::      :::::::   :::') + chalk.grey(' ::'),
+		chalk.grey('    :: ')               + chalk.cyan('::::     ::::::::     :::::::   :::') + chalk.grey(' ::'),
+		chalk.grey('    :: ')               + chalk.cyan(':::::     :::::::      ::::::  ::::') + chalk.grey(' ::'),
+		chalk.grey('    :: ')               + chalk.cyan(':::::     ::::::       ::::::  ::::') + chalk.grey(' :.'),
+		chalk.grey('    .:  ')              + chalk.cyan(':::::     :::::  ::    ::::  ::::')   + chalk.grey('  :.'),
+		chalk.grey('     :  ')              + chalk.cyan('::::::     :::   ::    ::::  ::::')   + chalk.grey('  :.'),
+		chalk.grey('     .:  ')             + chalk.cyan(':::::     ::   :::     ::  ::::')     + chalk.grey('  :.'),
+		chalk.grey('      .:  ')            + chalk.cyan(':::::        :::::    ::  :::')       + chalk.grey('  ::.'),
+		chalk.grey('      .::  ')           + chalk.cyan('::::       ::::::       :::')         + chalk.grey('  ::.'),
+		chalk.grey('        .:  ')          + chalk.cyan('::::     ::::::::     :::')           + chalk.grey('  ::.'),
+		chalk.grey('         .:   ')        + chalk.cyan('::    :::::::::    ::')               + chalk.grey('   :.'),
+		chalk.grey('          .::      ')   + chalk.cyan('::::::::::')                          + chalk.grey('      ::.'),
+		chalk.grey('            ..::    ') + chalk.cyan('::::::::')                             + chalk.grey('    ::..'),
+		chalk.grey('               ..:::..     ..:::..'),
+		chalk.grey('                    ..:::::.. '),
+		'',
 		'          A Yeoman Generator For WordPress'.red,
-		'   '
+		''
 	].join('\n'),
 	go : [
 		'  ',
@@ -45,7 +45,7 @@ module.exports = {
 		'  |__| |__||_______||___|  |_||_______|    |__| |__||_______|    |_______||_______|  |__|',
 		'  '
 	].join('\n').rainbow,
-	wawa : [
+	wawa : chalk.red([
 		'',
 		'____    __    ____  ___   ____    __    ____  ___       __   __ ',
 		'\\   \\  /  \\  /   / /   \\  \\   \\  /  \\  /   / /   \\     |  | |  |',
@@ -56,5 +56,5 @@ module.exports = {
 		'',
 		'                 Game over....try again.',
 		''
-	].join('\n').red
+	].join('\n'))
 };

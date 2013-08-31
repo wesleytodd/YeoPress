@@ -8,6 +8,7 @@ var util         = require('util'),
 	path         = require('path'),
 	yeoman       = require('yeoman-generator'),
 	wrench       = require('wrench'),
+	chalk        = require('chalk'),
 	git          = require('../util/git'),
 	prompt       = require('../util/prompt'),
 	wordpress    = require('../util/wordpress'),
@@ -72,7 +73,7 @@ Generator.prototype.gitIsTheShit = function() {
 Generator.prototype.heIsSuchAVagrant = function() {
 
 	if (this.userInput.useVagrant) {
-		console.log('Setting Up Vagrant'.green);
+		console.log(chalk.green('Setting Up Vagrant'));
 		this.template('Vagrantfile', 'Vagrantfile');
 		this.directory('puppet', 'puppet');
 	}
@@ -146,7 +147,7 @@ Generator.prototype.hazBaseData = function() {
 	var done = this.async();
 
 	wordpress.createDBifNotExists(done).on('error', function(err) {
-		console.log('Database does not exist, or crendetials are wrong!'.red);
+		console.log(chalk.red('Database does not exist, or crendetials are wrong!'));
 		console.log('Make sure you create the database and update the credentials in the wp-config.php');
 		done();
 	});
@@ -160,12 +161,12 @@ Generator.prototype.hazBaseData = function() {
 Generator.prototype.youAreNotAllowd = function() {
 
 	if (fs.existsSync('.')) {
-		console.log('Setting Permissions: 0755 on .'.green);
+		console.log(chalk.green('Setting Permissions: 0755 on .'));
 		wrench.chmodSyncRecursive('.', 0755);
 	}
 
 	if (fs.existsSync(this.userInput.contentDir)) {
-		console.log(('Setting Permissions: 0775 on ' + this.userInput.contentDir).green);
+		console.log(chalk.green('Setting Permissions: 0775 on ' + this.userInput.contentDir));
 		wrench.chmodSyncRecursive(this.userInput.contentDir, 0775);
 	}
 
@@ -223,7 +224,6 @@ Generator.prototype.dummyYouHaveToPlugItInFirst = function() {
 // Commit again with the template
 Generator.prototype.gitMeMOARCommits = function() {
 
-
 	if (this.userInput.git) {
 
 		var done = this.async();
@@ -238,7 +238,8 @@ Generator.prototype.gitMeMOARCommits = function() {
 
 // All done
 Generator.prototype.oopsIPeedMyself = function() {
-	console.log('All Done!!'.green);
+	console.log(chalk.green('All Done!!\n'));
+	console.log('Now it\'s time to check your `wp-config.php` to make sure all the settings work on your machine.\nI tried my best to set things up, but I\'m only human right? **wink wink**')
 };
 
 /**================================
@@ -362,7 +363,7 @@ function confirmInput(done) {
 
 	var me  = this;
 
-	console.log('\n----------------------------'.red);
+	console.log(chalk.red('\n----------------------------'));
 
 	logConfirmation('WordPress URL', this.userInput.url);
 	logConfirmation('Database table prefix', this.userInput.tablePrefix);
@@ -380,7 +381,7 @@ function confirmInput(done) {
 		logConfirmation('Theme install directory', path.join(this.userInput.contentDir, 'themes', this.userInput.themeDir));
 	}
 
-	console.log('----------------------------'.red);
+	console.log(chalk.red('----------------------------'));
 
 	prompt([prompts.correct], null, function(input) {
 		if (!input.correct) {
@@ -395,5 +396,5 @@ function confirmInput(done) {
 };
 
 function logConfirmation(msg, val) {
-	console.log(msg.bold.grey + ': '.bold.grey + val.cyan);
+	console.log(chalk.bold.grey(msg + ': ') + chalk.cyan(val));
 };

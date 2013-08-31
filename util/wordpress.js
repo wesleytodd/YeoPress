@@ -2,6 +2,7 @@ var https = require('https'),
 	fs = require('fs'),
 	path = require('path'),
 	mysql = require('mysql'),
+	chalk = require('chalk'),
 	exec = require('child_process').exec,
 	git = require('./git'),
 	EventEmitter = require('events').EventEmitter,
@@ -193,7 +194,7 @@ function installTheme(generator, config, done) {
 
 function setupTheme(generator, config, done) {
 	
-	console.log('Setting Up Theme'.green);
+	console.log(chalk.green('Setting Up Theme'));
 
 	var themePath = path.join(config.contentDir, 'themes', config.themeDir),
 		themePackageJson = path.join(themePath, 'package.json');
@@ -204,18 +205,18 @@ function setupTheme(generator, config, done) {
 		exec('npm install', function(err) {
 			if (fs.existsSync('Gruntfile.js')) {
 				exec('grunt setup', function(err) {
-					console.log('Theme setup!'.green);
+					console.log(chalk.green('Theme setup!'));
 					process.chdir(oldDir);
 					done();
 				});
 			} else {
-				console.log('Gruntfile.js missing!'.red);
+				console.log(chalk.red('Gruntfile.js missing!'));
 				process.chdir(oldDir);
 				done();
 			}
 		});
 	} else {
-		console.log('package.json missing!'.red);
+		console.log(chalk.red('package.json missing!'));
 		done();
 	}
 

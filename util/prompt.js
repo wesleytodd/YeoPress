@@ -1,8 +1,9 @@
 var prompt = require('prompt'),
 	util = require('util'),
+	chalk = require('chalk'),
 	EventEmitter = require('events').EventEmitter;
 
-prompt.message = '['.grey + '?'.green + ']'.grey;
+prompt.message = chalk.grey('[') + chalk.green('?') + chalk.grey(']');
 prompt.delimiter = ' ';
 
 module.exports = function(prompts, obj, callback) {

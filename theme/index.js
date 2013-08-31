@@ -18,6 +18,8 @@ module.exports = Generator;
 // Extend the base generator
 function Generator(args, options, config) {
 	yeoman.generators.Base.apply(this, arguments);
+	console.log('This feature is not yet fully working.  Please take a detour to your left.');
+	process.exit();
 };
 util.inherits(Generator, yeoman.generators.Base);
 

@@ -1,6 +1,6 @@
 var spawn = require('child_process').spawn,
 	util = require('util'),
-	_c = require('chalk');
+	chalk = require('chalk');
 
 module.exports = function execute(command, args, options, messages) {
 
@@ -28,7 +28,7 @@ module.exports = function execute(command, args, options, messages) {
 
 	p.on('error', function(err) {
 		if (typeof messages.error !== 'undefined') {
-			console.error(_c.red(messages.error), err);
+			console.error(chalk.red(messages.error), err);
 		} else {
 			console.error(err);
 		}
@@ -36,7 +36,7 @@ module.exports = function execute(command, args, options, messages) {
 
 	p.on('close', function() {
 		if (typeof messages.success !== 'undefined') {
-			console.log(_c.green(messages.success));
+			console.log(chalk.green(messages.success));
 		}
 	});
 
