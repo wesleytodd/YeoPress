@@ -158,7 +158,7 @@ Generator.prototype.hazBaseData = function() {
 /* @TODO Thinking that maybe permissions should be left up to the user 
    BUT, it seems that the theme stuff needs some permissions set to work....
 */
-Generator.prototype.youAreNotAllowd = function() {
+Generator.prototype.thisIsSparta = function() {
 
 	if (fs.existsSync('.')) {
 		console.log(chalk.green('Setting Permissions: 0755 on .'));
@@ -238,8 +238,9 @@ Generator.prototype.gitMeMOARCommits = function() {
 
 // All done
 Generator.prototype.oopsIPeedMyself = function() {
-	console.log(chalk.green('All Done!!\n'));
-	console.log('Now it\'s time to check your `wp-config.php` to make sure all the settings work on your machine.\nI tried my best to set things up, but I\'m only human right? **wink wink**')
+	console.log(chalk.bold.green('\nAll Done!!\n--------------------\n'));
+	console.log('I tried my best to set things up, but I\'m only human right? **wink wink**\nSo, you should probably check your `wp-config.php` to make sure all the settings work on your environment.');
+	console.log('Have fun pressing your words!\n');
 };
 
 /**================================
