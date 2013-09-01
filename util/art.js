@@ -1,5 +1,25 @@
 var chalk = require('chalk');
 
+// Rainbow display
+var rainbowColors = [
+	chalk.red,
+	chalk.yellow,
+	chalk.green,
+	chalk.blue,
+	chalk.magenta
+];
+chalk.rainbow = function(str) {
+	var arStr = str.split(''),
+		out = '';
+	for (var i in arStr) {
+		if (arStr[i] == ' ' || arStr[i] == '\t' || arStr[i] == '\n')
+			out += arStr[i];
+		else
+			out += rainbowColors[i % rainbowColors.length](arStr[i]);
+	}
+	return out;
+};
+
 module.exports = {
 	wp : [
 		'',
@@ -31,10 +51,10 @@ module.exports = {
 		chalk.grey('               ..:::..     ..:::..'),
 		chalk.grey('                    ..:::::.. '),
 		'',
-		'          A Yeoman Generator For WordPress'.red,
+		chalk.red('          A Yeoman Generator For WordPress'),
 		''
 	].join('\n'),
-	go : [
+	go : chalk.rainbow([
 		'  ',
 		'   __   __  _______  ______    _______      _     _  _______      _______  _______    __ ',
 		'  |  | |  ||       ||    _ |  |       |    | | _ | ||       |    |       ||       |  |  |',
@@ -43,8 +63,8 @@ module.exports = {
 		'  |       ||    ___||    __  ||    ___|    |       ||    ___|    |   ||  ||  |_|  |  |__|',
 		'  |   _   ||   |___ |   |  | ||   |___     |   _   ||   |___     |   |_| ||       |   __ ',
 		'  |__| |__||_______||___|  |_||_______|    |__| |__||_______|    |_______||_______|  |__|',
-		'  '
-	].join('\n').rainbow,
+		''
+	].join('\n')),
 	wawa : chalk.red([
 		'',
 		'____    __    ____  ___   ____    __    ____  ___       __   __ ',
