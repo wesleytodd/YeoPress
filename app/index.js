@@ -147,7 +147,7 @@ Generator.prototype.hazBaseData = function() {
 	var done = this.async();
 
 	wordpress.createDBifNotExists(done).on('error', function(err) {
-		console.log(chalk.red('Database does not exist, or crendetials are wrong!'));
+		console.log(chalk.red('Database does not exist, or the credentials are wrong!'));
 		console.log('Make sure you create the database and update the credentials in the wp-config.php');
 		done();
 	});
