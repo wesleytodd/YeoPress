@@ -74,12 +74,6 @@ define('WP_HOME',    'http://' . $_SERVER['SERVER_NAME'] . '<%= userInput.port %
 define('WP_CONTENT_DIR', __dir__ . '/<%= userInput.contentDir %>');
 define('WP_CONTENT_URL', 'http://' . $_SERVER['SERVER_NAME'] . '<%= userInput.port %>/<%= userInput.contentDir %>');
 
-/**
- * Disable external requests
- *
- * This is so that users dont see update requests since things are managed through git
- */
-define('WP_HTTP_BLOCK_EXTERNAL', true);
 <% } %>
 /**
  * For developers: WordPress debugging mode.
