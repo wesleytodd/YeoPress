@@ -1,5 +1,6 @@
 ## Versions
 
+- **1.1.3:** Removed block on external requests
 - **1.1.2:** Updated version of yeoman-generator
 - **1.1.0:** New puppet configuration, optionally ignore WP core files, started getting some test coverage, added a more robust gitignore file and moved over to chalk for command line colors.
 - **1.0.5 && 1.0.6:** Trying to fix colors
