@@ -13,19 +13,25 @@
  *
  * @package WordPress
  */
+ 
+// Include local configuration
+if (file_exists(dirname(__FILE__) . '/local-config.php')) {
+	include(dirname(__FILE__) . '/local-config.php');
+}
 
-// ** MySQL settings - You can get this info from your web host ** //
-/** The name of the database for WordPress */
-define('DB_NAME', '<%= userInput.dbName %>');
-
-/** MySQL database username */
-define('DB_USER', '<%= userInput.dbUser %>');
-
-/** MySQL database password */
-define('DB_PASSWORD', '<%= userInput.dbPass %>');
-
-/** MySQL hostname */
-define('DB_HOST', '<%= userInput.dbHost %>');
+// Global DB config
+if (!defined('DB_NAME')) {
+	define('DB_NAME', '<%= userInput.dbName %>');
+}
+if (!defined('DB_USER')) {
+	define('DB_USER', '<%= userInput.dbUser %>');
+}
+if (!defined('DB_PASSWORD')) {
+	define('DB_PASSWORD', '<%= userInput.dbPass %>');
+}
+if (!defined('DB_HOST')) {
+	define('DB_HOST', '<%= userInput.dbHost %>');
+}
 
 /** Database Charset to use in creating database tables. */
 define('DB_CHARSET', 'utf8');
@@ -82,7 +88,9 @@ define('WP_CONTENT_URL', 'http://' . $_SERVER['SERVER_NAME'] . '<%= userInput.po
  * It is strongly recommended that plugin and theme developers use WP_DEBUG
  * in their development environments.
  */
-define('WP_DEBUG', false);
+if (!defined('WP_DEBUG')) {
+	define('WP_DEBUG', false);
+}
 
 /* That's all, stop editing! Happy blogging. */
 
