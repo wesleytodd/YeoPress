@@ -80,7 +80,10 @@ module.exports = function(advanced) {
 			key: 'ignoreWPCore',
 			default: 'N',
 			required: true,
-			boolean: true
+			boolean: true,
+			depends: function(res) {
+				return !!res.useGit;
+			}
 		}, {
 			question: 'Install a custom theme?',
 			key: 'theme',

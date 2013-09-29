@@ -17,7 +17,8 @@
     "yeoman-generator": "~0.11.4",
     "wrench": "~1.4.4",
     "mysql": "~2.0.0-alpha7",
-    "chalk": "~0.2.1"
+    "chalk": "~0.2.1",
+	"simple-git": "~0.1.2"
   },
   "repository": {
     "type": "git",

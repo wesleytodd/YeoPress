@@ -4,7 +4,6 @@ var https = require('https'),
 	mysql = require('mysql'),
 	chalk = require('chalk'),
 	exec = require('child_process').exec,
-	git = require('./git'),
 	EventEmitter = require('events').EventEmitter,
 	wordpressRepo = "git://github.com/WordPress/WordPress.git";
 
@@ -25,27 +24,17 @@ function getSaltKeys(callback) {
 };
 
 function getCurrentVersion(callback) {
-	var ee = new EventEmitter(),
-		latestVersion = '3.5.1';
-
-	git.listRemoteTags(wordpressRepo).on('close', function(tagsList) {
-		tagList = '' + tagsList;
-		tagList = tagList.split('\n');
+	var latestVersion = '3.5.1';
+	require('simple-git')().listRemote('--tags '+ wordpressRepo, function(err, tagsList) {
+		if (err) return callback(err, latestVersion);
+		tagList = ('' + tagsList).split('\n');
 		tagList.pop();
-		var lastTag = tagList.pop();
-		lastTag = /\d\.\d\.\d/ig.exec(lastTag);
+		lastTag = /\d\.\d\.\d/ig.exec(tagList.pop());
 		if (lastTag !== null) {
 			latestVersion = lastTag[0];
 		}
-		ee.emit('close', latestVersion);
+		callback(null, latestVersion);
 	});
-
-	if (typeof callback === 'function') {
-		ee.on('close', callback);
-		ee.on('error', callback);
-	}
-
-	return ee;
 };
 
 function loadConfig() {

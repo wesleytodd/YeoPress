@@ -8,8 +8,8 @@ var util         = require('util'),
 	yeoman       = require('yeoman-generator'),
 	wrench       = require('wrench'),
 	chalk        = require('chalk'),
+	git          = require('simple-git')(),
 	prompt       = require('../util/prompt'),
-	git          = require('../util/git'),
 	wordpress    = require('../util/wordpress'),
 	art          = require('../util/art'),
 	Logger       = require('../util/log');
@@ -60,7 +60,8 @@ Generator.prototype.ohTellMeWhatYouWantWhatYouReallyReallyWant = function() {
 	this.logger.log(art.wp);
 	
 	var currentWpVer;
-	wordpress.getCurrentVersion(function(ver) {
+	wordpress.getCurrentVersion(function(err, ver) {
+		if (err) me.logger.warn('Error getting WP versions.  Falling back to ' + ver);
 		currentWpVer = ver;
 		getInput();
 	});
@@ -113,10 +114,16 @@ Generator.prototype.gitIsTheShit = function() {
 			me = this;
 
 		this.logger.verbose('Starting to setup Git');
-		git.init(function() {
+		git.init(function(err) {
+			if (err) me.logger.error(err);
+
 			me.logger.verbose('Git init complete');
-			git.addAllAndCommit('Initial Commit', function() {
-				me.logger.verbose('Git add and commit complete');
+			git.add('.', function(err) {
+				if (err) me.logger.error(err);
+			}).commit('Initial Commit', function(err, d) {
+				if (err) me.logger.error(err);
+				
+				me.logger.verbose('Git add and commit complete:', d);
 				done();
 			});
 		});
@@ -145,14 +152,17 @@ Generator.prototype.wordWhatUp = function() {
 		me   = this;
 
 	if (this.userInput.submodule) {
-		this.logger.verbose('Installing WordPress ' + this.userInput.wpVer + 'as a submodule');
-		git.submoduleAdd(wordpress.repo, this.userInput.wpDir, function() {
+		this.logger.verbose('Installing WordPress ' + this.userInput.wpVer + ' as a submodule');
+		git.submoduleAdd(wordpress.repo, this.userInput.wpDir, function(err) {
+			if (err) me.logger.error(err);
+
 			me.logger.verbose('Submodule added');
 			var cwd = process.cwd();
-			process.chdir(me.userInput.wpDir);
-			me.logger.verbose('Checking out WP version');
-			git.checkout([me.userInput.wpVer], function() {
-				process.chdir(cwd);
+			git._baseDir = me.userInput.wpDir;
+			me.logger.verbose('Checking out WP version ' + me.userInput.wpVer);
+			git.checkout(me.userInput.wpVer, function(err) {
+				if (err) me.logger.error(err);
+				git._baseDir = cwd;
 				me.logger.verbose('WordPress installed');
 				done();
 			});
@@ -253,11 +263,11 @@ Generator.prototype.commitThisToMemory = function() {
 			me = this;
 
 		this.logger.verbose('Committing WP to Git');
-		git.addAllAndCommit('Setup WordPress', function() {
-			me.logger.verbose('Done committing');
-			done();
-		}).on('error', function(e) {
-			me.logger.error(e);
+		git.add('.', function(err) {
+			if (err) me.logger.error(err);
+		}).commit('Initial Commit', function(err, d) {
+			if (err) me.logger.error(err);
+			me.logger.verbose('Done committing: ', d);
 			done();
 		});
 	}
@@ -301,8 +311,11 @@ Generator.prototype.gitMeMOARCommits = function() {
 	if (this.userInput.git) {
 		var done = this.async();
 		this.logger.verbose('Committing template to Git');
-		git.addAllAndCommit('Installed Template', function() {
-			this.logger.verbose('Comnmit complete');
+		git.add('.', function(err) {
+			if (err) me.logger.error(err);
+		}).commit('Initial Commit', function(err, d) {
+			if (err) me.logger.error(err);
+			me.logger.verbose('Done committing: ', d);
 			done();
 		});
 	}
