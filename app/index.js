@@ -9,8 +9,8 @@ var util         = require('util'),
 	yeoman       = require('yeoman-generator'),
 	wrench       = require('wrench'),
 	chalk        = require('chalk'),
-	git          = require('../util/git'),
 	prompt       = require('../util/prompt'),
+	git          = require('../util/git'),
 	wordpress    = require('../util/wordpress'),
 	spawn        = require('../util/spawn'),
 	art          = require('../util/art'),
@@ -22,9 +22,6 @@ module.exports = Generator;
 // Extend the base generator
 function Generator(args, options, config) {
 	yeoman.generators.Base.apply(this, arguments);
-	if (typeof options.advanced !== 'undefined' && options.advanced) {
-		prompt.advanced();
-	}
 };
 util.inherits(Generator, yeoman.generators.Base);
 
@@ -35,11 +32,39 @@ util.inherits(Generator, yeoman.generators.Base);
 // Ask the user what they want done
 Generator.prototype.ohTellMeWhatYouWantWhatYouReallyReallyWant = function() {
 
+	// This is an async step
+	var done = this.async();
+
 	// Display welcome message
 	console.log(art.wp);
 	
+	var currentWpVer;
+	wordpress.getCurrentVersion(function(ver) {
+		currentWpVer = ver;
+		getInput();
+	});
+
 	// Get the input
-	getInput.call(this, this.async());
+	var me = this;
+	function getInput() {
+		prompt.ask(prompts, {
+			confirm: {
+				message: 'Does this all look correct?',
+				before: chalk.red('\n--------------------------------'),
+				after: chalk.red('--------------------------------\n'),
+			},
+			overrideDefaults: {
+				wpVer: currentWpVer
+			}
+		}, function(err, input) {
+			if (err) {
+				console.error(err);
+				getInput();
+			}
+			me.userInput = input;
+			done();
+		});
+	}
 
 };
 
@@ -99,6 +124,7 @@ Generator.prototype.wordWhatUp = function() {
 
 	} else {
 
+		console.log(this.userInput);
 		this.remote('wordpress', 'wordpress', this.userInput.wpVer, function(err, remote) {
 			remote.directory('.', me.userInput.wpDir);
 			done();
@@ -111,7 +137,7 @@ Generator.prototype.wordWhatUp = function() {
 // Setup custom directory structure
 Generator.prototype.somethingsDifferent = function() {
 
-	if (this.userInput.customDirs) {
+	if (this.userInput.submodule || this.userInput.customDirs) {
 
 		var me = this,
 			done = this.async();
@@ -241,161 +267,4 @@ Generator.prototype.oopsIPeedMyself = function() {
 	console.log(chalk.bold.green('\nAll Done!!\n--------------------\n'));
 	console.log('I tried my best to set things up, but I\'m only human right? **wink wink**\nSo, you should probably check your `wp-config.php` to make sure all the settings work on your environment.');
 	console.log('Have fun pressing your words!\n');
-};
-
-/**================================
- * The prompt code is ulgy...so I put it at the bottom
- **===============================*/
-
-// Calls the prompt method
-// This can be called recursivly if the user messes up the input
-function getInput(done) {
-	var me = this;
-	promptForData.call(me, function(input) {
-		me.userInput = input;
-		confirmInput.call(me, done);
-	});
-};
-
-// Diaply the prompts and get the information
-var promptForData = function(done) {
-
-	// All the data will be attached to this object
-	var input = {},
-		me = this;
-
-	wordpress.getCurrentVersion(function(ver) {
-		prompts.wpVer.default = ver;
-		input.wpVer = ver;
-
-		prompt([
-			prompts.url,
-			prompts.tablePrefix,
-			prompts.dbHost,
-			prompts.dbName,
-			prompts.dbUser,
-			prompts.dbPass,
-			prompts.wpVer,
-			prompts.useVagrant,
-			prompts.useGit
-		], input, function(i) {
-			var port = i.url.match(/:[\d]+$/);
-			if (port !== null) {
-				input.port = port[0];
-			} else {
-				input.port = '';
-			}
-			if (i.useGit) {
-				prompt([prompts.submodule], input, function(i) {
-					if (i.submodule) {
-						input.customDirs = true;
-					}
-					ignoreWPCore();
-				});
-			} else {
-				ignoreWPCore();
-			}
-		});
-	});
-
-	function ignoreWPCore() {
-		if (input.useGit && !input.submodule) {
-			prompt([prompts.ignoreWPCore], input, function() {
-				customDir();
-			});
-		} else {
-			customDir();
-		}
-	}
-
-	function customDir() {
-		if (!input.customDirs) {
-			prompt([prompts.customDirs], input, function(i) {
-				if (i.customDirs) {
-					customInstallLocations();
-				} else {
-					input.wpDir = '.';
-					input.contentDir = 'wp-content';
-					installTheme();
-				}
-			});
-		} else {
-			customInstallLocations();
-		}
-	}
-
-	function customInstallLocations() {
-		prompt([prompts.wpDir, prompts.contentDir], input, function() {
-			installTheme();
-		});
-	}
-
-	function installTheme() {
-		prompt([prompts.theme], input, function(i) {
-			if (i.theme) {
-				prompt([prompts.themeDir, prompts.themeType], input, function(i) {
-					var nextPrompts = [];
-					switch(i.themeType) {
-						case 'git' :
-							nextPrompts = [
-								prompts.themeGitUser,
-								prompts.themeGitRepo,
-								prompts.themeGitBranch
-							];
-							break;
-						case 'tar' :
-							nextPrompts = [
-								prompts.themeTarUrl
-							];
-							break;
-					}
-					prompt(nextPrompts, input, function() {
-						done(input);
-					});
-				});
-			} else {
-				done(input);
-			}
-		});
-	}
-};
-
-function confirmInput(done) {
-
-	var me  = this;
-
-	console.log(chalk.red('\n----------------------------'));
-
-	logConfirmation('WordPress URL', this.userInput.url);
-	logConfirmation('Database table prefix', this.userInput.tablePrefix);
-	logConfirmation('Database host', this.userInput.dbHost);
-	logConfirmation('Database name', this.userInput.dbName);
-	logConfirmation('Database user', this.userInput.dbUser);
-	logConfirmation('Database password', this.userInput.dbPass);
-	logConfirmation('WordPress version', this.userInput.wpVer);
-	logConfirmation('WordPress install directory', this.userInput.wpDir);
-	logConfirmation('WordPress content directory', this.userInput.contentDir);
-	logConfirmation('Initialize a Git repo', ((this.userInput.useGit) ? 'Yes' : 'No'));
-	logConfirmation('Install WordPress as a Git submodule', ((this.userInput.submodule) ? 'Yes' : 'No'));
-	logConfirmation('Add WordPress Core files to .gitignore?', ((this.userInput.ignoreWPCore) ? 'Yes' : 'No'));
-	if (this.userInput.theme) {
-		logConfirmation('Theme install directory', path.join(this.userInput.contentDir, 'themes', this.userInput.themeDir));
-	}
-
-	console.log(chalk.red('----------------------------'));
-
-	prompt([prompts.correct], null, function(input) {
-		if (!input.correct) {
-			console.log(art.wawa);
-			getInput.call(me, done);
-		} else {
-			console.log(art.go);
-			done();
-		}
-	});
-
-};
-
-function logConfirmation(msg, val) {
-	console.log(chalk.bold.grey(msg + ': ') + chalk.cyan(val));
 };

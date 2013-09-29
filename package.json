@@ -13,7 +13,7 @@
   "author": "Wes Todd",
   "license": "BSD",
   "dependencies": {
-    "prompt": "~0.2.9",
+    "prompt-improved": "~0.1.0",
     "yeoman-generator": "~0.11.4",
     "wrench": "~1.4.4",
     "mysql": "~2.0.0-alpha7",
