@@ -5,14 +5,12 @@
 // Requirements
 var util         = require('util'),
 	fs           = require('fs'),
-	path         = require('path'),
 	yeoman       = require('yeoman-generator'),
 	wrench       = require('wrench'),
 	chalk        = require('chalk'),
 	prompt       = require('../util/prompt'),
 	git          = require('../util/git'),
 	wordpress    = require('../util/wordpress'),
-	spawn        = require('../util/spawn'),
 	art          = require('../util/art'),
 	Logger       = require('../util/log');
 
@@ -83,12 +81,14 @@ Generator.prototype.ohTellMeWhatYouWantWhatYouReallyReallyWant = function() {
 			// If an error occured, log it and try again
 			if (err) {
 				me.logger.error(err);
+				me.logger.log(art.wawa);
 				return getInput();
 			}
 
 			// Save the users input
 			me.userInput = input;
-			me.logger.verbose('\nUser Input:', me.userInput);
+			me.logger.verbose('User Input:', me.userInput);
+			me.logger.log(art.go);
 			done();
 		});
 	}
@@ -97,13 +97,11 @@ Generator.prototype.ohTellMeWhatYouWantWhatYouReallyReallyWant = function() {
 
 // .gitignore
 Generator.prototype.justIgnoreMe = function() {
-	this.logger.verbose('Starting justIgnoreMe()');
 	if (this.userInput.useGit) {
 		this.logger.verbose('Copying .gitignore file');
 		this.copy('gitignore.tmpl', '.gitignore');
 		this.logger.verbose('Done copying .gitignore file');
 	}
-	this.logger.verbose('Ending justIgnoreMe()');
 };
 
 // Git setup
@@ -111,11 +109,14 @@ Generator.prototype.gitIsTheShit = function() {
 
 	// Using Git?  Init it...
 	if (this.userInput.useGit) {
+		var done = this.async(),
+			me = this;
 
-		var done = this.async();
-
+		this.logger.verbose('Starting to setup Git');
 		git.init(function() {
+			me.logger.verbose('Git init complete');
 			git.addAllAndCommit('Initial Commit', function() {
+				me.logger.verbose('Git add and commit complete');
 				done();
 			});
 		});
@@ -127,9 +128,12 @@ Generator.prototype.gitIsTheShit = function() {
 Generator.prototype.heIsSuchAVagrant = function() {
 
 	if (this.userInput.useVagrant) {
-		console.log(chalk.green('Setting Up Vagrant'));
+		this.logger.log(chalk.green('Setting Up Vagrant'));
+		this.logger.verbose('Copying vagrant file');
 		this.template('Vagrantfile', 'Vagrantfile');
+		this.logger.verbose('Copying puppet files');
 		this.directory('puppet', 'puppet');
+		this.logger.verbose('Finished setting up Vagrant');
 	}
 
 };
@@ -141,21 +145,25 @@ Generator.prototype.wordWhatUp = function() {
 		me   = this;
 
 	if (this.userInput.submodule) {
-
+		this.logger.verbose('Installing WordPress ' + this.userInput.wpVer + 'as a submodule');
 		git.submoduleAdd(wordpress.repo, this.userInput.wpDir, function() {
+			me.logger.verbose('Submodule added');
 			var cwd = process.cwd();
 			process.chdir(me.userInput.wpDir);
+			me.logger.verbose('Checking out WP version');
 			git.checkout([me.userInput.wpVer], function() {
 				process.chdir(cwd);
+				me.logger.verbose('WordPress installed');
 				done();
 			});
 		});
 
 	} else {
 
-		console.log(this.userInput);
+		this.logger.verbose('Installing WordPress ' + this.userInput.wpVer + ' normally');
 		this.remote('wordpress', 'wordpress', this.userInput.wpVer, function(err, remote) {
 			remote.directory('.', me.userInput.wpDir);
+			me.logger.verbose('WordPress installed');
 			done();
 		});
 
@@ -171,10 +179,13 @@ Generator.prototype.somethingsDifferent = function() {
 		var me = this,
 			done = this.async();
 
+		this.logger.verbose('Copying index.php');
 		this.template('index.php.tmpl', 'index.php');
 
+		this.logger.verbose('Setting up the content directory');
 		this.remote('wordpress', 'wordpress', this.userInput.wpVer, function(err, remote) {
 			remote.directory('wp-content', me.userInput.contentDir);
+			me.logger.verbose('Content directory setup');
 			done();
 		});
 
@@ -188,8 +199,11 @@ Generator.prototype.muHaHaHaConfig = function() {
 	var done = this.async(),
 		me   = this;
 
+	this.logger.verbose('Getting salt keys');
 	wordpress.getSaltKeys(function(saltKeys) {
+		me.logger.verbose('Salt keys:', saltKeys);
 		me.userInput.saltKeys = saltKeys;
+		me.logger.verbose('Copying wp-config');
 		me.template('wp-config.php.tmpl', 'wp-config.php');
 		done();
 	});
@@ -199,11 +213,12 @@ Generator.prototype.muHaHaHaConfig = function() {
 // Check that the database exists, create it otherwise
 Generator.prototype.hazBaseData = function() {
 
-	var done = this.async();
+	var done = this.async(),
+		me = this;
 
 	wordpress.createDBifNotExists(done).on('error', function(err) {
-		console.log(chalk.red('Database does not exist, or the credentials are wrong!'));
-		console.log('Make sure you create the database and update the credentials in the wp-config.php');
+		me.logger.warn('Cannot access database');
+		me.logger.warn('Make sure you create the database and update the credentials in the wp-config.php');
 		done();
 	});
 
@@ -216,13 +231,15 @@ Generator.prototype.hazBaseData = function() {
 Generator.prototype.thisIsSparta = function() {
 
 	if (fs.existsSync('.')) {
-		console.log(chalk.green('Setting Permissions: 0755 on .'));
+		this.logger.log('Setting Permissions: 0755 on .');
 		wrench.chmodSyncRecursive('.', 0755);
+		this.logger.verbose('Done setting permissions on .');
 	}
 
 	if (fs.existsSync(this.userInput.contentDir)) {
-		console.log(chalk.green('Setting Permissions: 0775 on ' + this.userInput.contentDir));
+		this.logger.log('Setting Permissions: 0775 on ' + this.userInput.contentDir);
 		wrench.chmodSyncRecursive(this.userInput.contentDir, 0775);
+		this.logger.verbose('Done setting permissions on ' + this.userInput.contentDir);
 	}
 
 };
@@ -231,18 +248,18 @@ Generator.prototype.thisIsSparta = function() {
 // Commit the wordpress stuff
 Generator.prototype.commitThisToMemory = function() {
 
-
 	if (this.userInput.useGit) {
+		var done = this.async(),
+			me = this;
 
-		var done = this.async();
-
+		this.logger.verbose('Committing WP to Git');
 		git.addAllAndCommit('Setup WordPress', function() {
+			me.logger.verbose('Done committing');
 			done();
 		}).on('error', function(e) {
-			console.error(e);
+			me.logger.error(e);
 			done();
 		});
-
 	}
 
 };
@@ -251,18 +268,18 @@ Generator.prototype.commitThisToMemory = function() {
 Generator.prototype.dumbledoreHasStyle = function() {
 
 	if (this.userInput.theme) {
-
 		var done = this.async()
 			me = this;
 
+		this.logger.verbose('Starting to install theme');
 		wordpress.installTheme(this, this.userInput, function() {
 			/* @TODO You need to run the install before doing this
 			   see if I can get yeopress to do that.
 		    */
 			//wordpress.activateTheme(me.userInput.themeDir, done);
+			me.logger.verbose('Theme install complete');
 			done();
 		});
-
 	}
 
 };
@@ -271,7 +288,9 @@ Generator.prototype.dumbledoreHasStyle = function() {
 Generator.prototype.dummyYouHaveToPlugItInFirst = function() {
 
 	if (this.userInput.theme) {
+		this.logger.verbose('Starting theme setup');
 		wordpress.setupTheme(this, this.userInput, this.async());
+		this.logger.verbose('Theme setup complete');
 	}
 
 };
@@ -280,20 +299,19 @@ Generator.prototype.dummyYouHaveToPlugItInFirst = function() {
 Generator.prototype.gitMeMOARCommits = function() {
 
 	if (this.userInput.git) {
-
 		var done = this.async();
-
+		this.logger.verbose('Committing template to Git');
 		git.addAllAndCommit('Installed Template', function() {
+			this.logger.verbose('Comnmit complete');
 			done();
 		});
-
 	}
 
 };
 
 // All done
 Generator.prototype.oopsIPeedMyself = function() {
-	console.log(chalk.bold.green('\nAll Done!!\n--------------------\n'));
-	console.log('I tried my best to set things up, but I\'m only human right? **wink wink**\nSo, you should probably check your `wp-config.php` to make sure all the settings work on your environment.');
-	console.log('Have fun pressing your words!\n');
+	this.logger.log(chalk.bold.green('\nAll Done!!\n--------------------\n'));
+	this.logger.log('I tried my best to set things up, but I\'m only human right? **wink wink**\nSo, you should probably check your `wp-config.php` to make sure all the settings work on your environment.');
+	this.logger.log('Have fun pressing your words!\n');
 };

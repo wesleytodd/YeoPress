@@ -1,10 +1,7 @@
 var Prompt = require('prompt-improved');
-
-var chalk = Prompt.chalk;
-
 module.exports = new Prompt({
-	prefix: chalk.grey('[') + chalk.green('?') + chalk.grey(']') + ' ',
-	textTheme: chalk.white,
-	defaultTheme: chalk.gray,
+	prefix: Prompt.chalk.white('[') + Prompt.chalk.green('?') + Prompt.chalk.white(']') + ' ',
+	textTheme: Prompt.chalk.white,
+	defaultTheme: Prompt.chalk.gray,
 	suffix: ':'
 });

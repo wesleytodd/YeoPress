@@ -48,8 +48,10 @@ severityLevels.forEach(function(fnc) {
 					message = this[fnc + 'MessageTheme'](args[i]+'');
 				}
 
-				if (typeof console[fnc + 'Stream'] === 'function') {
+				if (typeof this[fnc + 'Stream'] === 'function') {
 					this[fnc + 'Stream'].write(prefix + message);
+				} else if (typeof console[fnc] === 'function') {
+					console[fnc](prefix + message);
 				} else {
 					console.log(prefix + message);
 				}
