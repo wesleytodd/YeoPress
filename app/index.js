@@ -14,7 +14,7 @@ var util         = require('util'),
 	wordpress    = require('../util/wordpress'),
 	spawn        = require('../util/spawn'),
 	art          = require('../util/art'),
-	prompts      = require('./prompts');
+	Logger       = require('../util/log');
 
 // Export the module
 module.exports = Generator;
@@ -22,6 +22,29 @@ module.exports = Generator;
 // Extend the base generator
 function Generator(args, options, config) {
 	yeoman.generators.Base.apply(this, arguments);
+
+	// Log level option
+	this.option('log', {
+		desc: 'The log verbosity level: [ verbose | log | warn | error ]',
+		defaults: 'log',
+		alias: 'l',
+		name: 'level'
+	});
+
+	// Enable advanced features
+	this.option('advanced', {
+		desc: 'Makes advanced features available',
+		alias: 'a'
+	});
+
+	// Setup the logger
+	this.logger = Logger({
+		level: this.options.log
+	});
+
+	// Log the options
+	this.logger.verbose('\nOptions:', this.options);
+
 };
 util.inherits(Generator, yeoman.generators.Base);
 
@@ -36,7 +59,7 @@ Generator.prototype.ohTellMeWhatYouWantWhatYouReallyReallyWant = function() {
 	var done = this.async();
 
 	// Display welcome message
-	console.log(art.wp);
+	this.logger.log(art.wp);
 	
 	var currentWpVer;
 	wordpress.getCurrentVersion(function(ver) {
@@ -47,7 +70,7 @@ Generator.prototype.ohTellMeWhatYouWantWhatYouReallyReallyWant = function() {
 	// Get the input
 	var me = this;
 	function getInput() {
-		prompt.ask(prompts, {
+		prompt.ask(require('./prompts')(me.options.advanced), {
 			confirm: {
 				message: 'Does this all look correct?',
 				before: chalk.red('\n--------------------------------'),
@@ -57,11 +80,15 @@ Generator.prototype.ohTellMeWhatYouWantWhatYouReallyReallyWant = function() {
 				wpVer: currentWpVer
 			}
 		}, function(err, input) {
+			// If an error occured, log it and try again
 			if (err) {
-				console.error(err);
-				getInput();
+				me.logger.error(err);
+				return getInput();
 			}
+
+			// Save the users input
 			me.userInput = input;
+			me.logger.verbose('\nUser Input:', me.userInput);
 			done();
 		});
 	}
@@ -70,11 +97,13 @@ Generator.prototype.ohTellMeWhatYouWantWhatYouReallyReallyWant = function() {
 
 // .gitignore
 Generator.prototype.justIgnoreMe = function() {
-	
+	this.logger.verbose('Starting justIgnoreMe()');
 	if (this.userInput.useGit) {
+		this.logger.verbose('Copying .gitignore file');
 		this.copy('gitignore.tmpl', '.gitignore');
+		this.logger.verbose('Done copying .gitignore file');
 	}
-
+	this.logger.verbose('Ending justIgnoreMe()');
 };
 
 // Git setup
