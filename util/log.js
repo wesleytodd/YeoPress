@@ -1,55 +1,63 @@
 var util = require('util'),
 	chalk = require('chalk');
 
+// Utility extend
+function extend(obj) {
+	var args = Array.prototype.slice.call(arguments, 1);
+	for (var i = 0, len = args.length; i < len; i++) {
+		if (args[i]) {
+			for (var prop in args[i]) {
+				obj[prop] = args[i][prop];
+			}
+		}
+	}
+    return obj;
+};
+
 // The supported severity levels
 var severityLevels = ['verbose', 'log', 'warn', 'error'];
 
 var Logger = function(options) {
-	if (!(this instanceof Logger))
-		return new Logger(options);
+	if (!(this instanceof Logger)) return new Logger(options);
+	this.options = extend({}, Logger.defaultOptions, options);
+};
 
-	options = options || {};
-
-	this.level             = options.level || 'error';
-
-	this.verbosePrefix       = options.verbosePrefix || '>> ';
-	this.verbosePrefixTheme  = options.verbosePrefixTheme || chalk.gray.bold;
-	this.verboseMessageTheme = options.verboseMessageTheme || chalk.white;
-	this.verboseStream       = options.verboseStream || process.stdout;
-
-	this.logPrefix         = options.logPrefix || '';
-	this.logPrefixTheme    = options.logPrefixTheme || chalk.cyan.bold;
-	this.logMessageTheme   = options.logMessageTheme || chalk.white;
-	this.logStream         = options.logStream || process.stdout;
-
-	this.warnPrefix        = options.warnPrefix || '>> ';
-	this.warnPrefixTheme   = options.warnPrefixTheme || chalk.yellow.bold;
-	this.warnMessageTheme  = options.warnMessageTheme || chalk.white;
-	this.warnStream        = options.warnStream || process.stdout;
-
-	this.errorPrefix       = options.errorPrefix || 'Error: ';
-	this.errorPrefixTheme  = options.errorPrefixTheme || chalk.red.bold;
-	this.errorMessageTheme = options.errorMessageTheme || chalk.red;
-	this.errorStream       = options.errorStream || process.stderr;
-
+Logger.defaultOptions = {
+	level               : 'error',
+	verbosePrefix       : '>> ',
+	verbosePrefixTheme  : chalk.gray.bold,
+	verboseMessageTheme : chalk.white,
+	verboseStream       : process.stdout,
+	logPrefix           : '',
+	logPrefixTheme      : chalk.cyan.bold,
+	logMessageTheme     : chalk.white,
+	logStream           : process.stdout,
+	warnPrefix          : '>> ',
+	warnPrefixTheme     : chalk.yellow.bold,
+	warnMessageTheme    : chalk.white,
+	warnStream          : process.stdout,
+	errorPrefix         : 'Error: ',
+	errorPrefixTheme    : chalk.red.bold,
+	errorMessageTheme   : chalk.red,
+	errorStream         : process.stderr
 };
 
 severityLevels.forEach(function(fnc) {
 	Logger.prototype[fnc] = function() {
-		if (severityLevels.indexOf(fnc) >= severityLevels.indexOf(this.level)) {
+		if (severityLevels.indexOf(fnc) >= severityLevels.indexOf(this.options.level)) {
 			var args = arguments;
 			for (var i = 0; i < args.length; i++) {
-				var prefix = this[fnc + 'PrefixTheme'](this[fnc + 'Prefix']);
+				var prefix = this.options[fnc + 'PrefixTheme'](this.options[fnc + 'Prefix']);
 
 				var message;
 				if (typeof args[i] === 'object') {
-					message = this[fnc + 'MessageTheme'](util.inspect(args[i]));
+					message = this.options[fnc + 'MessageTheme'](util.inspect(args[i]));
 				} else {
-					message = this[fnc + 'MessageTheme'](args[i]+'');
+					message = this.options[fnc + 'MessageTheme'](args[i]+'');
 				}
 
-				if (typeof this[fnc + 'Stream'] === 'function') {
-					this[fnc + 'Stream'].write(prefix + message);
+				if (typeof this.options[fnc + 'Stream'] === 'function') {
+					this.options[fnc + 'Stream'].write(prefix + message);
 				} else if (typeof console[fnc] === 'function') {
 					console[fnc](prefix + message);
 				} else {

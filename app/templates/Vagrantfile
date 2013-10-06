@@ -8,8 +8,8 @@ Vagrant.configure("2") do |config|
   config.vm.box_url = "http://files.vagrantup.com/precise32.box"
 
   # Apache
-  config.vm.network :forwarded_port, guest: 80, host: 8089
-  config.vm.network :forwarded_port, guest: 443, host: 4434
+  config.vm.network :forwarded_port, guest: 80, host: 8080
+  config.vm.network :forwarded_port, guest: 443, host: 4433
   # MySQL
   config.vm.network :forwarded_port, guest: 3306, host: 3308
 

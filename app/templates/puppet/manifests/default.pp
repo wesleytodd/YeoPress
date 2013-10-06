@@ -49,10 +49,10 @@ class {
 		require => Exec['apt-get update'];
 }
 mysql::db {
-	'yeopress':
-		user     => 'yeopress',
-		password => 'yeopress',
-		host     => 'localhost',
+	'<%= userInput.dbName %>':
+		user     => '<%= userInput.dbUser %>',
+		password => '<%= userInput.dbPass %>',
+		host     => '<%= userInput.dbHost %>',
 		grant    => ['all'],
 }
 

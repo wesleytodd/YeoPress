@@ -32,7 +32,7 @@ module.exports = function(advanced) {
 			required: true
 		}, {
 			question: 'Database user',
-			name: 'dbUser',
+			key: 'dbUser',
 			required: true
 		}, {
 			question: 'Database password',
@@ -82,7 +82,7 @@ module.exports = function(advanced) {
 			required: true,
 			boolean: true,
 			depends: function(res) {
-				return !!res.useGit;
+				return (advanced && !!res.useGit);
 			}
 		}, {
 			question: 'Install a custom theme?',

@@ -8,7 +8,7 @@ var util         = require('util'),
 	yeoman       = require('yeoman-generator'),
 	wrench       = require('wrench'),
 	chalk        = require('chalk'),
-	git          = require('simple-git2')(),
+	git          = require('simple-git')(),
 	prompt       = require('../util/prompt'),
 	wordpress    = require('../util/wordpress'),
 	art          = require('../util/art'),
@@ -35,6 +35,15 @@ function Generator(args, options, config) {
 		alias: 'a'
 	});
 
+	// Shortcut for --log=verbose
+	this.option('verbose', {
+		desc: 'Verbose logging',
+		alias: 'v'
+	});
+	if (this.options.verbose) {
+		this.options.log = 'verbose';
+	}
+
 	// Setup the logger
 	this.logger = Logger({
 		level: this.options.log
@@ -60,8 +69,10 @@ Generator.prototype.ohTellMeWhatYouWantWhatYouReallyReallyWant = function() {
 	this.logger.log(art.wp);
 	
 	var currentWpVer;
+	this.logger.verbose('Getting current WP version');
 	wordpress.getCurrentVersion(function(err, ver) {
 		if (err) me.logger.warn('Error getting WP versions.  Falling back to ' + ver);
+		me.logger.verbose('Got current WP version: ' + ver);
 		currentWpVer = ver;
 		getInput();
 	});
@@ -85,6 +96,10 @@ Generator.prototype.ohTellMeWhatYouWantWhatYouReallyReallyWant = function() {
 				me.logger.log(art.wawa);
 				return getInput();
 			}
+
+			// Set port
+			var port = input.url.match(/:[\d]+$/);
+			if (port) input.port = port[0];
 
 			// Save the users input
 			me.userInput = input;
@@ -113,7 +128,7 @@ Generator.prototype.gitIsTheShit = function() {
 		var done = this.async(),
 			me = this;
 
-		this.logger.verbose('Starting to setup Git');
+		this.logger.log('Seting up Git');
 		git.init(function(err) {
 			if (err) me.logger.error(err);
 
@@ -135,7 +150,7 @@ Generator.prototype.gitIsTheShit = function() {
 Generator.prototype.heIsSuchAVagrant = function() {
 
 	if (this.userInput.useVagrant) {
-		this.logger.log(chalk.green('Setting Up Vagrant'));
+		this.logger.log('Setting up Vagrant');
 		this.logger.verbose('Copying vagrant file');
 		this.template('Vagrantfile', 'Vagrantfile');
 		this.logger.verbose('Copying puppet files');
@@ -152,7 +167,7 @@ Generator.prototype.wordWhatUp = function() {
 		me   = this;
 
 	if (this.userInput.submodule) {
-		this.logger.verbose('Installing WordPress ' + this.userInput.wpVer + ' as a submodule');
+		this.logger.log('Installing WordPress ' + this.userInput.wpVer + ' as a submodule');
 		git.submoduleAdd(wordpress.repo, this.userInput.wpDir, function(err) {
 			if (err) me.logger.error(err);
 
@@ -170,10 +185,10 @@ Generator.prototype.wordWhatUp = function() {
 
 	} else {
 
-		this.logger.verbose('Installing WordPress ' + this.userInput.wpVer + ' normally');
+		this.logger.log('Installing WordPress ' + this.userInput.wpVer);
 		this.remote('wordpress', 'wordpress', this.userInput.wpVer, function(err, remote) {
 			remote.directory('.', me.userInput.wpDir);
-			me.logger.verbose('WordPress installed');
+			me.logger.log('WordPress installed');
 			done();
 		});
 
@@ -192,7 +207,7 @@ Generator.prototype.somethingsDifferent = function() {
 		this.logger.verbose('Copying index.php');
 		this.template('index.php.tmpl', 'index.php');
 
-		this.logger.verbose('Setting up the content directory');
+		this.logger.log('Setting up the content directory');
 		this.remote('wordpress', 'wordpress', this.userInput.wpVer, function(err, remote) {
 			remote.directory('wp-content', me.userInput.contentDir);
 			me.logger.verbose('Content directory setup');
@@ -209,7 +224,7 @@ Generator.prototype.muHaHaHaConfig = function() {
 	var done = this.async(),
 		me   = this;
 
-	this.logger.verbose('Getting salt keys');
+	this.logger.log('Getting salt keys');
 	wordpress.getSaltKeys(function(saltKeys) {
 		me.logger.verbose('Salt keys:', saltKeys);
 		me.userInput.saltKeys = saltKeys;
@@ -281,7 +296,7 @@ Generator.prototype.dumbledoreHasStyle = function() {
 		var done = this.async()
 			me = this;
 
-		this.logger.verbose('Starting to install theme');
+		this.logger.log('Starting to install theme');
 		wordpress.installTheme(this, this.userInput, function() {
 			/* @TODO You need to run the install before doing this
 			   see if I can get yeopress to do that.
@@ -298,7 +313,7 @@ Generator.prototype.dumbledoreHasStyle = function() {
 Generator.prototype.dummyYouHaveToPlugItInFirst = function() {
 
 	if (this.userInput.theme) {
-		this.logger.verbose('Starting theme setup');
+		this.logger.log('Starting theme setup');
 		wordpress.setupTheme(this, this.userInput, this.async());
 		this.logger.verbose('Theme setup complete');
 	}
@@ -317,6 +332,31 @@ Generator.prototype.gitMeMOARCommits = function() {
 			if (err) me.logger.error(err);
 			me.logger.verbose('Done committing: ', d);
 			done();
+		});
+	}
+
+};
+
+// Run vagrant up
+Generator.prototype.vagrantUp = function() {
+
+	if (this.userInput.useVagrant) {
+		var done = this.async();
+		this.logger.log('Running vagrant up');
+		var me = this;
+		var child = require('child_process').exec('vagrant up', function(err) {
+			if (err) return me.logger.error(err);
+			me.logger.verbose('Finished running Vagrant');
+			done();
+		});
+		child.on('error', function(err) {
+			process.stderr.write(err);
+		});
+		child.stdout.on('data', function(data) {
+			process.stdout.write(data);
+		});
+		child.stderr.on('data', function(err) {
+			process.stderr.write(err);
 		});
 	}
 
