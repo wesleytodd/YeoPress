@@ -66,7 +66,7 @@ Generator.prototype.ohTellMeWhatYouWantWhatYouReallyReallyWant = function() {
 	var done = this.async();
 
 	// Display welcome message
-	this.logger.log(art.wp);
+	this.logger.log(art.wp, {logPrefix: ''});
 	
 	var currentWpVer;
 	this.logger.verbose('Getting current WP version');
@@ -85,6 +85,7 @@ Generator.prototype.ohTellMeWhatYouWantWhatYouReallyReallyWant = function() {
 				message: 'Does this all look correct?',
 				before: chalk.red('\n--------------------------------'),
 				after: chalk.red('--------------------------------\n'),
+				all: me.options.log == 'verbose'
 			},
 			overrideDefaults: {
 				wpVer: currentWpVer
@@ -93,18 +94,22 @@ Generator.prototype.ohTellMeWhatYouWantWhatYouReallyReallyWant = function() {
 			// If an error occured, log it and try again
 			if (err) {
 				me.logger.error(err);
-				me.logger.log(art.wawa);
+				me.logger.log(art.wawa, {logPrefix: ''});
 				return getInput();
 			}
 
 			// Set port
-			var port = input.url.match(/:[\d]+$/);
-			if (port) input.port = port[0];
+			var portRegex = /:[\d]+$/;
+			var port = input.url.match(portRegex);
+			if (port) input.port = port[0].replace(':', '');
+
+			// Remove port from url
+			input.url = input.url.replace(portRegex, '');
 
 			// Save the users input
 			me.userInput = input;
 			me.logger.verbose('User Input:', me.userInput);
-			me.logger.log(art.go);
+			me.logger.log(art.go, {logPrefix: ''});
 			done();
 		});
 	}
@@ -128,7 +133,7 @@ Generator.prototype.gitIsTheShit = function() {
 		var done = this.async(),
 			me = this;
 
-		this.logger.log('Seting up Git');
+		this.logger.log('Initializing Git');
 		git.init(function(err) {
 			if (err) me.logger.error(err);
 
@@ -362,9 +367,17 @@ Generator.prototype.vagrantUp = function() {
 
 };
 
+// Save settings to .yeopress file
+Generator.prototype.saveDaSettings = function() {
+
+	this.logger.log('Writing .yeopress file');
+	fs.writeFileSync('.yeopress', JSON.stringify(this.userInput, null, '\t'));
+
+};
+
 // All done
 Generator.prototype.oopsIPeedMyself = function() {
-	this.logger.log(chalk.bold.green('\nAll Done!!\n--------------------\n'));
-	this.logger.log('I tried my best to set things up, but I\'m only human right? **wink wink**\nSo, you should probably check your `wp-config.php` to make sure all the settings work on your environment.');
-	this.logger.log('Have fun pressing your words!\n');
+	this.logger.log(chalk.bold.green('\nAll Done!!\n------------------------\n'), {logPrefix: ''});
+	this.logger.log('I tried my best to set things up, but I\'m only human right? **wink wink**\nSo, you should probably check your `wp-config.php` to make sure all the settings work on your environment.', {logPrefix: ''});
+	this.logger.log('Have fun pressing your words!\n', {logPrefix: ''});
 };

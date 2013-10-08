@@ -28,7 +28,7 @@ Logger.defaultOptions = {
 	verbosePrefixTheme  : chalk.gray.bold,
 	verboseMessageTheme : chalk.white,
 	verboseStream       : process.stdout,
-	logPrefix           : '',
+	logPrefix           : '>> ',
 	logPrefixTheme      : chalk.cyan.bold,
 	logMessageTheme     : chalk.white,
 	logStream           : process.stdout,
@@ -43,26 +43,24 @@ Logger.defaultOptions = {
 };
 
 severityLevels.forEach(function(fnc) {
-	Logger.prototype[fnc] = function() {
+	Logger.prototype[fnc] = function(out, opts) {
 		if (severityLevels.indexOf(fnc) >= severityLevels.indexOf(this.options.level)) {
-			var args = arguments;
-			for (var i = 0; i < args.length; i++) {
-				var prefix = this.options[fnc + 'PrefixTheme'](this.options[fnc + 'Prefix']);
+			opts = extend({}, this.options, opts);
+			var prefix = opts[fnc + 'PrefixTheme'](opts[fnc + 'Prefix']);
 
-				var message;
-				if (typeof args[i] === 'object') {
-					message = this.options[fnc + 'MessageTheme'](util.inspect(args[i]));
-				} else {
-					message = this.options[fnc + 'MessageTheme'](args[i]+'');
-				}
+			var message;
+			if (typeof out === 'object') {
+				message = opts[fnc + 'MessageTheme'](util.inspect(out));
+			} else {
+				message = opts[fnc + 'MessageTheme'](out+'');
+			}
 
-				if (typeof this.options[fnc + 'Stream'] === 'function') {
-					this.options[fnc + 'Stream'].write(prefix + message);
-				} else if (typeof console[fnc] === 'function') {
-					console[fnc](prefix + message);
-				} else {
-					console.log(prefix + message);
-				}
+			if (typeof opts[fnc + 'Stream'] === 'function') {
+				opts[fnc + 'Stream'].write(prefix + message);
+			} else if (typeof console[fnc] === 'function') {
+				console[fnc](prefix + message);
+			} else {
+				console.log(prefix + message);
 			}
 		}
 	};

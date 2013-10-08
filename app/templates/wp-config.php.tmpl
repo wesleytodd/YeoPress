@@ -75,10 +75,10 @@ define('WPLANG', '');
  *
  * These are required because wordpress is installed in a subdirectory.
  */
-define('WP_SITEURL', 'http://' . $_SERVER['SERVER_NAME'] . '<%= userInput.port %>/<%= userInput.wpDir %>');
-define('WP_HOME',    'http://' . $_SERVER['SERVER_NAME'] . '<%= userInput.port %>');
+define('WP_SITEURL', 'http://' . $_SERVER['SERVER_NAME'] . '<%= (userInput.port) ? ':' + userInput.port : '' %>/<%= userInput.wpDir %>');
+define('WP_HOME',    'http://' . $_SERVER['SERVER_NAME'] . '<%= (userInput.port) ? ':' + userInput.port : '' %>');
 define('WP_CONTENT_DIR', __dir__ . '/<%= userInput.contentDir %>');
-define('WP_CONTENT_URL', 'http://' . $_SERVER['SERVER_NAME'] . '<%= userInput.port %>/<%= userInput.contentDir %>');
+define('WP_CONTENT_URL', 'http://' . $_SERVER['SERVER_NAME'] . '<%= (userInput.port) ? ':' + userInput.port : '' %>/<%= userInput.contentDir %>');
 
 <% } %>
 /**
