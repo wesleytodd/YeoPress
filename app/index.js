@@ -63,12 +63,14 @@ util.inherits(Generator, yeoman.generators.Base);
 Generator.prototype.ohTellMeWhatYouWantWhatYouReallyReallyWant = function() {
 
 	// This is an async step
-	var done = this.async();
+	var done = this.async(),
+		me = this,
+		currentWpVer;
 
 	// Display welcome message
 	this.logger.log(art.wp, {logPrefix: ''});
 	
-	var currentWpVer;
+	// Get the current version number of wordpress
 	this.logger.verbose('Getting current WP version');
 	wordpress.getCurrentVersion(function(err, ver) {
 		if (err) me.logger.warn('Error getting WP versions.  Falling back to ' + ver);
@@ -78,14 +80,13 @@ Generator.prototype.ohTellMeWhatYouWantWhatYouReallyReallyWant = function() {
 	});
 
 	// Get the input
-	var me = this;
 	function getInput() {
 		prompt.ask(require('./prompts')(me.options.advanced), {
 			confirm: {
 				message: 'Does this all look correct?',
 				before: chalk.red('\n--------------------------------'),
 				after: chalk.red('--------------------------------\n'),
-				all: me.options.log == 'verbose'
+				all: this.options.log == 'verbose'
 			},
 			overrideDefaults: {
 				wpVer: currentWpVer
