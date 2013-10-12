@@ -108,6 +108,11 @@ Generator.prototype.ohTellMeWhatYouWantWhatYouReallyReallyWant = function() {
 			// Remove port from url
 			input.url = input.url.replace(portRegex, '');
 
+			// SEt customDirs to true if installing as a submodule
+			if (input.submodule) {
+				input.customDirs = true;
+			}
+
 			// Dont use wordpress dir if custom dir's is not set
 			if (!input.customDirs) {
 				input.wpDir = '.';
@@ -150,7 +155,7 @@ Generator.prototype.gitIsTheShit = function() {
 			}).commit('Initial Commit', function(err, d) {
 				if (err) me.logger.error(err);
 				
-				me.logger.verbose('Git add and commit complete:', d);
+				me.logger.verbose('Git add and commit complete: ' + JSON.stringify(d, null, '  '));
 				done();
 			});
 		});
@@ -292,9 +297,9 @@ Generator.prototype.commitThisToMemory = function() {
 		this.logger.verbose('Committing WP to Git');
 		git.add('.', function(err) {
 			if (err) me.logger.error(err);
-		}).commit('Initial Commit', function(err, d) {
+		}).commit('Installed wordpress', function(err, d) {
 			if (err) me.logger.error(err);
-			me.logger.verbose('Done committing: ', d);
+			me.logger.verbose('Done committing: ' + JSON.stringify(d, null, '  '));
 			done();
 		});
 	}
@@ -335,14 +340,15 @@ Generator.prototype.dummyYouHaveToPlugItInFirst = function() {
 // Commit again with the template
 Generator.prototype.gitMeMOARCommits = function() {
 
-	if (this.conf.get('git')) {
-		var done = this.async();
+	if (this.conf.get('git') && this.conf.get('installTheme')) {
+		var done = this.async(),
+			me = this;
 		this.logger.verbose('Committing template to Git');
 		git.add('.', function(err) {
 			if (err) me.logger.error(err);
-		}).commit('Initial Commit', function(err, d) {
+		}).commit('Installed theme', function(err, d) {
 			if (err) me.logger.error(err);
-			me.logger.verbose('Done committing: ', d);
+			me.logger.verbose('Done committing: ', JSON.stringify(d, null, '  '));
 			done();
 		});
 	}

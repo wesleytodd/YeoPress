@@ -49,7 +49,7 @@ module.exports = function(advanced) {
 			default: 'N',
 			boolean: true,
 			depends: function(res) {
-				return !!res.useGit;
+				return !!res.git;
 			}
 		}, {
 			question: 'Would you like to install WordPress with the custom directory structure?',
@@ -57,7 +57,7 @@ module.exports = function(advanced) {
 			default: 'N',
 			boolean: true,
 			depends: function(res) {
-				return !res.useGit || !res.submodule;
+				return !res.git || !res.submodule;
 			}
 		}, {
 			question: 'WordPress install directory',
@@ -87,7 +87,7 @@ module.exports = function(advanced) {
 			required: true,
 			boolean: true,
 			depends: function(res) {
-				return (advanced && !!res.useGit);
+				return (advanced && !!res.git);
 			}
 		}, {
 			question: 'Use Vagrant?',
