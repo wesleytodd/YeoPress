@@ -37,12 +37,12 @@ contentDirs = [
 	'/wp-cache-config.php'
 ];
 for (var i in contentDirs) {
-	print(userInput.contentDir + contentDirs[i] + '\n');
+	print(conf.get('contentDir') + contentDirs[i] + '\n');
 }
 
-if (userInput.ignoreWPCore) {
+if (conf.get('ignoreWPCore')) {
 	print('# WordPress Core\n');
-	wpDir = (userInput.wpDir == '.') ? '' : userInput.wpDir;
+	wpDir = (conf.get('wpDir') == '.') ? '' : conf.get('wpDir');
 	wpDirs = [
 		'/db-config.php',
 		'/index.php',

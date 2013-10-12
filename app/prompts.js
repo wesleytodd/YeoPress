@@ -40,7 +40,7 @@ module.exports = function(advanced) {
 			required: true
 		}, {
 			question: 'Use Git?',
-			key: 'useGit',
+			key: 'git',
 			default: 'N',
 			boolean: true
 		}, {
@@ -90,8 +90,15 @@ module.exports = function(advanced) {
 				return (advanced && !!res.useGit);
 			}
 		}, {
+			question: 'Use Vagrant?',
+			key: 'vagrant',
+			required: true,
+			depends: advanced,
+			default: 'N',
+			boolean: true
+		}, {
 			question: 'Install a custom theme?',
-			key: 'theme',
+			key: 'installTheme',
 			default: 'Y',
 			boolean: true
 		}, {
@@ -99,7 +106,7 @@ module.exports = function(advanced) {
 			key: 'themeDir',
 			required: true,
 			depends: function(res) {
-				return !!res.theme;
+				return !!res.installTheme;
 			}
 		}, {
 			question: 'Theme source type (git/tar)',
@@ -108,46 +115,39 @@ module.exports = function(advanced) {
 			validate: /^(?:git|tar)$/,
 			default: 'git',
 			depends: function(res) {
-				return !!res.theme;
+				return !!res.installTheme;
 			}
 		}, {
 			question: 'GitHub username',
-			key: 'user',
+			key: 'themeUser',
 			required: true,
 			default: 'wesleytodd',
 			depends: function(res) {
-				return !!res.theme && res.themeType == 'git';
+				return !!res.installTheme && res.themeType == 'git';
 			}
 		}, {
 			question: 'GitHub repository name',
-			key: 'repo',
+			key: 'themeRepo',
 			required: true,
 			default: 'YeoPress',
 			depends: function(res) {
-				return !!res.theme && res.themeType == 'git';
+				return !!res.installTheme && res.themeType == 'git';
 			}
 		}, {
 			question: 'Repository branch',
-			key: 'branch',
+			key: 'themeBranch',
 			required: true,
 			default: 'template',
 			depends: function(res) {
-				return !!res.theme && res.themeType == 'git';
+				return !!res.installTheme && res.themeType == 'git';
 			}
 		}, {
 			question: 'Remote tarball url (ex. https://github.com/user/repo/tarball/master)',
-			key: 'tarballUrl',
+			key: 'themeTarballUrl',
 			required: true,
 			depends: function(res) {
 				return !!res.theme && res.themeType == 'tar';
 			}
-		}, {
-			question: 'Use Vagrant?',
-			key: 'useVagrant',
-			required: true,
-			depends: advanced,
-			default: 'N',
-			boolean: true
 		}
 	];
 };

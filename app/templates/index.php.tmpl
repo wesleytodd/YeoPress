@@ -13,9 +13,9 @@
  */
 define('WP_USE_THEMES', true);
 
-<% if (userInput.customDirs) { %>
+<% if (conf.get('customDirs')) { %>
 /** Loads the WordPress Environment and Template */
-require('./<%= userInput.wpDir %>/wp-blog-header.php');
+require('./<%= conf.get('wpDir') %>/wp-blog-header.php');
 <% } else { %>
 /** Loads the WordPress Environment and Template */
 require('./wp-blog-header.php');

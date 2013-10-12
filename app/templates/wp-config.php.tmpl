@@ -21,16 +21,16 @@ if (file_exists(dirname(__FILE__) . '/local-config.php')) {
 
 // Global DB config
 if (!defined('DB_NAME')) {
-	define('DB_NAME', '<%= userInput.dbName %>');
+	define('DB_NAME', '<%= conf.get('dbName') %>');
 }
 if (!defined('DB_USER')) {
-	define('DB_USER', '<%= userInput.dbUser %>');
+	define('DB_USER', '<%= conf.get('dbUser') %>');
 }
 if (!defined('DB_PASSWORD')) {
-	define('DB_PASSWORD', '<%= userInput.dbPass %>');
+	define('DB_PASSWORD', '<%= conf.get('dbPass') %>');
 }
 if (!defined('DB_HOST')) {
-	define('DB_HOST', '<%= userInput.dbHost %>');
+	define('DB_HOST', '<%= conf.get('dbHost') %>');
 }
 
 /** Database Charset to use in creating database tables. */
@@ -48,7 +48,7 @@ define('DB_COLLATE', '');
  *
  * @since 2.6.0
  */
-<%= userInput.saltKeys %>
+<%= conf.get('saltKeys') %>
 /**#@-*/
 
 /**
@@ -57,7 +57,7 @@ define('DB_COLLATE', '');
  * You can have multiple installations in one database if you give each a unique
  * prefix. Only numbers, letters, and underscores please!
  */
-$table_prefix  = '<%= userInput.tablePrefix %>';
+$table_prefix  = '<%= conf.get('tablePrefix') %>';
 
 /**
  * WordPress Localized Language, defaults to English.
@@ -68,18 +68,18 @@ $table_prefix  = '<%= userInput.tablePrefix %>';
  * language support.
  */
 define('WPLANG', '');
-<% if (userInput.customDirs) { %>
+<% if (conf.get('customDirs')) { %>
 /**
  * Set custom paths
  *
  * These are required because wordpress is installed in a subdirectory.
  */
-define('WP_SITEURL', 'http://' . $_SERVER['SERVER_NAME'] . '<%= (userInput.port) ? ':' + userInput.port : '' %>/<%= userInput.wpDir %>');
-define('WP_HOME',    'http://' . $_SERVER['SERVER_NAME'] . '<%= (userInput.port) ? ':' + userInput.port : '' %>');
-define('WP_CONTENT_DIR', __dir__ . '/<%= userInput.contentDir %>');
-define('WP_CONTENT_URL', 'http://' . $_SERVER['SERVER_NAME'] . '<%= (userInput.port) ? ':' + userInput.port : '' %>/<%= userInput.contentDir %>');
+define('WP_SITEURL', 'http://' . $_SERVER['SERVER_NAME'] . '<%= (conf.get('port')) ? ':' + conf.get('port') : '' %>/<%= conf.get('wpDir') %>');
+define('WP_HOME',    'http://' . $_SERVER['SERVER_NAME'] . '<%= (conf.get('port')) ? ':' + conf.get('port') : '' %>');
+define('WP_CONTENT_DIR', __dir__ . '/<%= conf.get('contentDir') %>');
+define('WP_CONTENT_URL', 'http://' . $_SERVER['SERVER_NAME'] . '<%= (conf.get('port')) ? ':' + conf.get('port') : '' %>/<%= conf.get('contentDir') %>');
 <% } %>
-<% if (userInput.blockExternalRequests) { %>
+<% if (conf.get('blockExternalRequests')) { %>
 /**
  * Disable external requests
  *

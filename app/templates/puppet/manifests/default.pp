@@ -49,10 +49,10 @@ class {
 		require => Exec['apt-get update'];
 }
 mysql::db {
-	'<%= userInput.dbName %>':
-		user     => '<%= userInput.dbUser %>',
-		password => '<%= userInput.dbPass %>',
-		host     => '<%= userInput.dbHost %>',
+	'<%= conf.get('dbName') %>':
+		user     => '<%= conf.get('dbUser') %>',
+		password => '<%= conf.get('dbPass') %>',
+		host     => '<%= conf.get('dbHost') %>',
 		grant    => ['all'],
 }
 

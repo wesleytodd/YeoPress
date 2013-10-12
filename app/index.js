@@ -12,7 +12,8 @@ var util         = require('util'),
 	prompt       = require('../util/prompt'),
 	wordpress    = require('../util/wordpress'),
 	art          = require('../util/art'),
-	Logger       = require('../util/log');
+	Logger       = require('../util/log'),
+	Config       = require('../util/config');
 
 // Export the module
 module.exports = Generator;
@@ -52,6 +53,9 @@ function Generator(args, options, config) {
 	// Log the options
 	this.logger.verbose('\nOptions: ' + JSON.stringify(this.options, null, '  '));
 
+	// Load the config files
+	this.conf = new Config();
+
 };
 util.inherits(Generator, yeoman.generators.Base);
 
@@ -64,8 +68,7 @@ Generator.prototype.ohTellMeWhatYouWantWhatYouReallyReallyWant = function() {
 
 	// This is an async step
 	var done = this.async(),
-		me = this,
-		currentWpVer;
+		me = this;
 
 	// Display welcome message
 	this.logger.log(art.wp, {logPrefix: ''});
@@ -75,7 +78,7 @@ Generator.prototype.ohTellMeWhatYouWantWhatYouReallyReallyWant = function() {
 	wordpress.getCurrentVersion(function(err, ver) {
 		if (err) me.logger.warn('Error getting WP versions.  Falling back to ' + ver);
 		me.logger.verbose('Got current WP version: ' + ver);
-		currentWpVer = ver;
+		me.conf.set('wpVer', ver);
 		getInput();
 	});
 
@@ -86,11 +89,9 @@ Generator.prototype.ohTellMeWhatYouWantWhatYouReallyReallyWant = function() {
 				message: 'Does this all look correct?',
 				before: chalk.red('\n--------------------------------'),
 				after: chalk.red('--------------------------------\n'),
-				all: this.options.log == 'verbose'
+				all: me.options.log == 'verbose'
 			},
-			overrideDefaults: {
-				wpVer: currentWpVer
-			}
+			overrideDefaults: me.conf.get()
 		}, function(err, input) {
 			// If an error occured, log it and try again
 			if (err) {
@@ -113,8 +114,8 @@ Generator.prototype.ohTellMeWhatYouWantWhatYouReallyReallyWant = function() {
 			}
 
 			// Save the users input
-			me.userInput = input;
-			me.logger.verbose('User Input: ' + JSON.stringify(me.userInput, null, '  '));
+			me.conf.set(input);
+			me.logger.verbose('User Input: ' + JSON.stringify(me.conf.get(), null, '  '));
 			me.logger.log(art.go, {logPrefix: ''});
 			done();
 		});
@@ -124,7 +125,7 @@ Generator.prototype.ohTellMeWhatYouWantWhatYouReallyReallyWant = function() {
 
 // .gitignore
 Generator.prototype.justIgnoreMe = function() {
-	if (this.userInput.useGit) {
+	if (this.conf.get('git')) {
 		this.logger.verbose('Copying .gitignore file');
 		this.copy('gitignore.tmpl', '.gitignore');
 		this.logger.verbose('Done copying .gitignore file');
@@ -135,7 +136,7 @@ Generator.prototype.justIgnoreMe = function() {
 Generator.prototype.gitIsTheShit = function() {
 
 	// Using Git?  Init it...
-	if (this.userInput.useGit) {
+	if (this.conf.get('git')) {
 		var done = this.async(),
 			me = this;
 
@@ -160,7 +161,7 @@ Generator.prototype.gitIsTheShit = function() {
 // Setup Vagrant config
 Generator.prototype.heIsSuchAVagrant = function() {
 
-	if (this.userInput.useVagrant) {
+	if (this.conf.get('vagrant')) {
 		this.logger.log('Setting up Vagrant');
 		this.logger.verbose('Copying vagrant file');
 		this.template('Vagrantfile', 'Vagrantfile');
@@ -177,16 +178,16 @@ Generator.prototype.wordWhatUp = function() {
 	var done = this.async(),
 		me   = this;
 
-	if (this.userInput.submodule) {
-		this.logger.log('Installing WordPress ' + this.userInput.wpVer + ' as a submodule');
-		git.submoduleAdd(wordpress.repo, this.userInput.wpDir, function(err) {
+	if (this.conf.get('submodule')) {
+		this.logger.log('Installing WordPress ' + this.conf.get('wpVer') + ' as a submodule');
+		git.submoduleAdd(wordpress.repo, this.conf.get('wpDir'), function(err) {
 			if (err) me.logger.error(err);
 
 			me.logger.verbose('Submodule added');
 			var cwd = process.cwd();
-			git._baseDir = me.userInput.wpDir;
-			me.logger.verbose('Checking out WP version ' + me.userInput.wpVer);
-			git.checkout(me.userInput.wpVer, function(err) {
+			git._baseDir = me.conf.get('wpDir');
+			me.logger.verbose('Checking out WP version ' + me.conf.get('wpVer'));
+			git.checkout(me.conf.get('wpVer'), function(err) {
 				if (err) me.logger.error(err);
 				git._baseDir = cwd;
 				me.logger.verbose('WordPress installed');
@@ -196,9 +197,9 @@ Generator.prototype.wordWhatUp = function() {
 
 	} else {
 
-		this.logger.log('Installing WordPress ' + this.userInput.wpVer);
-		this.remote('wordpress', 'wordpress', this.userInput.wpVer, function(err, remote) {
-			remote.directory('.', me.userInput.wpDir);
+		this.logger.log('Installing WordPress ' + this.conf.get('wpVer'));
+		this.remote('wordpress', 'wordpress', this.conf.get('wpVer'), function(err, remote) {
+			remote.directory('.', me.conf.get('wpDir'));
 			me.logger.log('WordPress installed');
 			done();
 		});
@@ -210,7 +211,7 @@ Generator.prototype.wordWhatUp = function() {
 // Setup custom directory structure
 Generator.prototype.somethingsDifferent = function() {
 
-	if (this.userInput.submodule || this.userInput.customDirs) {
+	if (this.conf.get('submodule') || this.conf.get('customDirs')) {
 
 		var me = this,
 			done = this.async();
@@ -219,8 +220,8 @@ Generator.prototype.somethingsDifferent = function() {
 		this.template('index.php.tmpl', 'index.php');
 
 		this.logger.log('Setting up the content directory');
-		this.remote('wordpress', 'wordpress', this.userInput.wpVer, function(err, remote) {
-			remote.directory('wp-content', me.userInput.contentDir);
+		this.remote('wordpress', 'wordpress', this.conf.get('wpVer'), function(err, remote) {
+			remote.directory('wp-content', me.conf.get('contentDir'));
 			me.logger.verbose('Content directory setup');
 			done();
 		});
@@ -238,7 +239,7 @@ Generator.prototype.muHaHaHaConfig = function() {
 	this.logger.log('Getting salt keys');
 	wordpress.getSaltKeys(function(saltKeys) {
 		me.logger.verbose('Salt keys: ' + JSON.stringify(saltKeys, null, '  '));
-		me.userInput.saltKeys = saltKeys;
+		me.conf.set('saltKeys', saltKeys);
 		me.logger.verbose('Copying wp-config');
 		me.template('wp-config.php.tmpl', 'wp-config.php');
 		done();
@@ -272,10 +273,10 @@ Generator.prototype.thisIsSparta = function() {
 		this.logger.verbose('Done setting permissions on .');
 	}
 
-	if (fs.existsSync(this.userInput.contentDir)) {
-		this.logger.log('Setting Permissions: 0775 on ' + this.userInput.contentDir);
-		wrench.chmodSyncRecursive(this.userInput.contentDir, 0775);
-		this.logger.verbose('Done setting permissions on ' + this.userInput.contentDir);
+	if (fs.existsSync(this.conf.get('contentDir'))) {
+		this.logger.log('Setting Permissions: 0775 on ' + this.conf.get('contentDir'));
+		wrench.chmodSyncRecursive(this.conf.get('contentDir'), 0775);
+		this.logger.verbose('Done setting permissions on ' + this.conf.get('contentDir'));
 	}
 
 };
@@ -284,7 +285,7 @@ Generator.prototype.thisIsSparta = function() {
 // Commit the wordpress stuff
 Generator.prototype.commitThisToMemory = function() {
 
-	if (this.userInput.useGit) {
+	if (this.conf.get('git')) {
 		var done = this.async(),
 			me = this;
 
@@ -303,16 +304,16 @@ Generator.prototype.commitThisToMemory = function() {
 // Install and activate the theme
 Generator.prototype.dumbledoreHasStyle = function() {
 
-	if (this.userInput.theme) {
+	if (this.conf.get('installTheme')) {
 		var done = this.async()
 			me = this;
 
 		this.logger.log('Starting to install theme');
-		wordpress.installTheme(this, this.userInput, function() {
+		wordpress.installTheme(this, this.conf.get(), function() {
 			/* @TODO You need to run the install before doing this
 			   see if I can get yeopress to do that.
 		    */
-			//wordpress.activateTheme(me.userInput.themeDir, done);
+			//wordpress.activateTheme(me.conf.get(), done);
 			me.logger.verbose('Theme install complete');
 			done();
 		});
@@ -323,9 +324,9 @@ Generator.prototype.dumbledoreHasStyle = function() {
 // Setup theme
 Generator.prototype.dummyYouHaveToPlugItInFirst = function() {
 
-	if (this.userInput.theme) {
+	if (this.conf.get('installTheme')) {
 		this.logger.log('Starting theme setup');
-		wordpress.setupTheme(this, this.userInput, this.async());
+		wordpress.setupTheme(this, this.conf.get(), this.async());
 		this.logger.verbose('Theme setup complete');
 	}
 
@@ -334,7 +335,7 @@ Generator.prototype.dummyYouHaveToPlugItInFirst = function() {
 // Commit again with the template
 Generator.prototype.gitMeMOARCommits = function() {
 
-	if (this.userInput.git) {
+	if (this.conf.get('git')) {
 		var done = this.async();
 		this.logger.verbose('Committing template to Git');
 		git.add('.', function(err) {
@@ -351,7 +352,7 @@ Generator.prototype.gitMeMOARCommits = function() {
 // Run vagrant up
 Generator.prototype.vagrantUp = function() {
 
-	if (this.userInput.useVagrant) {
+	if (this.conf.get('vagrant')) {
 		var done = this.async();
 		this.logger.log('Running vagrant up');
 		var me = this;
@@ -377,7 +378,7 @@ Generator.prototype.vagrantUp = function() {
 Generator.prototype.saveDaSettings = function() {
 
 	this.logger.log('Writing .yeopress file');
-	fs.writeFileSync('.yeopress', JSON.stringify(this.userInput, null, '\t'));
+	fs.writeFileSync('.yeopress', JSON.stringify(this.conf.get(), null, '\t'));
 
 };
 
