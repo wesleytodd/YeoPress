@@ -3,4 +3,4 @@ Description:
     Just follow the prompts and it will get you off the ground.  Happy WordPressing!
 
 Example:
-    yo wordpress [--log-level=<LEVEL>] [--advanced]
+    yo wordpress [--log-level=<LEVEL>] [--advanced] [--verbose]

@@ -1,5 +1,6 @@
 ## Versions
 
+- **1.2.0:** Major refactor.  Added prompt module and git module, added .yeopress files, added better logging and more cli options.
 - **1.1.3:** Removed block on external requests
 - **1.1.2:** Updated version of yeoman-generator
 - **1.1.0:** New puppet configuration, optionally ignore WP core files, started getting some test coverage, added a more robust gitignore file and moved over to chalk for command line colors.

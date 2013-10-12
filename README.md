@@ -10,7 +10,8 @@ The officially un-official [Yeoman](https://github.com/yeoman/yeoman) Generator 
 - Permission setting on install
 - Create your database, all you have to do is make me a user
 - Built in Vagrant configuration
-- *Coming Soonish* Grunt tasks for some other WP tasks
+- *New* Set custom defaults with `.yeopress` files
+- *New* Environment based wp-config files, `local-config.php`
 
 ## How To Use
 
@@ -26,9 +27,30 @@ Follow my prompts and WA-BAM....ASCII art!!!!
 
 ![image](http://wesleytodd.com/images/yeopress-ascii-art.png)
 
-Newly added in version 1.0.4 is the `advanced` flag, which enables a few extra prompts.  These prompts allow you to use some extra features like the Vagrant integration and manually specifying the WP version.  To enable the advanced options run the generator like this:
+### Advanced Usage
 
-	$ yo wordpress --advanced
+By specifying the `--advanced` flag you get access to more features:
+
+- Vagrant: Sets up a Vagrant box using Puppet with all the requirements for running a WordPress site.
+- WP version: Select a specific WordPress version to install
+- Block external requests: Adds the `WP_HTTP_BLOCK_EXTERNAL` config variable to wp-config to lock down the admin
+- Add core files to gitignore: Adds rules to the `.gitignore` file for the WordPress core files
+
+### Reusing common settings
+
+You probably want to be able to quickly zip through your install with similar settings for every project.  For example, you probably always want to use git but the default is no git.  You can define any custom defaults you want in `~/.yeopress`.  This file is just a json file with key-value pairs for the config settings you want.  Here is an example:
+
+```json
+{
+	"git": true,
+	"dbHost": "localhost",
+	"dbName": "yeopress",
+	"dbUser": "yeopress",
+	"dbPass": "yeopress"
+}
+```
+
+For a full example, open up the local `.yeopress` file that is created by the generator.  This file is located in the directory you ran `yo wordpress` in.
 
 ### Visual Learner??
 
