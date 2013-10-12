@@ -33,7 +33,7 @@ By specifying the `--advanced` flag you get access to more features:
 
 - Vagrant: Sets up a Vagrant box using Puppet with all the requirements for running a WordPress site.
 - WP version: Select a specific WordPress version to install
-- Block external requests: Adds the `WP_HTTP_BLOCK_EXTERNAL` config variable to wp-config to lock down the admin
+- Block external requests: Adds the `WP_HTTP_BLOCK_EXTERNAL` setting to config to lock down the admin
 - Add core files to gitignore: Adds rules to the `.gitignore` file for the WordPress core files
 
 ### Reusing common settings
