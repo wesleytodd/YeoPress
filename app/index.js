@@ -106,6 +106,11 @@ Generator.prototype.ohTellMeWhatYouWantWhatYouReallyReallyWant = function() {
 			// Remove port from url
 			input.url = input.url.replace(portRegex, '');
 
+			// If submodule, force custom dirs
+			if (input.submodule) {
+				input.customDirs = true;
+			}
+
 			// Dont use wordpress dir if custom dir's is not set
 			if (!input.customDirs) {
 				input.wpDir = '.';
@@ -177,7 +182,7 @@ Generator.prototype.wordWhatUp = function() {
 		me   = this;
 
 	if (this.userInput.submodule) {
-		this.logger.log('Installing WordPress ' + this.userInput.wpVer + ' as a submodule');
+		this.logger.log('Installing WordPress ' + this.userInput.wpVer + ' as a submodule into ' + this.userInput.wpDir);
 		git.submoduleAdd(wordpress.repo, this.userInput.wpDir, function(err) {
 			if (err) me.logger.error(err);
 

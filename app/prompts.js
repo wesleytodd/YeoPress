@@ -49,7 +49,7 @@ module.exports = function(advanced) {
 			default: 'N',
 			boolean: true,
 			depends: function(res) {
-				return !!res.useGit;
+				return !!res.useGit || advanced;
 			}
 		}, {
 			question: 'Would you like to install WordPress with the custom directory structure?',
@@ -57,7 +57,7 @@ module.exports = function(advanced) {
 			default: 'N',
 			boolean: true,
 			depends: function(res) {
-				return !res.useGit || !res.submodule;
+				return !res.submodule && !res.useGit;
 			}
 		}, {
 			question: 'WordPress install directory',
