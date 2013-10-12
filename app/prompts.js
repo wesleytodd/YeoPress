@@ -62,7 +62,6 @@ module.exports = function(advanced) {
 		}, {
 			question: 'WordPress install directory',
 			key: 'wpDir',
-			required: true,
 			default: 'wordpress',
 			depends: function(res) {
 				return !!res.submodule || !!res.customDirs;
@@ -76,6 +75,12 @@ module.exports = function(advanced) {
 				return !!res.submodule || !!res.customDirs;
 			}
 		}, {
+			question: 'Block external WP requests?',
+			key: 'blockExternalRequests',
+			default: 'N',
+			boolean: true,
+			depends: advanced
+		},{
 			question: 'Add WordPress Core files to .gitignore?',
 			key: 'ignoreWPCore',
 			default: 'N',

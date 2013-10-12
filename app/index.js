@@ -50,7 +50,7 @@ function Generator(args, options, config) {
 	});
 
 	// Log the options
-	this.logger.verbose('\nOptions:', this.options);
+	this.logger.verbose('\nOptions: ' + JSON.stringify(this.options, null, '  '));
 
 };
 util.inherits(Generator, yeoman.generators.Base);
@@ -106,9 +106,14 @@ Generator.prototype.ohTellMeWhatYouWantWhatYouReallyReallyWant = function() {
 			// Remove port from url
 			input.url = input.url.replace(portRegex, '');
 
+			// Dont use wordpress dir if custom dir's is not set
+			if (!input.customDirs) {
+				input.wpDir = '.';
+			}
+
 			// Save the users input
 			me.userInput = input;
-			me.logger.verbose('User Input:', me.userInput);
+			me.logger.verbose('User Input: ' + JSON.stringify(me.userInput, null, '  '));
 			me.logger.log(art.go, {logPrefix: ''});
 			done();
 		});
@@ -231,7 +236,7 @@ Generator.prototype.muHaHaHaConfig = function() {
 
 	this.logger.log('Getting salt keys');
 	wordpress.getSaltKeys(function(saltKeys) {
-		me.logger.verbose('Salt keys:', saltKeys);
+		me.logger.verbose('Salt keys: ' + JSON.stringify(saltKeys, null, '  '));
 		me.userInput.saltKeys = saltKeys;
 		me.logger.verbose('Copying wp-config');
 		me.template('wp-config.php.tmpl', 'wp-config.php');
