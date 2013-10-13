@@ -17,7 +17,7 @@ var Config = module.exports = function(locals, globals) {
 
 	// Set initial data
 	if (locals) this.set(locals);
-	if (globals) this.set(globals);
+	if (globals) this.setGlobal(globals);
 };
 
 // Set local config values
@@ -66,7 +66,7 @@ Config.prototype.get = function(key) {
 Config.prototype.write = function(filepath, data) {
 	filepath = filepath || this.filename;
 	data = data || this.get();
-	fs.writeFileSync(path, JSON.stringify(data, null, '\t'));
+	fs.writeFileSync(filepath, JSON.stringify(data, null, '\t'));
 };
 
 // Load a config file
