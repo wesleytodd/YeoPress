@@ -80,7 +80,16 @@ module.exports = function(advanced) {
 			default: 'N',
 			boolean: true,
 			depends: advanced
-		},{
+		}, {
+			question: 'Add wp-config.php to .gitignore?',
+			key: 'ignoreWPConfig',
+			default: 'n',
+			required: true,
+			boolean: true,
+			depends: function(res) {
+				return (advanced && !!res.git);
+			}
+		}, {
 			question: 'Add WordPress Core files to .gitignore?',
 			key: 'ignoreWPCore',
 			default: 'N',
