@@ -171,12 +171,12 @@ function getContentDir() {
 function installTheme(generator, config, done) {
 
 	if (config.themeType == 'git') {
-		generator.remote(config.user, config.repo, config.branch, function(err, remote) {
+		generator.remote(config.themeUser, config.themeRepo, config.themeBranch, function(err, remote) {
 			remote.directory('.', path.join(config.contentDir, 'themes', config.themeDir));
 			done();
 		});
 	} else if (config.themeType == 'tar') {
-		generator.tarball(config.tarballUrl, path.join(config.contentDir, 'themes', config.themeDir), done);
+		generator.tarball(config.themeTarballUrl, path.join(config.contentDir, 'themes', config.themeDir), done);
 	}
 
 };
