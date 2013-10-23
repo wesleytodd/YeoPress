@@ -18,7 +18,7 @@
     "wrench": "~1.4.4",
     "mysql": "~2.0.0-alpha7",
     "chalk": "~0.2.1",
-	"simple-git": "~0.2.0"
+    "simple-git": "~0.2.0"
   },
   "repository": {
     "type": "git",
