@@ -2,10 +2,15 @@
 bower_components
 node_modules
 
-# Ignore configuration and automatically generated cruft
-wp-config.php
+# Ignore automatically generated cruft
 *.log
 .sass-cache
+
+# Ignore config
+local-config.php
+<% if (conf.get('ignoreWPCore')) { %>
+wp-config.php
+<% } %>
 
 # Operating system files
 .Spotlight-V100
@@ -29,9 +34,9 @@ contentDirs = [
 	'/backups/',
 	'/blogs.dir/',
 	'/cache/',
-	'/wp-content/index.php',
-	'/wp-content/plugins/index.php',
-	'/wp-content/themes/index.php',
+	'/index.php',
+	'/plugins/index.php',
+	'/themes/index.php',
 	'/uploads/',
 	'/upgrade/',
 	'/wp-cache-config.php'
