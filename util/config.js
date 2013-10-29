@@ -12,7 +12,7 @@ var Config = module.exports = function(locals, globals) {
 	this.filename = '.yeopress';
 
 	// Load files
-	this.global = this.load(path.join(process.env.HOME, this.filename)) || {};
+	this.global = this.load(path.join(process.env.HOME || process.env.USERPROFILE, this.filename)) || {};
 	this.local = this.load() || {};
 
 	// Set initial data
