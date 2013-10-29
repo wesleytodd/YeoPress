@@ -85,7 +85,7 @@ if (!defined('WP_HOME')) {
 	define('WP_HOME',    'http://' . $_SERVER['SERVER_NAME'] . '<%= (conf.get('port')) ? ':' + conf.get('port') : '' %>');
 }
 if (!defined('WP_CONTENT_DIR')) {
-	define('WP_CONTENT_DIR', __dir__ . '/<%= conf.get('contentDir') %>');
+	define('WP_CONTENT_DIR', dirname(__FILE__) . '/<%= conf.get('contentDir') %>');
 }
 if (!defined('WP_CONTENT_URL')) {
 	define('WP_CONTENT_URL', 'http://' . $_SERVER['SERVER_NAME'] . '<%= (conf.get('port')) ? ':' + conf.get('port') : '' %>/<%= conf.get('contentDir') %>');
