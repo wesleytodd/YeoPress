@@ -1,5 +1,6 @@
 ## Versions
 
+- **1.3.1:** Bug fix for windows that I forgot to get in with 1.3.0
 - **1.3.0:** Updated yeoman, converted back to yeoman prompts, fixed some regressions
 - **1.2.2:** Bug fixes
 - **1.2.1:** Bug fixes
