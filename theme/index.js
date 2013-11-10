@@ -6,7 +6,6 @@
 var util         = require('util'),
 	yeoman    = require('yeoman-generator'),
 	path      = require('path'),
-	prompt    = require('../util/prompt'),
 	wordpress = require('../util/wordpress'),
 	prompts   = require('../app/prompts'),
 	art       = require('../util/art');
