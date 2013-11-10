@@ -84,45 +84,42 @@ Generator.prototype.ohTellMeWhatYouWantWhatYouReallyReallyWant = function() {
 
 	// Get the input
 	function getInput() {
-		prompt.ask(require('./prompts')(me.options.advanced), {
-			confirm: {
+		me.prompt(require('./prompts')(me.options.advanced, me.conf.get()), function(input) {
+			me.prompt([{
 				message: 'Does this all look correct?',
-				before: chalk.red('\n--------------------------------'),
-				after: chalk.red('--------------------------------\n'),
-				all: me.options.log == 'verbose'
-			},
-			overrideDefaults: me.conf.get()
-		}, function(err, input) {
-			// If an error occured, log it and try again
-			if (err) {
-				me.logger.error(err);
-				me.logger.log(art.wawa, {logPrefix: ''});
-				return getInput();
-			}
+				name: 'confirm',
+				type: 'confirm'
+			}], function(i) {
+				if (i.confirm) {
+					// Set port
+					var portRegex = /:[\d]+$/;
+					var port = input.url.match(portRegex);
+					if (port) input.port = port[0].replace(':', '');
 
-			// Set port
-			var portRegex = /:[\d]+$/;
-			var port = input.url.match(portRegex);
-			if (port) input.port = port[0].replace(':', '');
+					// Remove port from url
+					input.url = input.url.replace(portRegex, '');
 
-			// Remove port from url
-			input.url = input.url.replace(portRegex, '');
+					// Set customDirs to true if installing as a submodule
+					if (input.submodule) {
+						input.customDirs = true;
+					}
 
-			// SEt customDirs to true if installing as a submodule
-			if (input.submodule) {
-				input.customDirs = true;
-			}
+					// Set dirs if custom dir's is not set
+					if (!input.customDirs) {
+						input.wpDir = '.';
+						input.contentDir = 'wp-content';
+					}
 
-			// Dont use wordpress dir if custom dir's is not set
-			if (!input.customDirs) {
-				input.wpDir = '.';
-			}
-
-			// Save the users input
-			me.conf.set(input);
-			me.logger.verbose('User Input: ' + JSON.stringify(me.conf.get(), null, '  '));
-			me.logger.log(art.go, {logPrefix: ''});
-			done();
+					// Save the users input
+					me.conf.set(input);
+					me.logger.verbose('User Input: ' + JSON.stringify(me.conf.get(), null, '  '));
+					me.logger.log(art.go, {logPrefix: ''});
+					done();
+				} else {
+					console.log();
+					getInput();
+				}
+			});
 		});
 	}
 
@@ -171,7 +168,7 @@ Generator.prototype.heIsSuchAVagrant = function() {
 		this.logger.verbose('Copying vagrant file');
 		this.template('Vagrantfile', 'Vagrantfile');
 		this.logger.verbose('Copying puppet files');
-		this.directory('puppet', 'puppet');
+		this.bulkDirectory('puppet', 'puppet');
 		this.logger.verbose('Finished setting up Vagrant');
 	}
 
@@ -204,7 +201,7 @@ Generator.prototype.wordWhatUp = function() {
 
 		this.logger.log('Installing WordPress ' + this.conf.get('wpVer'));
 		this.remote('wordpress', 'wordpress', this.conf.get('wpVer'), function(err, remote) {
-			remote.directory('.', me.conf.get('wpDir'));
+			remote.bulkDirectory('.', me.conf.get('wpDir'));
 			me.logger.log('WordPress installed');
 			done();
 		});
@@ -250,6 +247,14 @@ Generator.prototype.muHaHaHaConfig = function() {
 		done();
 	});
 
+};
+
+// local-config.php
+Generator.prototype.localConf = function() {
+	if (this.conf.get('createLocalConfig')) {
+		this.logger.verbose('Copying wp-config');
+		this.template('local-config.php.tmpl', 'local-config.php');
+	}
 };
 
 // Check that the database exists, create it otherwise

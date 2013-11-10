@@ -1,5 +1,6 @@
 ## Versions
 
+- **1.3.0:** Updated yeoman, converted back to yeoman prompts, fixed some regressions
 - **1.2.2:** Bug fixes
 - **1.2.1:** Bug fixes
 - **1.2.0:** Major refactor.  Added prompt module and git module, added .yeopress files, added better logging and more cli options.
