@@ -14,7 +14,7 @@
   "license": "BSD",
   "dependencies": {
     "prompt-improved": "~0.1.10",
-    "yeoman-generator": "~0.11.4",
+    "yeoman-generator": "~0.14.0-rc.2",
     "wrench": "~1.4.4",
     "mysql": "~2.0.0-alpha7",
     "chalk": "~0.2.1",

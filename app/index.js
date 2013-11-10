@@ -204,7 +204,7 @@ Generator.prototype.wordWhatUp = function() {
 
 		this.logger.log('Installing WordPress ' + this.conf.get('wpVer'));
 		this.remote('wordpress', 'wordpress', this.conf.get('wpVer'), function(err, remote) {
-			remote.directory('.', me.conf.get('wpDir'));
+			remote.bulkDirectory('.', me.conf.get('wpDir'));
 			me.logger.log('WordPress installed');
 			done();
 		});
