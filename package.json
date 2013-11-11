@@ -15,7 +15,6 @@
   "license": "BSD",
   "devDependencies": {
     "grunt": "~0.4.1",
-    "grunt-contrib-sass": "~0.2.2",
     "grunt-contrib-jshint": "~0.1.1",
     "grunt-contrib-livereload": "~0.1.0",
     "grunt-bower-requirejs": "~0.4.1",
