@@ -186,6 +186,11 @@ module.exports = function(advanced, defaults) {
 			when: function(res) {
 				return !!res.installTheme && res.themeType == 'tar';
 			}
+		}, {
+			message: 'Set file permissions',
+			name: 'themeSetPermissions',
+			type: 'confirm',
+			default: defaults.setPermissions || 'N'
 		}
 	];
 };

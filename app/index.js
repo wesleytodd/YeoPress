@@ -271,21 +271,23 @@ Generator.prototype.hazBaseData = function() {
 };
 
 // Set some permissions
-/* @TODO Thinking that maybe permissions should be left up to the user 
-   BUT, it seems that the theme stuff needs some permissions set to work....
-*/
 Generator.prototype.thisIsSparta = function() {
 
-	if (fs.existsSync('.')) {
-		this.logger.log('Setting Permissions: 0755 on .');
-		wrench.chmodSyncRecursive('.', 0755);
-		this.logger.verbose('Done setting permissions on .');
-	}
+	if (this.conf.get('themeSetPermissions')) {
 
-	if (fs.existsSync(this.conf.get('contentDir'))) {
-		this.logger.log('Setting Permissions: 0775 on ' + this.conf.get('contentDir'));
-		wrench.chmodSyncRecursive(this.conf.get('contentDir'), 0775);
-		this.logger.verbose('Done setting permissions on ' + this.conf.get('contentDir'));
+		if (fs.existsSync('.')) {
+			this.logger.log('Setting Permissions: 0755 on .');
+			wrench.chmodSyncRecursive('.', 0755);
+			this.logger.verbose('Done setting permissions on .');
+		}
+
+		if (fs.existsSync(this.conf.get('contentDir'))) {
+			this.logger.log('Setting Permissions: 0775 on ' + this.conf.get('contentDir'));
+			wrench.chmodSyncRecursive(this.conf.get('contentDir'), 0775);
+			this.logger.verbose('Done setting permissions on ' + this.conf.get('contentDir'));
+		}
+	} else {
+		this.logger.log('Permissions not set. You have to do this by manually!');
 	}
 
 };
