@@ -6,6 +6,16 @@ Contributing to YeoPress is simple.  A Vagrant configuration is bundled with the
 
 Vagrant will provision a new virtual machine, setup everything you need to run WordPress and Yeoman.  The virtual machine has port `8080` forwarding to the test site which is located in `test/site`.  So to check things in the browser, you simply open `http://localhost:8080` and you should see your WP install.
 
+If you prefer to work locally without Vagrant, you can link the cloned repository with npm:
+
+```
+$ git clone git@github.com:<Your User Name>/YeoPress.git generator-wordpress && cd generator-wordpress
+$ sudo npm link
+$ cd /path/to/where/you/want/to/test/run/the/generator && yo wordpress
+```
+
+Now any changes you make in to the generator will be instaltly available when you run the generator.  Also, the `--verbose` flag is very helpful in diagnosing problems.
+
 ## Pull Requests
 
 Please make all pull requests to the develop branch.  Example process for making a PR:
