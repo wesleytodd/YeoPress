@@ -29,7 +29,7 @@ function getCurrentVersion(callback) {
 		if (err) return callback(err, latestVersion);
 		tagList = ('' + tagsList).split('\n');
 		tagList.pop();
-		lastTag = /\d\.\d\.\d/ig.exec(tagList.pop());
+		lastTag = /\d\.\d(\.\d)?/ig.exec(tagList.pop());
 		if (lastTag !== null) {
 			latestVersion = lastTag[0];
 		}
