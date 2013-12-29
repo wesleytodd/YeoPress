@@ -16,8 +16,7 @@
   "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-contrib-sass": "~0.2.2",
-    "grunt-contrib-jshint": "~0.1.1",
-    "grunt-contrib-livereload": "~0.1.0",
+    "grunt-contrib-jshint": "~0.1.1", 
     "grunt-bower-requirejs": "~0.4.1",
     "grunt-contrib-requirejs": "~0.4.0",
     "bower": "~0.8.6",
