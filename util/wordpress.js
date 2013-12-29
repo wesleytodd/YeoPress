@@ -24,7 +24,7 @@ function getSaltKeys(callback) {
 };
 
 function getCurrentVersion(callback) {
-	var latestVersion = '3.5.1';
+	var latestVersion = '3.8';
 	require('simple-git')().listRemote('--tags '+ wordpressRepo, function(err, tagsList) {
 		if (err) return callback(err, latestVersion);
 		tagList = ('' + tagsList).split('\n');
