@@ -50,7 +50,13 @@ function Generator(args, options, config) {
 	});
 
 	// Log the options
-	this.logger.verbose('\nOptions: ' + JSON.stringify(this.options, null, '  '));
+	try {
+		this.logger.verbose('\nOptions: ' + JSON.stringify(this.options, null, '  '));
+	} catch(e) {
+		// This is here because when a generator is run by selecting it after running `yo`,
+		// the options is a circular data structure, causing an error when converting to json.
+		// Verbose cannot be called this way, so there is no need to log anything.
+	}
 
 	// Load the config files
 	this.conf = new Config();
