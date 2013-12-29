@@ -1,4 +1,4 @@
-![image](http://wesleytodd.com/images/yeopress.jpg)
+![image](http://wesleytodd.com/media/pages/index/yeopress.jpg)
 
 # YeoPress
 
@@ -25,7 +25,7 @@ And run me:
 
 Follow my prompts and WA-BAM....ASCII art!!!!
 
-![image](http://wesleytodd.com/images/yeopress-ascii-art.png)
+![image](http://wesleytodd.com/media/posts/yeopress-a-yeoman-generator-for-wordpress/yeopress-ascii-art.png)
 
 ### Advanced Usage
 
