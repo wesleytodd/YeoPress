@@ -173,7 +173,8 @@ Generator.prototype.heIsSuchAVagrant = function() {
 		this.logger.verbose('Copying vagrant file');
 		this.template('Vagrantfile', 'Vagrantfile');
 		this.logger.verbose('Copying puppet files');
-		this.bulkDirectory('puppet', 'puppet');
+		this.bulkDirectory('puppet/modules', 'puppet/modules');
+		this.directory('puppet/manifests', 'puppet/manifests');
 		this.logger.verbose('Finished setting up Vagrant');
 	}
 
