@@ -12,6 +12,7 @@ var util         = require('util'),
 	wordpress    = require('../util/wordpress'),
 	art          = require('../util/art'),
 	Logger       = require('../util/log'),
+	mkdirp       = require('mkdirp'),
 	Config       = require('../util/config');
 
 // Export the module
@@ -396,6 +397,16 @@ Generator.prototype.saveDaSettings = function() {
 
 	this.logger.log('Writing .yeopress file');
 	fs.writeFileSync('.yeopress', JSON.stringify(this.conf.get(), null, '\t'));
+
+};
+
+// Create Language folder
+Generator.prototype.getLanguage = function() {
+
+	this.logger.log('Creating language folders');
+	mkdirp('wp-content/languages/themes', function (err) {
+		if (err) { throw err; }
+	});
 
 };
 

@@ -71,7 +71,8 @@ $table_prefix  = '<%= conf.get('tablePrefix') %>';
  * de_DE.mo to wp-content/languages and set WPLANG to 'de_DE' to enable German
  * language support.
  */
-define('WPLANG', '');
+define('WPLANG', '<%= conf.get('wplang') %>');
+
 <% if (conf.get('customDirs')) { %>
 /**
  * Set custom paths
