@@ -55,7 +55,13 @@ module.exports = function(advanced, defaults) {
 			message: 'Database password',
 			name: 'dbPass',
 			default: defaults.dbPass || null
-		}, {
+		},
+		{
+			message: 'Localized Language, defaults to English',
+			name: 'wplang',
+			default: defaults.wplang || null
+		},
+		{
 			message: 'Use Git?',
 			name: 'git',
 			default: defaults.git || 'N',
