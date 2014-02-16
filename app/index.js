@@ -4,15 +4,16 @@
 
 // Requirements
 var util         = require('util'),
+	path         = require('path'),
 	fs           = require('fs'),
 	yeoman       = require('yeoman-generator'),
 	wrench       = require('wrench'),
 	chalk        = require('chalk'),
+	mkdirp       = require('mkdirp'),
 	git          = require('simple-git')(),
 	wordpress    = require('../util/wordpress'),
 	art          = require('../util/art'),
 	Logger       = require('../util/log'),
-	mkdirp       = require('mkdirp'),
 	Config       = require('../util/config');
 
 // Export the module
@@ -297,7 +298,23 @@ Generator.prototype.thisIsSparta = function() {
 	}
 
 };
-/**/
+
+// Create Language directory
+Generator.prototype.doveIlBagno = function() {
+
+	// Only do this if the user specified a language
+	if (this.conf.get('wpLang')) {
+		var done = this.async(),
+			me = this;
+
+		this.logger.log('Creating language directories');
+		mkdirp(path.join(this.conf.get('contentDir'), 'languages', 'themes'), function (err) {
+			if (err) me.logger.error(err);
+			done();
+		});
+	}
+
+};
 
 // Commit the wordpress stuff
 Generator.prototype.commitThisToMemory = function() {
@@ -397,16 +414,6 @@ Generator.prototype.saveDaSettings = function() {
 
 	this.logger.log('Writing .yeopress file');
 	fs.writeFileSync('.yeopress', JSON.stringify(this.conf.get(), null, '\t'));
-
-};
-
-// Create Language folder
-Generator.prototype.getLanguage = function() {
-
-	this.logger.log('Creating language folders');
-	mkdirp('wp-content/languages/themes', function (err) {
-		if (err) { throw err; }
-	});
 
 };
 
