@@ -6,7 +6,6 @@
 var util         = require('util'),
 	path         = require('path'),
 	yeoman       = require('yeoman-generator'),
-	prompt       = require('../util/prompt'),
 	wordpress    = require('../util/wordpress'),
 	art          = require('../util/art'),
 	Logger       = require('../util/log'),
@@ -18,10 +17,6 @@ module.exports = Generator;
 // Extend the base generator
 function Generator(args, options, config) {
 	yeoman.generators.Base.apply(this, arguments);
-
-	// Not functioning
-	console.log('This sub-generator is not functioning until yeoman supports zip extraction');
-	process.exit();
 
 	// Log level option
 	this.option('log', {
@@ -57,6 +52,10 @@ function Generator(args, options, config) {
 	// Load the config files
 	this.conf = new Config();
 
+	// Success message
+	this.on('end', function () {
+		this.log.ok('Plugins installed.');
+	}.bind(this));
 
 };
 util.inherits(Generator, yeoman.generators.Base);
@@ -71,8 +70,10 @@ Generator.prototype.plugItInPlugItIn = function() {
 	this.logger.log(art.wp, {logPrefix: ''});
 	
 	(function getInput() {
-		prompt.ask('Plugins to install (ex. wordpress-importer, wp-custom-admin-bar)', {
-			after: function(input) {
+		me.prompt({
+			message: 'Plugins to install (ex. wordpress-importer, wp-custom-admin-bar)',
+			name: 'plugins',
+			filter: function(input) {
 				var plugins = [],
 					items = input.split(',');
 				for (var i in items) {
@@ -80,13 +81,8 @@ Generator.prototype.plugItInPlugItIn = function() {
 				}
 				return plugins;
 			}
-		}, function(err, plugins) {
-			if (err) {
-				me.logger.error(err);
-				me.logger.log(art.wawa, {logPrefix: ''});
-				return getInput();
-			}
-
+		}, function(input) {
+			var plugins = input.plugins;
 			var len = plugins.length;
 			var next = function(i) {
 				installPlugin(plugins[i], function() {
