@@ -11,6 +11,7 @@ var util         = require('util'),
 	chalk        = require('chalk'),
 	mkdirp       = require('mkdirp'),
 	git          = require('simple-git')(),
+	wp           = require('wp-util'),
 	wordpress    = require('../util/wordpress'),
 	art          = require('../util/art'),
 	Logger       = require('../util/log'),
@@ -116,6 +117,19 @@ Generator.prototype.ohTellMeWhatYouWantWhatYouReallyReallyWant = function() {
 						input.wpDir = '.';
 						input.contentDir = 'wp-content';
 					}
+
+					// Create a wordpress site instance
+					me.wpSite = new wp.Site({
+						contentDirectory: input.contentDir,
+						wpBaseDirectory: input.wpDir,
+						databaseCredentials: {
+							host: input.dbHost,
+							user: input.dbUser,
+							password: input.dbPass,
+							name: input.dbName,
+							prefix: input.tablePrefix,
+						}
+					});
 
 					// Save the users input
 					me.conf.set(input);
@@ -247,7 +261,10 @@ Generator.prototype.muHaHaHaConfig = function() {
 		me   = this;
 
 	this.logger.log('Getting salt keys');
-	wordpress.getSaltKeys(function(saltKeys) {
+	wp.misc.getSaltKeys(function(err, saltKeys) {
+		if (err) {
+			me.logger.error('Failed to get salt keys, remember to change them.');
+		}
 		me.logger.verbose('Salt keys: ' + JSON.stringify(saltKeys, null, '  '));
 		me.conf.set('saltKeys', saltKeys);
 		me.logger.verbose('Copying wp-config');
@@ -271,9 +288,11 @@ Generator.prototype.hazBaseData = function() {
 	var done = this.async(),
 		me = this;
 
-	wordpress.createDBifNotExists(done).on('error', function(err) {
-		me.logger.warn('Cannot access database');
-		me.logger.warn('Make sure you create the database and update the credentials in the wp-config.php');
+	this.wpSite.database.createIfNotExists(function(err) {
+		if (err) {
+			me.logger.warn('Cannot access database');
+			me.logger.warn('Make sure you create the database and update the credentials in the wp-config.php');
+		}
 		done();
 	});
 
@@ -307,8 +326,8 @@ Generator.prototype.doveIlBagno = function() {
 		var done = this.async(),
 			me = this;
 
-		this.logger.log('Creating language directories');
-		mkdirp(path.join(this.conf.get('contentDir'), 'languages', 'themes'), function (err) {
+		this.logger.log('Setting up locale files');
+		wp.locale.getLanguage(this.conf.get('wpLang'), this.conf.get('contentDir'), function (err) {
 			if (err) me.logger.error(err);
 			done();
 		});
