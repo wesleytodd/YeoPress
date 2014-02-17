@@ -52,6 +52,10 @@ You probably want to be able to quickly zip through your install with similar se
 
 For a full example, open up the local `.yeopress` file that is created by the generator.  This file is located in the directory you ran `yo wordpress` in.
 
+## Installing WordPress Plugins
+
+New with `v1.4.0` is a subgenerator for installing plugins, `yo wordpress:plugin`.  You can supply a comma delimited list of plugin slugs to download.  YeoPress will download and unzip those plugins into your content directory.
+
 ### Visual Learner??
 
 [Watch the video](http://www.youtube.com/watch?v=Em-NMCgNhhY).
