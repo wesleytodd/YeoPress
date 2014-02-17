@@ -1,11 +1,77 @@
 var https = require('https'),
+	http = require('http'),
 	fs = require('fs'),
+	util = require('util'),
 	path = require('path'),
 	mysql = require('mysql'),
 	chalk = require('chalk'),
 	exec = require('child_process').exec,
 	EventEmitter = require('events').EventEmitter,
 	wordpressRepo = "git://github.com/WordPress/WordPress.git";
+
+function getLanguage(contentDir, language, callback) {
+	var files = {
+		'': '%s.mo',
+		'admin': 'admin-%s.mo',
+		'admin/network': 'admin-network-%s.mo',
+		'twentyeleven': path.join('themes', 'twentyeleven-%s.mo'),
+		'twentytwelve': path.join('themes', 'twentytwelve-%s.mo'),
+		'twentythirteen': path.join('themes', 'twentythirteen-%s.mo'),
+		'twentyfourteen': path.join('themes', 'twentyfourteen-%s.mo'),
+	};
+
+	var requested = complete = 0, errors = [];
+	for (var file in files) {
+		requested++;
+		downloadLanguageFile(language, file, 'mo', function(err, res) {
+			if (err) {
+				return errors.push(err);
+			}
+
+			// Pipe to  file
+			var p = path.join(contentDir, 'languages', util.format(files[file], language));
+			var f = fs.createWriteStream(p);
+			res.pipe(f);
+
+			// Complete
+			res.on('end', function() {
+				complete++;
+				if (requested == complete) callback(errors.length ? null : errors);
+			});
+		});
+	}
+
+};
+
+function downloadLanguageFile(language, file, format, callback) {
+	// Build url with or without a file
+	if (file && file != '') {
+		var url = util.format('/projects/wp/dev/%s/%s/default/export-translations?format=%s', file, language, format);
+	} else {
+		var url = util.format('/projects/wp/dev/%s/default/export-translations?format=%s', language, format);
+	}
+
+	// Make request
+	http.get({
+		hostname: 'translate.wordpress.org',
+		path: url,
+	}, function(res) {
+		// Not found
+		if (res.statusCode == 404) {
+			// Retry with the language code with no region specifier
+			if (language.indexOf('_') !== -1) {
+				// es_ES => es
+				language = language.split('_')[0];
+				return downloadLanguageFile(language, file, format, callback);
+			}
+			// Not found
+			return callback(res);
+		}
+
+		// Success
+		callback(null, res);
+	}).on('error', callback);
+};
 
 function getSaltKeys(callback) {
 	var ee = new EventEmitter(),
@@ -24,12 +90,12 @@ function getSaltKeys(callback) {
 };
 
 function getCurrentVersion(callback) {
-	var latestVersion = '3.5.1';
+	var latestVersion = '3.8';
 	require('simple-git')().listRemote('--tags '+ wordpressRepo, function(err, tagsList) {
 		if (err) return callback(err, latestVersion);
 		tagList = ('' + tagsList).split('\n');
 		tagList.pop();
-		lastTag = /\d\.\d\.\d/ig.exec(tagList.pop());
+		lastTag = /\d\.\d(\.\d)?/ig.exec(tagList.pop());
 		if (lastTag !== null) {
 			latestVersion = lastTag[0];
 		}
@@ -171,12 +237,12 @@ function getContentDir() {
 function installTheme(generator, config, done) {
 
 	if (config.themeType == 'git') {
-		generator.remote(config.user, config.repo, config.branch, function(err, remote) {
+		generator.remote(config.themeUser, config.themeRepo, config.themeBranch, function(err, remote) {
 			remote.directory('.', path.join(config.contentDir, 'themes', config.themeDir));
 			done();
 		});
 	} else if (config.themeType == 'tar') {
-		generator.tarball(config.tarballUrl, path.join(config.contentDir, 'themes', config.themeDir), done);
+		generator.tarball(config.themeTarballUrl, path.join(config.contentDir, 'themes', config.themeDir), done);
 	}
 
 };
@@ -261,5 +327,7 @@ module.exports = {
 	getContentDir : getContentDir,
 	installTheme : installTheme,
 	setupTheme : setupTheme,
-	activateTheme : activateTheme
+	activateTheme : activateTheme,
+	downloadLanguageFile: downloadLanguageFile,
+	getLanguage: getLanguage,
 };

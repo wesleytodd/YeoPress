@@ -1,5 +1,11 @@
 ## Versions
 
+- **1.3.5:** Bug fix for vagrant
+- **1.3.4:** Bug fix for running generator with just `yo` and selecting wordpress
+- **1.3.3:** Bug fix for versions without a third part, updated default version to 3.8
+- **1.3.1:** Bug fix for windows that I forgot to get in with 1.3.0
+- **1.3.0:** Updated yeoman, converted back to yeoman prompts, fixed some regressions
+- **1.2.2:** Bug fixes
 - **1.2.1:** Bug fixes
 - **1.2.0:** Major refactor.  Added prompt module and git module, added .yeopress files, added better logging and more cli options.
 - **1.1.3:** Removed block on external requests

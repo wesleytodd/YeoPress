@@ -1,4 +1,4 @@
-![image](http://wesleytodd.com/images/yeopress.jpg)
+![image](http://wesleytodd.com/media/pages/index/yeopress.jpg)
 
 # YeoPress
 
@@ -25,7 +25,7 @@ And run me:
 
 Follow my prompts and WA-BAM....ASCII art!!!!
 
-![image](http://wesleytodd.com/images/yeopress-ascii-art.png)
+![image](http://wesleytodd.com/media/posts/yeopress-a-yeoman-generator-for-wordpress/yeopress-ascii-art.png)
 
 ### Advanced Usage
 
@@ -74,3 +74,7 @@ Custom themes can be installed from GitHub or a Tarball.  Once installed, they a
 - RequireJS ([grunt-contrib-requirejs](https://npmjs.org/package/grunt-contrib-requirejs))
 
 More information on themes [here](https://github.com/wesleytodd/YeoPress/wiki/Themes) & [here](http://wesleytodd.com/2013/5/yeopress-themes.html)
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/wesleytodd/yeopress/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+

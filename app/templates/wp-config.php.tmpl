@@ -34,10 +34,14 @@ if (!defined('DB_HOST')) {
 }
 
 /** Database Charset to use in creating database tables. */
-define('DB_CHARSET', 'utf8');
+if (!defined('DB_CHARSET')) {
+	define('DB_CHARSET', 'utf8');
+}
 
 /** The Database Collate type. Don't change this if in doubt. */
-define('DB_COLLATE', '');
+if (!defined('DB_COLLATE')) {
+	define('DB_COLLATE', '');
+}
 
 /**#@+
  * Authentication Unique Keys and Salts.
@@ -67,17 +71,26 @@ $table_prefix  = '<%= conf.get('tablePrefix') %>';
  * de_DE.mo to wp-content/languages and set WPLANG to 'de_DE' to enable German
  * language support.
  */
-define('WPLANG', '');
+define('WPLANG', '<%= conf.get('wpLang') %>');
+
 <% if (conf.get('customDirs')) { %>
 /**
  * Set custom paths
  *
  * These are required because wordpress is installed in a subdirectory.
  */
-define('WP_SITEURL', 'http://' . $_SERVER['SERVER_NAME'] . '<%= (conf.get('port')) ? ':' + conf.get('port') : '' %>/<%= conf.get('wpDir') %>');
-define('WP_HOME',    'http://' . $_SERVER['SERVER_NAME'] . '<%= (conf.get('port')) ? ':' + conf.get('port') : '' %>');
-define('WP_CONTENT_DIR', __dir__ . '/<%= conf.get('contentDir') %>');
-define('WP_CONTENT_URL', 'http://' . $_SERVER['SERVER_NAME'] . '<%= (conf.get('port')) ? ':' + conf.get('port') : '' %>/<%= conf.get('contentDir') %>');
+if (!defined('WP_SITEURL')) {
+	define('WP_SITEURL', 'http://' . $_SERVER['SERVER_NAME'] . '<%= (conf.get('port')) ? ':' + conf.get('port') : '' %>/<%= conf.get('wpDir') %>');
+}
+if (!defined('WP_HOME')) {
+	define('WP_HOME',    'http://' . $_SERVER['SERVER_NAME'] . '<%= (conf.get('port')) ? ':' + conf.get('port') : '' %>');
+}
+if (!defined('WP_CONTENT_DIR')) {
+	define('WP_CONTENT_DIR', dirname(__FILE__) . '/<%= conf.get('contentDir') %>');
+}
+if (!defined('WP_CONTENT_URL')) {
+	define('WP_CONTENT_URL', 'http://' . $_SERVER['SERVER_NAME'] . '<%= (conf.get('port')) ? ':' + conf.get('port') : '' %>/<%= conf.get('contentDir') %>');
+}
 <% } %>
 <% if (conf.get('blockExternalRequests')) { %>
 /**
@@ -85,7 +98,9 @@ define('WP_CONTENT_URL', 'http://' . $_SERVER['SERVER_NAME'] . '<%= (conf.get('p
  *
  * This is so that users dont see update requests since things are managed through git
  */
-define('WP_HTTP_BLOCK_EXTERNAL', true);
+if (!defined('WP_HTTP_BLOCK_EXTERNAL')) {
+	define('WP_HTTP_BLOCK_EXTERNAL', true);
+}
 <% } %>
 /**
  * For developers: WordPress debugging mode.

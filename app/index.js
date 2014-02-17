@@ -4,12 +4,14 @@
 
 // Requirements
 var util         = require('util'),
+	path         = require('path'),
 	fs           = require('fs'),
 	yeoman       = require('yeoman-generator'),
 	wrench       = require('wrench'),
 	chalk        = require('chalk'),
+	mkdirp       = require('mkdirp'),
 	git          = require('simple-git')(),
-	prompt       = require('../util/prompt'),
+	wp           = require('wp-util'),
 	wordpress    = require('../util/wordpress'),
 	art          = require('../util/art'),
 	Logger       = require('../util/log'),
@@ -51,7 +53,13 @@ function Generator(args, options, config) {
 	});
 
 	// Log the options
-	this.logger.verbose('\nOptions: ' + JSON.stringify(this.options, null, '  '));
+	try {
+		this.logger.verbose('\nOptions: ' + JSON.stringify(this.options, null, '  '));
+	} catch(e) {
+		// This is here because when a generator is run by selecting it after running `yo`,
+		// the options is a circular data structure, causing an error when converting to json.
+		// Verbose cannot be called this way, so there is no need to log anything.
+	}
 
 	// Load the config files
 	this.conf = new Config();
@@ -84,45 +92,55 @@ Generator.prototype.ohTellMeWhatYouWantWhatYouReallyReallyWant = function() {
 
 	// Get the input
 	function getInput() {
-		prompt.ask(require('./prompts')(me.options.advanced), {
-			confirm: {
+		me.prompt(require('./prompts')(me.options.advanced, me.conf.get()), function(input) {
+			me.prompt([{
 				message: 'Does this all look correct?',
-				before: chalk.red('\n--------------------------------'),
-				after: chalk.red('--------------------------------\n'),
-				all: me.options.log == 'verbose'
-			},
-			overrideDefaults: me.conf.get()
-		}, function(err, input) {
-			// If an error occured, log it and try again
-			if (err) {
-				me.logger.error(err);
-				me.logger.log(art.wawa, {logPrefix: ''});
-				return getInput();
-			}
+				name: 'confirm',
+				type: 'confirm'
+			}], function(i) {
+				if (i.confirm) {
+					// Set port
+					var portRegex = /:[\d]+$/;
+					var port = input.url.match(portRegex);
+					if (port) input.port = port[0].replace(':', '');
 
-			// Set port
-			var portRegex = /:[\d]+$/;
-			var port = input.url.match(portRegex);
-			if (port) input.port = port[0].replace(':', '');
+					// Remove port from url
+					input.url = input.url.replace(portRegex, '');
 
-			// Remove port from url
-			input.url = input.url.replace(portRegex, '');
+					// Set customDirs to true if installing as a submodule
+					if (input.submodule) {
+						input.customDirs = true;
+					}
 
-			// SEt customDirs to true if installing as a submodule
-			if (input.submodule) {
-				input.customDirs = true;
-			}
+					// Set dirs if custom dir's is not set
+					if (!input.customDirs) {
+						input.wpDir = '.';
+						input.contentDir = 'wp-content';
+					}
 
-			// Dont use wordpress dir if custom dir's is not set
-			if (!input.customDirs) {
-				input.wpDir = '.';
-			}
+					// Create a wordpress site instance
+					me.wpSite = new wp.Site({
+						contentDirectory: input.contentDir,
+						wpBaseDirectory: input.wpDir,
+						databaseCredentials: {
+							host: input.dbHost,
+							user: input.dbUser,
+							password: input.dbPass,
+							name: input.dbName,
+							prefix: input.tablePrefix,
+						}
+					});
 
-			// Save the users input
-			me.conf.set(input);
-			me.logger.verbose('User Input: ' + JSON.stringify(me.conf.get(), null, '  '));
-			me.logger.log(art.go, {logPrefix: ''});
-			done();
+					// Save the users input
+					me.conf.set(input);
+					me.logger.verbose('User Input: ' + JSON.stringify(me.conf.get(), null, '  '));
+					me.logger.log(art.go, {logPrefix: ''});
+					done();
+				} else {
+					console.log();
+					getInput();
+				}
+			});
 		});
 	}
 
@@ -171,7 +189,8 @@ Generator.prototype.heIsSuchAVagrant = function() {
 		this.logger.verbose('Copying vagrant file');
 		this.template('Vagrantfile', 'Vagrantfile');
 		this.logger.verbose('Copying puppet files');
-		this.directory('puppet', 'puppet');
+		this.bulkDirectory('puppet/modules', 'puppet/modules');
+		this.directory('puppet/manifests', 'puppet/manifests');
 		this.logger.verbose('Finished setting up Vagrant');
 	}
 
@@ -204,7 +223,7 @@ Generator.prototype.wordWhatUp = function() {
 
 		this.logger.log('Installing WordPress ' + this.conf.get('wpVer'));
 		this.remote('wordpress', 'wordpress', this.conf.get('wpVer'), function(err, remote) {
-			remote.directory('.', me.conf.get('wpDir'));
+			remote.bulkDirectory('.', me.conf.get('wpDir'));
 			me.logger.log('WordPress installed');
 			done();
 		});
@@ -242,7 +261,10 @@ Generator.prototype.muHaHaHaConfig = function() {
 		me   = this;
 
 	this.logger.log('Getting salt keys');
-	wordpress.getSaltKeys(function(saltKeys) {
+	wp.misc.getSaltKeys(function(err, saltKeys) {
+		if (err) {
+			me.logger.error('Failed to get salt keys, remember to change them.');
+		}
 		me.logger.verbose('Salt keys: ' + JSON.stringify(saltKeys, null, '  '));
 		me.conf.set('saltKeys', saltKeys);
 		me.logger.verbose('Copying wp-config');
@@ -252,15 +274,25 @@ Generator.prototype.muHaHaHaConfig = function() {
 
 };
 
+// local-config.php
+Generator.prototype.localConf = function() {
+	if (this.conf.get('createLocalConfig')) {
+		this.logger.verbose('Copying wp-config');
+		this.template('local-config.php.tmpl', 'local-config.php');
+	}
+};
+
 // Check that the database exists, create it otherwise
 Generator.prototype.hazBaseData = function() {
 
 	var done = this.async(),
 		me = this;
 
-	wordpress.createDBifNotExists(done).on('error', function(err) {
-		me.logger.warn('Cannot access database');
-		me.logger.warn('Make sure you create the database and update the credentials in the wp-config.php');
+	this.wpSite.database.createIfNotExists(function(err) {
+		if (err) {
+			me.logger.warn('Cannot access database');
+			me.logger.warn('Make sure you create the database and update the credentials in the wp-config.php');
+		}
 		done();
 	});
 
@@ -285,7 +317,23 @@ Generator.prototype.thisIsSparta = function() {
 	}
 
 };
-/**/
+
+// Create Language directory
+Generator.prototype.doveIlBagno = function() {
+
+	// Only do this if the user specified a language
+	if (this.conf.get('wpLang')) {
+		var done = this.async(),
+			me = this;
+
+		this.logger.log('Setting up locale files');
+		wp.locale.getLanguage(this.conf.get('wpLang'), this.conf.get('contentDir'), function (err) {
+			if (err) me.logger.error(err);
+			done();
+		});
+	}
+
+};
 
 // Commit the wordpress stuff
 Generator.prototype.commitThisToMemory = function() {
