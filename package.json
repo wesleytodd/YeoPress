@@ -1,6 +1,6 @@
 {
   "name": "generator-wordpress",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "A Yeoman generator for WordPress",
   "keywords": [
     "yeoman-generator",
@@ -19,7 +19,7 @@
     "chalk": "~0.2.1",
     "simple-git": "~0.2.0",
     "mkdirp": "~0.3.5",
-    "wp-util": "~0.1.0"
+    "wp-util": "~0.1.1"
   },
   "repository": {
     "type": "git",

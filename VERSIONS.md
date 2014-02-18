@@ -1,5 +1,6 @@
 ## Versions
 
+- **1.4.1:** Bug fix in wp-util, updated dep
 - **1.4.0:** Added support for localization of WordPress, updated to yeoman-generator#0.16.0
 - **1.3.5:** Bug fix for vagrant
 - **1.3.4:** Bug fix for running generator with just `yo` and selecting wordpress
