@@ -20,7 +20,7 @@ function getLanguage(contentDir, language, callback) {
 		'twentyfourteen': path.join('themes', 'twentyfourteen-%s.mo'),
 	};
 
-	var requested = complete = 0, errors = [];
+	var requested = 0, complete = 0, errors = [];
 	for (var file in files) {
 		requested++;
 		downloadLanguageFile(language, file, 'mo', function(err, res) {
