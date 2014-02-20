@@ -17,15 +17,15 @@ module.exports = function(grunt) {
 		watch : {
 			sass : {
 				files : ['scss/**/*.scss'],
-				tasks : (hasSass) ? ['sass:dev'] : null,
-				options : {
-					livereload : true
-				}
+				tasks : (hasSass) ? ['sass:dev'] : null
 			},
 			stylus : {
 				files : ['stylus/**/*.styl'],
-				tasks : (hasStylus) ? ['stylus:dev'] : null,
-				options: {
+				tasks : (hasStylus) ? ['stylus:dev'] : null
+			},
+			css : {
+				files : ['css/**/*.css'],
+				options : {
 					livereload : true
 				}
 			},
