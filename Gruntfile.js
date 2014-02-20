@@ -192,7 +192,7 @@ module.exports = function(grunt) {
 
 		arr.push('imagemin:production', 'svgmin:production', 'requirejs:production');
 
-		return arr;
+		return grunt.task.run(arr);
 	});
 
 	// Template Setup Task
@@ -200,7 +200,7 @@ module.exports = function(grunt) {
 		var arr = [];
 
 		if (hasSass) {
-			arr.push['sass:dev'];
+			arr.push('sass:dev');
 		}
 
 		if (hasStylus) {
@@ -208,6 +208,8 @@ module.exports = function(grunt) {
 		}
 
 		arr.push('bower-install');
+
+		return grunt.task.run(arr);
 	});
 
 	// Load up tasks
@@ -218,7 +220,7 @@ module.exports = function(grunt) {
 	if (hasStylus) {
 		grunt.loadNpmTasks('grunt-contrib-stylus');
 	}
-	
+
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-bower-requirejs');
