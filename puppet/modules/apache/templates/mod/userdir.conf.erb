@@ -4,7 +4,7 @@
 <% end -%>
   UserDir <%= @dir %>
 
-  <Directory <%= @home %>/*/<%= @dir %>>
+  <Directory "<%= @home %>/*/<%= @dir %>">
     AllowOverride FileInfo AuthConfig Limit Indexes
     Options MultiViews Indexes SymLinksIfOwnerMatch IncludesNoExec
     <Limit GET POST OPTIONS>

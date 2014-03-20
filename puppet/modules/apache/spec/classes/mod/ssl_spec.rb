@@ -10,7 +10,7 @@ describe 'apache::mod::ssl', :type => :class do
         :concat_basedir         => '/dne',
       }
     end
-    it { expect { should raise_error(Puppet::Error, "Unsupported operatingsystem:") } }
+    it { expect { subject }.to raise_error(Puppet::Error, /Unsupported osfamily:/) }
   end
 
   context 'on a RedHat OS' do
@@ -21,7 +21,7 @@ describe 'apache::mod::ssl', :type => :class do
         :concat_basedir         => '/dne',
       }
     end
-    it { should include_class('apache::params') }
+    it { should contain_class('apache::params') }
     it { should contain_apache__mod('ssl') }
     it { should contain_package('mod_ssl') }
   end
@@ -34,8 +34,20 @@ describe 'apache::mod::ssl', :type => :class do
         :concat_basedir         => '/dne',
       }
     end
-    it { should include_class('apache::params') }
+    it { should contain_class('apache::params') }
     it { should contain_apache__mod('ssl') }
     it { should_not contain_package('libapache2-mod-ssl') }
+  end
+
+  context 'on a FreeBSD OS' do
+    let :facts do
+      {
+        :osfamily               => 'FreeBSD',
+        :operatingsystemrelease => '9',
+        :concat_basedir         => '/dne',
+      }
+    end
+    it { should contain_class('apache::params') }
+    it { should contain_apache__mod('ssl') }
   end
 end

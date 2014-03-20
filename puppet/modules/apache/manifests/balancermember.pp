@@ -9,7 +9,7 @@
 #
 # === Requirement/Dependencies:
 #
-# Currently requires the ripienaar/concat module on the Puppet Forge and
+# Currently requires the puppetlabs/concat module on the Puppet Forge and
 # uses storeconfigs on the Puppet Master to export/collect resources
 # from all balancer members.
 #

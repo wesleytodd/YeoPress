@@ -18,21 +18,31 @@
 #
 # Sample Usage:
 #
-class apache::params {
-  # This will be 5 or 6 on RedHat, 6 or wheezy on Debian, 12 or quantal on Ubuntu, etc.
+class apache::params inherits ::apache::version {
+  # This will be 5 or 6 on RedHat, 6 or wheezy on Debian, 12 or quantal on Ubuntu, 3 on Amazon, etc.
   $osr_array = split($::operatingsystemrelease,'[\/\.]')
   $distrelease = $osr_array[0]
   if ! $distrelease {
     fail("Class['apache::params']: Unparsable \$::operatingsystemrelease: ${::operatingsystemrelease}")
   }
 
-  $servername = $::fqdn
+  if($::fqdn) {
+    $servername = $::fqdn
+  } else {
+    $servername = $::hostname
+  }
+
+  # The default error log level
+  $log_level = 'warn'
 
   if $::osfamily == 'RedHat' or $::operatingsystem == 'amazon' {
     $user                 = 'apache'
     $group                = 'apache'
+    $root_group           = 'root'
     $apache_name          = 'httpd'
+    $service_name         = 'httpd'
     $httpd_dir            = '/etc/httpd'
+    $server_root          = '/etc/httpd'
     $conf_dir             = "${httpd_dir}/conf"
     $confd_dir            = "${httpd_dir}/conf.d"
     $mod_dir              = "${httpd_dir}/conf.d"
@@ -45,38 +55,53 @@ class apache::params {
     $dev_packages         = 'httpd-devel'
     $default_ssl_cert     = '/etc/pki/tls/certs/localhost.crt'
     $default_ssl_key      = '/etc/pki/tls/private/localhost.key'
-    $ssl_certs_dir        = $distrelease ? {
-      '5' => '/etc/pki/tls/certs',
-      '6' => '/etc/ssl/certs',
-    }
-    $passenger_root       = '/usr/share/rubygems/gems/passenger-3.0.17'
-    $passenger_ruby       = '/usr/bin/ruby'
+    $ssl_certs_dir        = '/etc/pki/tls/certs'
+    $passenger_conf_file  = 'passenger_extra.conf'
+    $passenger_conf_package_file = 'passenger.conf'
+    $passenger_root       = undef
+    $passenger_ruby       = undef
+    $suphp_addhandler     = 'php5-script'
+    $suphp_engine         = 'off'
+    $suphp_configpath     = undef
     $mod_packages         = {
-      'auth_kerb'  => 'mod_auth_kerb',
-      'fcgid'      => 'mod_fcgid',
-      'passenger'  => 'mod_passenger',
-      'perl'       => 'mod_perl',
-      'php5'       => $distrelease ? {
-        '5' => 'php53',
-        '6' => 'php',
+      'auth_kerb'   => 'mod_auth_kerb',
+      'authnz_ldap' => 'mod_authz_ldap',
+      'fastcgi'     => 'mod_fastcgi',
+      'fcgid'       => 'mod_fcgid',
+      'passenger'   => 'mod_passenger',
+      'perl'        => 'mod_perl',
+      'php5'        => $distrelease ? {
+        '5'     => 'php53',
+        default => 'php',
       },
-      'proxy_html' => 'mod_proxy_html',
-      'python'     => 'mod_python',
-      'shibboleth' => 'shibboleth',
-      'ssl'        => 'mod_ssl',
-      'wsgi'       => 'mod_wsgi',
-      'dav_svn'    => 'mod_dav_svn',
-      'xsendfile'  => 'mod_xsendfile',
+      'proxy_html'  => 'mod_proxy_html',
+      'python'      => 'mod_python',
+      'shibboleth'  => 'shibboleth',
+      'ssl'         => 'mod_ssl',
+      'wsgi'        => 'mod_wsgi',
+      'dav_svn'     => 'mod_dav_svn',
+      'suphp'       => 'mod_suphp',
+      'xsendfile'   => 'mod_xsendfile',
+      'nss'         => 'mod_nss',
     }
     $mod_libs             = {
       'php5' => 'libphp5.so',
+      'nss'  => 'libmodnss.so',
     }
     $conf_template        = 'apache/httpd.conf.erb'
+    $keepalive            = 'Off'
+    $keepalive_timeout    = 15
+    $fastcgi_lib_path     = undef
+    $mime_support_package = 'mailcap'
+    $mime_types_config    = '/etc/mime.types'
   } elsif $::osfamily == 'Debian' {
     $user             = 'www-data'
     $group            = 'www-data'
+    $root_group       = 'root'
     $apache_name      = 'apache2'
+    $service_name     = 'apache2'
     $httpd_dir        = '/etc/apache2'
+    $server_root      = '/etc/apache2'
     $conf_dir         = $httpd_dir
     $confd_dir        = "${httpd_dir}/conf.d"
     $mod_dir          = "${httpd_dir}/mods-available"
@@ -92,24 +117,96 @@ class apache::params {
     $default_ssl_cert = '/etc/ssl/certs/ssl-cert-snakeoil.pem'
     $default_ssl_key  = '/etc/ssl/private/ssl-cert-snakeoil.key'
     $ssl_certs_dir    = '/etc/ssl/certs'
+    $passenger_conf_file = 'passenger.conf'
+    $passenger_conf_package_file = undef
     $passenger_root   = '/usr'
     $passenger_ruby   = '/usr/bin/ruby'
+    $suphp_addhandler  = 'x-httpd-php'
+    $suphp_engine      = 'off'
+    $suphp_configpath  = '/etc/php5/apache2'
     $mod_packages     = {
-      'auth_kerb'  => 'libapache2-mod-auth-kerb',
-      'fcgid'      => 'libapache2-mod-fcgid',
-      'passenger'  => 'libapache2-mod-passenger',
-      'perl'       => 'libapache2-mod-perl2',
-      'php5'       => 'libapache2-mod-php5',
-      'proxy_html' => 'libapache2-mod-proxy-html',
-      'python'     => 'libapache2-mod-python',
-      'wsgi'       => 'libapache2-mod-wsgi',
-      'dav_svn'    => 'libapache2-svn',
-      'xsendfile'  => 'libapache2-mod-xsendfile',
+      'auth_kerb'   => 'libapache2-mod-auth-kerb',
+      'dav_svn'     => 'libapache2-svn',
+      'fastcgi'     => 'libapache2-mod-fastcgi',
+      'fcgid'       => 'libapache2-mod-fcgid',
+      'nss'         => 'libapache2-mod-nss',
+      'passenger'   => 'libapache2-mod-passenger',
+      'perl'        => 'libapache2-mod-perl2',
+      'php5'        => 'libapache2-mod-php5',
+      'proxy_html'  => 'libapache2-mod-proxy-html',
+      'python'      => 'libapache2-mod-python',
+      'rpaf'        => 'libapache2-mod-rpaf',
+      'suphp'       => 'libapache2-mod-suphp',
+      'wsgi'        => 'libapache2-mod-wsgi',
+      'xsendfile'   => 'libapache2-mod-xsendfile',
     }
     $mod_libs         = {
       'php5' => 'libphp5.so',
     }
-    $conf_template    = 'apache/httpd.conf.erb'
+    $conf_template     = 'apache/httpd.conf.erb'
+    $keepalive         = 'Off'
+    $keepalive_timeout = 15
+    $fastcgi_lib_path  = '/var/lib/apache2/fastcgi'
+    $mime_support_package = 'mime-support'
+    $mime_types_config = '/etc/mime.types'
+  } elsif $::osfamily == 'FreeBSD' {
+    $user             = 'www'
+    $group            = 'www'
+    $root_group       = 'wheel'
+    $apache_name      = 'apache22'
+    $service_name     = 'apache22'
+    $httpd_dir        = '/usr/local/etc/apache22'
+    $server_root      = '/usr/local'
+    $conf_dir         = $httpd_dir
+    $confd_dir        = "${httpd_dir}/Includes"
+    $mod_dir          = "${httpd_dir}/Modules"
+    $mod_enable_dir   = undef
+    $vhost_dir        = "${httpd_dir}/Vhosts"
+    $vhost_enable_dir = undef
+    $conf_file        = 'httpd.conf'
+    $ports_file       = "${conf_dir}/ports.conf"
+    $logroot          = '/var/log/apache22'
+    $lib_path         = '/usr/local/libexec/apache22'
+    $mpm_module       = 'prefork'
+    $dev_packages     = undef
+    $default_ssl_cert = '/usr/local/etc/apache22/server.crt'
+    $default_ssl_key  = '/usr/local/etc/apache22/server.key'
+    $ssl_certs_dir    = '/usr/local/etc/apache22'
+    $passenger_conf_file = 'passenger.conf'
+    $passenger_conf_package_file = undef
+    $passenger_root   = '/usr/local/lib/ruby/gems/1.9/gems/passenger-4.0.10'
+    $passenger_ruby   = '/usr/bin/ruby'
+    $suphp_addhandler = 'php5-script'
+    $suphp_engine     = 'off'
+    $suphp_configpath = undef
+    $mod_packages     = {
+      # NOTE: I list here only modules that are not included in www/apache22
+      # NOTE: 'passenger' needs to enable APACHE_SUPPORT in make config
+      # NOTE: 'php' needs to enable APACHE option in make config
+      # NOTE: 'dav_svn' needs to enable MOD_DAV_SVN make config
+      # NOTE: not sure where the shibboleth should come from
+      # NOTE: don't know where the shibboleth module should come from
+      'auth_kerb'  => 'www/mod_auth_kerb2',
+      'fcgid'      => 'www/mod_fcgid',
+      'passenger'  => 'www/rubygem-passenger',
+      'perl'       => 'www/mod_perl2',
+      'php5'       => 'lang/php5',
+      'proxy_html' => 'www/mod_proxy_html',
+      'python'     => 'www/mod_python3',
+      'wsgi'       => 'www/mod_wsgi',
+      'dav_svn'    => 'devel/subversion',
+      'xsendfile'  => 'www/mod_xsendfile',
+      'rpaf'       => 'www/mod_rpaf2'
+    }
+    $mod_libs         = {
+      'php5' => 'libphp5.so',
+    }
+    $conf_template        = 'apache/httpd.conf.erb'
+    $keepalive            = 'Off'
+    $keepalive_timeout    = 15
+    $fastcgi_lib_path     = undef # TODO: revisit
+    $mime_support_package = 'misc/mime-support'
+    $mime_types_config    = '/usr/local/etc/mime.types'
   } else {
     fail("Class['apache::params']: Unsupported osfamily: ${::osfamily}")
   }

@@ -56,6 +56,24 @@ describe 'apache::mod::info', :type => :class do
     it { should contain_file("info.conf").with_path("/etc/httpd/conf.d/info.conf") }
   end
 
+  context "On a FreeBSD OS with default params" do
+    let :facts do
+      {
+        :osfamily               => 'FreeBSD',
+        :operatingsystemrelease => '9',
+        :concat_basedir         => '/dne',
+      }
+    end
+
+    # Load the more generic tests for this context
+    general_info_specs()
+
+    it { should contain_file("info.conf").with({
+      :ensure => 'file',
+      :path   => '/usr/local/etc/apache22/Modules/info.conf',
+    } ) }
+  end
+
   context "with $allow_from => ['10.10.10.10','11.11.11.11']" do
     let :facts do
       {

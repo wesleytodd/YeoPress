@@ -145,10 +145,30 @@ apache::vhost { 'sixteenth.example.com non-ssl':
   servername   => 'sixteenth.example.com',
   port         => '80',
   docroot      => '/var/www/sixteenth',
+  rewrites     => [
+    {
+      comment       => 'redirect non-SSL traffic to SSL site',
+      rewrite_cond  => ['%{HTTPS} off'],
+      rewrite_rule  => ['(.*) https://%{HTTPS_HOST}%{REQUEST_URI}'],
+    }
+  ]
+}
+apache::vhost { 'sixteenth.example.com ssl':
+  servername => 'sixteenth.example.com',
+  port       => '443',
+  docroot    => '/var/www/sixteenth',
+  ssl        => true,
+}
+
+# Vhost to redirect non-ssl to ssl using old rewrite method
+apache::vhost { 'sixteenth.example.com non-ssl old rewrite':
+  servername   => 'sixteenth.example.com',
+  port         => '80',
+  docroot      => '/var/www/sixteenth',
   rewrite_cond => '%{HTTPS} off',
   rewrite_rule => '(.*) https://%{HTTPS_HOST}%{REQUEST_URI}',
 }
-apache::vhost { 'sixteenth.example.com ssl':
+apache::vhost { 'sixteenth.example.com ssl old rewrite':
   servername => 'sixteenth.example.com',
   port       => '443',
   docroot    => '/var/www/sixteenth',
@@ -168,10 +188,18 @@ apache::vhost { 'eighteenth.example.com':
   docroot => '/var/www/eighteenth',
   setenv  => ['SPECIAL_PATH /foo/bin','KILROY was_here'],
 }
+
 apache::vhost { 'nineteenth.example.com':
   port     => '80',
   docroot  => '/var/www/nineteenth',
   setenvif => 'Host "^([^\.]*)\.website\.com$" CLIENT_NAME=$1',
+}
+
+# Vhost with additional include files
+apache::vhost { 'twentyieth.example.com':
+  port                => '80',
+  docroot             => '/var/www/twelfth',
+  additional_includes => ['/tmp/proxy_group_a','/tmp/proxy_group_b'],
 }
 
 # Vhost with alias for subdomain mapped to same named directory
@@ -183,3 +211,27 @@ apache::vhost { 'subdomain.loc':
   docroot         => '/var/www',
   serveraliases   => ['*.loc',],
 }
+
+# Vhost with SSLProtocol,SSLCipherSuite, SSLHonorCipherOrder
+apache::vhost { 'securedomain.com':
+        priority              => '10',
+        vhost_name            => 'www.securedomain.com',
+        port                  => '443',
+        docroot               => '/var/www/secure',
+        ssl                   => true,
+        ssl_cert              => '/etc/ssl/securedomain.cert',
+        ssl_key               => '/etc/ssl/securedomain.key',
+        ssl_chain             => '/etc/ssl/securedomain.crt',
+        ssl_protocol          => '-ALL +SSLv3 +TLSv1',
+        ssl_cipher            => 'ALL:!aNULL:!ADH:!eNULL:!LOW:!EXP:RC4+RSA:+HIGH:+MEDIUM',
+        ssl_honorcipherorder  => 'On',
+        add_listen            => false,
+}
+
+# Vhost with access log environment variables writing control
+apache::vhost { 'twentyfirst.example.com':
+  port               => '80',
+  docroot            => '/var/www/twentyfirst',
+  access_log_env_var => 'admin',
+}
+

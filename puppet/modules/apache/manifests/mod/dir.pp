@@ -6,16 +6,16 @@ class apache::mod::dir (
   $indexes = ['index.html','index.html.var','index.cgi','index.pl','index.php','index.xhtml'],
 ) {
   validate_array($indexes)
-  apache::mod { 'dir': }
+  ::apache::mod { 'dir': }
 
   # Template uses
   # - $indexes
   file { 'dir.conf':
     ensure  => file,
-    path    => "${apache::mod_dir}/dir.conf",
+    path    => "${::apache::mod_dir}/dir.conf",
     content => template('apache/mod/dir.conf.erb'),
-    require => Exec["mkdir ${apache::mod_dir}"],
-    before  => File[$apache::mod_dir],
+    require => Exec["mkdir ${::apache::mod_dir}"],
+    before  => File[$::apache::mod_dir],
     notify  => Service['httpd'],
   }
 }

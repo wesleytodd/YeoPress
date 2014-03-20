@@ -8,7 +8,7 @@ describe 'apache::dev', :type => :class do
         :operatingsystemrelease => '6',
       }
     end
-    it { should include_class("apache::params") }
+    it { should contain_class("apache::params") }
     it { should contain_package("libaprutil1-dev") }
     it { should contain_package("libapr1-dev") }
     it { should contain_package("apache2-prefork-dev") }
@@ -20,7 +20,19 @@ describe 'apache::dev', :type => :class do
         :operatingsystemrelease => '6',
       }
     end
-    it { should include_class("apache::params") }
+    it { should contain_class("apache::params") }
     it { should contain_package("httpd-devel") }
+  end
+  context "on a FreeBSD OS" do
+    let :pre_condition do
+      'include apache::package'
+    end
+    let :facts do
+      {
+        :osfamily               => 'FreeBSD',
+        :operatingsystemrelease => '9',
+      }
+    end
+    it { should contain_class("apache::params") }
   end
 end

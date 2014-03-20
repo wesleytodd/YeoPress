@@ -1,25 +1,29 @@
 # Security
-ServerTokens OS
-ServerSignature On
-TraceEnable Off
+ServerTokens <%= @server_tokens %>
+ServerSignature <%= @server_signature %>
+TraceEnable <%= @trace_enable %>
 
 ServerName "<%= @servername %>"
-ServerRoot "<%= @httpd_dir %>"
+ServerRoot "<%= @server_root %>"
 PidFile <%= @pidfile %>
-Timeout 120
-KeepAlive Off
+Timeout <%= @timeout %>
+KeepAlive <%= @keepalive %>
 MaxKeepAliveRequests 100
-KeepAliveTimeout 15
+KeepAliveTimeout <%= @keepalive_timeout %>
 
 User <%= @user %>
 Group <%= @group %>
 
 AccessFileName .htaccess
-<Files ~ "^\.ht">
-    Order allow,deny
-    Deny from all
-    Satisfy all
-</Files>
+<FilesMatch "^\.ht">
+<%- if @apache_version >= '2.4' -%>
+    Require all denied
+<%- else -%>
+     Order allow,deny
+     Deny from all
+     Satisfy all
+<%- end -%>
+</FilesMatch>
 
 <Directory />
   Options FollowSymLinks
@@ -28,27 +32,37 @@ AccessFileName .htaccess
 
 DefaultType none
 HostnameLookups Off
-ErrorLog <%= @logroot %>/<%= @error_log %>
-LogLevel warn
-<% if @sendfile #XXX Why? %>
+ErrorLog "<%= @logroot %>/<%= @error_log %>"
+LogLevel <%= @log_level %>
 EnableSendfile <%= @sendfile %>
-<% end %>
 
 #Listen 80
-Include <%= @mod_load_dir %>/*.load
-<% if @mod_load_dir != @confd_dir and @mod_load_dir != @vhost_load_dir -%>
-Include <%= @mod_load_dir %>/*.conf
+
+<% if @apxs_workaround -%>
+# Workaround: without this hack apxs would be confused about where to put
+# LoadModule directives and fail entire procedure of apache package
+# installation/reinstallation. This problem was observed on FreeBSD (apache22).
+#LoadModule fake_module libexec/apache22/mod_fake.so
 <% end -%>
-Include <%= @ports_file %>
+
+Include "<%= @mod_load_dir %>/*.load"
+<% if @mod_load_dir != @confd_dir and @mod_load_dir != @vhost_load_dir -%>
+Include "<%= @mod_load_dir %>/*.conf"
+<% end -%>
+Include "<%= @ports_file %>"
 
 LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" combined
 LogFormat "%h %l %u %t \"%r\" %>s %b" common
 LogFormat "%{Referer}i -> %U" referer
 LogFormat "%{User-agent}i" agent
 
-Include <%= @confd_dir %>/*.conf
+<%- if @apache_version >= '2.4' -%>
+IncludeOptional "<%= @confd_dir %>/*.conf"
+<%- else -%>
+Include "<%= @confd_dir %>/*.conf"
+<%- end -%>
 <% if @vhost_load_dir != @confd_dir -%>
-Include <%= @vhost_load_dir %>/*.conf
+Include "<%= @vhost_load_dir %>/*.conf"
 <% end -%>
 
 <% if @error_documents -%>
@@ -60,8 +74,12 @@ Alias /error/ "<%= @error_documents_path %>/"
   Options IncludesNoExec
   AddOutputFilter Includes html
   AddHandler type-map var
+<%- if @apache_version == '2.4' -%>
+  Require all granted
+<%- else -%>
   Order allow,deny
   Allow from all
+<%- end -%>
   LanguagePriority en cs de es fr it nl sv pt-br ro
   ForceLanguagePriority Prefer Fallback
 </Directory>

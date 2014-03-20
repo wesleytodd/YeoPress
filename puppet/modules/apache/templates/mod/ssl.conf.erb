@@ -8,14 +8,21 @@
   AddType application/x-pkcs7-crl    .crl
 
   SSLPassPhraseDialog  builtin
-  SSLSessionCache shmcb:<%= @session_cache %>
+  SSLSessionCache "shmcb:<%= @session_cache %>"
   SSLSessionCacheTimeout 300
 <% if @ssl_compression -%>
   SSLCompression Off
 <% end -%>
+  <% if @apache_version >= '2.4' -%>
+  Mutex <%= @ssl_mutex %>
+  <% else -%>
   SSLMutex <%= @ssl_mutex %>
+  <% end -%>
   SSLCryptoDevice builtin
   SSLHonorCipherOrder On
   SSLCipherSuite HIGH:MEDIUM:!aNULL:!MD5
   SSLProtocol all -SSLv2
+<% if @ssl_options -%>
+  SSLOptions <%= @ssl_options.compact.join(' ') %>
+<% end -%>
 </IfModule>
