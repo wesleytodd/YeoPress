@@ -10,7 +10,7 @@ describe 'apache::mod::dav_svn', :type => :class do
         :concat_basedir         => '/dne',
       }
     end
-    it { should include_class("apache::params") }
+    it { should contain_class("apache::params") }
     it { should contain_apache__mod('dav_svn') }
     it { should contain_package("libapache2-svn") }
   end
@@ -22,8 +22,20 @@ describe 'apache::mod::dav_svn', :type => :class do
         :concat_basedir         => '/dne',
       }
     end
-    it { should include_class("apache::params") }
+    it { should contain_class("apache::params") }
     it { should contain_apache__mod('dav_svn') }
     it { should contain_package("mod_dav_svn") }
+  end
+  context "on a FreeBSD OS" do
+    let :facts do
+      {
+        :osfamily               => 'FreeBSD',
+        :operatingsystemrelease => '9',
+        :concat_basedir         => '/dne',
+      }
+    end
+    it { should contain_class("apache::params") }
+    it { should contain_apache__mod('dav_svn') }
+    it { should contain_package("devel/subversion") }
   end
 end

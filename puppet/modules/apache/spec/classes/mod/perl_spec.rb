@@ -10,7 +10,7 @@ describe 'apache::mod::perl', :type => :class do
         :concat_basedir         => '/dne',
       }
     end
-    it { should include_class("apache::params") }
+    it { should contain_class("apache::params") }
     it { should contain_apache__mod('perl') }
     it { should contain_package("libapache2-mod-perl2") }
   end
@@ -22,8 +22,20 @@ describe 'apache::mod::perl', :type => :class do
         :concat_basedir         => '/dne',
       }
     end
-    it { should include_class("apache::params") }
+    it { should contain_class("apache::params") }
     it { should contain_apache__mod('perl') }
     it { should contain_package("mod_perl") }
+  end
+  context "on a FreeBSD OS" do
+    let :facts do
+      {
+        :osfamily               => 'FreeBSD',
+        :operatingsystemrelease => '9',
+        :concat_basedir         => '/dne',
+      }
+    end
+    it { should contain_class("apache::params") }
+    it { should contain_apache__mod('perl') }
+    it { should contain_package("www/mod_perl2") }
   end
 end

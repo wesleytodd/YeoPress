@@ -35,7 +35,7 @@ Puppet::Type.type(:a2mod).provide(:redhat, :parent => Puppet::Provider::A2mod) d
   end
 
   def self.instances
-    modules = apachectl("-M").collect { |line|
+    modules = apachectl("-M").lines.collect { |line|
       m = line.match(/(\w+)_module \(shared\)$/)
       m[1] if m
     }.compact

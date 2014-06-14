@@ -4,6 +4,7 @@ Puppet::Type.newtype(:a2mod) do
     ensurable
 
     newparam(:name) do
+       Puppet.warning "The a2mod provider is deprecated, please use apache::mod instead"
        desc "The name of the module to be managed"
 
        isnamevar

@@ -14,5 +14,5 @@
 #
 class apache::ssl {
   warning('apache::ssl is deprecated; please use apache::mod::ssl')
-  include apache::mod::ssl
+  include ::apache::mod::ssl
 }

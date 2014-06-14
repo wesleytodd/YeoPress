@@ -10,3 +10,15 @@
   Redirect <%= "#{@redirect_status_a[i]} " %><%= source %> <%= @redirect_dest_a[i] %>
 <% end -%>
 <% end -%>
+
+<%- if @redirectmatch_status and @redirectmatch_regexp -%>
+<% @redirectmatch_status_a = Array(@redirectmatch_status) -%>
+<% @redirectmatch_regexp_a = Array(@redirectmatch_regexp) -%>
+
+  ## RedirectMatch rules
+<% @redirectmatch_status_a.each_with_index do |status, i| -%>
+<% @redirectmatch_status_a[i] ||= @redirectmatch_status_a[0] -%>
+<% @redirectmatch_regexp_a[i] ||= @redirectmatch_regexp_a[0] -%>
+  RedirectMatch <%= "#{@redirectmatch_status_a[i]} " %> <%= @redirectmatch_regexp_a[i] %>
+<% end -%>
+<% end -%>

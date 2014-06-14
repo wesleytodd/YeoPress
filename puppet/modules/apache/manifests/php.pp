@@ -14,5 +14,5 @@
 #
 class apache::php {
   warning('apache::php is deprecated; please use apache::mod::php')
-  include apache::mod::php
+  include ::apache::mod::php
 }

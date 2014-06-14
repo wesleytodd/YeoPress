@@ -11,7 +11,7 @@ Puppet::Type.type(:a2mod).provide(:a2mod, :parent => Puppet::Provider::A2mod) do
     defaultfor :operatingsystem => [:debian, :ubuntu]
 
     def self.instances
-      modules = apache2ctl("-M").collect { |line|
+      modules = apache2ctl("-M").lines.collect { |line|
         m = line.match(/(\w+)_module \(shared\)$/)
         m[1] if m
       }.compact

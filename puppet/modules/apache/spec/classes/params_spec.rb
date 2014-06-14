@@ -13,9 +13,9 @@ describe 'apache::params', :type => :class do
 
     # There are 4 resources in this class currently
     # there should not be any more resources because it is a params class
-    # The resources are class[apache::params], class[main], class[settings], stage[main]
+    # The resources are class[apache::version], class[apache::params], class[main], class[settings], stage[main]
     it "Should not contain any resources" do
-      subject.resources.size.should == 4
+      subject.resources.size.should == 5
     end
   end
 end
