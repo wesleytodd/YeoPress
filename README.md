@@ -19,6 +19,10 @@ If you do not already have the Yeoman toolset installed do so now, and might as 
 
 	$ npm install -g yo generator-wordpress
 
+While running if you get errors try running as super user:
+
+	$ sudo npm install -g yo generator-wordpress
+
 And run me:
 
 	$ yo wordpress
