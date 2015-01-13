@@ -184,6 +184,15 @@ module.exports = function(advanced, defaults) {
 				return !!res.installTheme && res.themeType == 'git';
 			}
 		}, {
+			message: 'Refresh remote (busts potentially cached theme)',
+			name: 'refreshRemote',
+			type: 'confirm',
+			default: defaults.refreshRemote || true,
+			validate: requiredValidate,
+			when: function(res) {
+				return !!res.installTheme && res.themeType == 'git';
+			}
+		}, {
 			message: 'Remote tarball url',
 			name: 'themeTarballUrl',
 			default: defaults.themeTarballUrl || 'https://github.com/wesleytodd/YeoPress/archive/template.tar.gz',
