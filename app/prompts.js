@@ -160,6 +160,19 @@ module.exports = function(advanced, defaults) {
 				return !!res.installTheme;
 			}
 		}, {
+			message: 'Task runner (grunt/gulp)',
+			name: 'themeTaskRunner',
+			default: defaults.themeTaskRunner || 'grunt',
+			validate: function(value) {
+				if (value != '' && /^(?:grunt|gulp)$/.test(value)) {
+					return true;
+				}
+				return false;
+			},
+			when: function(res) {
+				return !! res.installTheme;
+			}
+		}, {
 			message: 'GitHub username',
 			name: 'themeUser',
 			default: defaults.themeUser || 'wesleytodd',
