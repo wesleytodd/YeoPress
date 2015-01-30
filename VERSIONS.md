@@ -1,5 +1,6 @@
 ## Versions
 
+- **1.5.0:** Cached busting for remote resources
 - **1.4.3:** Bug fix in wp-util, updated deps, dont ignore important wp files
 - **1.4.1:** Bug fix in wp-util, updated dep
 - **1.4.0:** Added support for localization of WordPress, updated to yeoman-generator#0.16.0
