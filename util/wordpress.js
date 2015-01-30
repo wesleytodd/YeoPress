@@ -247,7 +247,7 @@ function installTheme(generator, config, done) {
 
 };
 
-function setupTheme(generator, config, done) {
+function setupTheme(generator, config, cb) {
 	
 	console.log(chalk.green('Setting Up Theme'));
 
@@ -257,22 +257,26 @@ function setupTheme(generator, config, done) {
 	if (fs.existsSync(themePackageJson)) {
 		var oldDir = process.cwd();
 		process.chdir(themePath);
+		console.log(chalk.green('Installing Node Packages (be patient)'));
+
 		exec('npm install', function(err) {
 			if (fs.existsSync('Gruntfile.js')) {
+				console.log(chalk.green('Running Grunt Setup'));
+
 				exec('grunt setup', function(err) {
 					console.log(chalk.green('Theme setup!'));
 					process.chdir(oldDir);
-					done();
+					cb();
 				});
 			} else {
 				console.log(chalk.red('Gruntfile.js missing!'));
 				process.chdir(oldDir);
-				done();
+				cb();
 			}
 		});
 	} else {
 		console.log(chalk.red('package.json missing!'));
-		done();
+		cb();
 	}
 
 };
