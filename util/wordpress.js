@@ -240,7 +240,7 @@ function installTheme(generator, config, done) {
 		generator.remote(config.themeUser, config.themeRepo, config.themeBranch, function(err, remote) {
 			remote.directory('.', path.join(config.contentDir, 'themes', config.themeDir));
 			done();
-		});
+		}, config.refreshRemote);
 	} else if (config.themeType == 'tar') {
 		generator.tarball(config.themeTarballUrl, path.join(config.contentDir, 'themes', config.themeDir), done);
 	}
