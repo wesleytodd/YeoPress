@@ -71,6 +71,7 @@ util.inherits(Generator, yeoman.generators.Base);
  * Easy as 1, 2, 3...err....9 maybe 10 or 11
  **===============================*/
 
+
 // Ask the user what they want done
 Generator.prototype.ohTellMeWhatYouWantWhatYouReallyReallyWant = function() {
 
@@ -150,12 +151,12 @@ Generator.prototype.ohTellMeWhatYouWantWhatYouReallyReallyWant = function() {
 Generator.prototype.justIgnoreMe = function() {
 	if (this.conf.get('git')) {
 		this.logger.verbose('Copying .gitignore file');
-		this.copy('gitignore.tmpl', '.gitignore');
-		this.logger.verbose('Done copying .gitignore file');
+		this.fs.copyTpl(this.templatePath('gitignore.tmpl'), this.destinationPath('.gitignore'), { conf: this.conf });
+		//this.logger.verbose('Done copying .gitignore file');
 	}
 };
 
-// Git setup
+// Git setup and initial commit of WP stuff
 Generator.prototype.gitIsTheShit = function() {
 
 	// Using Git?  Init it...
@@ -168,14 +169,16 @@ Generator.prototype.gitIsTheShit = function() {
 			if (err) me.logger.error(err);
 
 			me.logger.verbose('Git init complete');
-			git.add('.', function(err) {
-				if (err) me.logger.error(err);
-			}).commit('Initial Commit', function(err, d) {
-				if (err) me.logger.error(err);
+			done();
+			//git.add('.', function(err) {
+				//if (err) me.logger.error(err);
+
+			//}).commit('Initial WP Commit', function(err, d) {
+				//if (err) me.logger.error(err);
 				
-				me.logger.verbose('Git add and commit complete: ' + JSON.stringify(d, null, '  '));
-				done();
-			});
+				//me.logger.verbose('Git add and commit complete: ' + JSON.stringify(d, null, '  '));
+				//done();
+			//});
 		});
 	}
 
@@ -187,10 +190,12 @@ Generator.prototype.heIsSuchAVagrant = function() {
 	if (this.conf.get('vagrant')) {
 		this.logger.log('Setting up Vagrant');
 		this.logger.verbose('Copying vagrant file');
-		this.template('Vagrantfile', 'Vagrantfile');
+		//this.template('Vagrantfile', 'Vagrantfile');
+		this.fs.copyTpl(this.templatePath('Vagrantfile'), this.destinationPath('Vagrantfile'));
 		this.logger.verbose('Copying puppet files');
-		this.bulkDirectory('puppet/modules', 'puppet/modules');
-		this.directory('puppet/manifests', 'puppet/manifests');
+		//this.bulkDirectory('puppet/modules', 'puppet/modules');
+		//this.directory('puppet/manifests', 'puppet/manifests');
+		this.fs.copy(this.templatePath('puppet/'), this.destinationPath('puppet/'));
 		this.logger.verbose('Finished setting up Vagrant');
 	}
 
@@ -203,7 +208,7 @@ Generator.prototype.wordWhatUp = function() {
 		me   = this;
 
 	if (this.conf.get('submodule')) {
-		this.logger.log('Installing WordPress ' + this.conf.get('wpVer') + ' as a submodule');
+		this.logger.log('Installing WordPress ' + this.conf.get('wpVer') + ' as a submodule (be patient)');
 		git.submoduleAdd(wordpress.repo, this.conf.get('wpDir'), function(err) {
 			if (err) me.logger.error(err);
 
@@ -223,13 +228,13 @@ Generator.prototype.wordWhatUp = function() {
 
 		this.logger.log('Installing WordPress ' + this.conf.get('wpVer'));
 		this.remote('wordpress', 'wordpress', this.conf.get('wpVer'), function(err, remote) {
-			remote.bulkDirectory('.', me.conf.get('wpDir'));
+			remote.directory('.', me.conf.get('wpDir'));
 			me.logger.log('WordPress installed');
 			done();
 		});
 
 	}
-
+	
 };
 
 // Setup custom directory structure
@@ -237,17 +242,18 @@ Generator.prototype.somethingsDifferent = function() {
 
 	if (this.conf.get('submodule') || this.conf.get('customDirs')) {
 
-		var me = this,
-			done = this.async();
+		var me = this;
+			//done = this.async();
 
 		this.logger.verbose('Copying index.php');
-		this.template('index.php.tmpl', 'index.php');
+		//this.template('index.php.tmpl', 'index.php');
+		this.fs.copyTpl(this.templatePath('index.php.tmpl'), this.destinationPath('index.php'), { conf: this.conf });
 
 		this.logger.log('Setting up the content directory');
 		this.remote('wordpress', 'wordpress', this.conf.get('wpVer'), function(err, remote) {
 			remote.directory('wp-content', me.conf.get('contentDir'));
 			me.logger.verbose('Content directory setup');
-			done();
+			//done();
 		});
 
 	}
@@ -268,7 +274,8 @@ Generator.prototype.muHaHaHaConfig = function() {
 		me.logger.verbose('Salt keys: ' + JSON.stringify(saltKeys, null, '  '));
 		me.conf.set('saltKeys', saltKeys);
 		me.logger.verbose('Copying wp-config');
-		me.template('wp-config.php.tmpl', 'wp-config.php');
+		//me.template('wp-config.php.tmpl', 'wp-config.php');
+		me.fs.copyTpl(me.templatePath('wp-config.php.tmpl'), me.destinationPath('wp-config.php'), { conf: me.conf });
 		done();
 	});
 
@@ -277,25 +284,43 @@ Generator.prototype.muHaHaHaConfig = function() {
 // local-config.php
 Generator.prototype.localConf = function() {
 	if (this.conf.get('createLocalConfig')) {
-		this.logger.verbose('Copying wp-config');
-		this.template('local-config.php.tmpl', 'local-config.php');
+		this.logger.verbose('Copying local-config');
+		//this.template('local-config.php.tmpl', 'local-config.php');
+		this.fs.copyTpl(this.templatePath('local-config.php.tmpl'), this.destinationPath('local-config.php'), { conf: this.conf });
 	}
 };
 
-// Check that the database exists, create it otherwise
-Generator.prototype.hazBaseData = function() {
+// Create Language directory
+Generator.prototype.doveIlBagno = function() {
+
+	// Only do this if the user specified a language
+	if (this.conf.get('wpLang')) {
+		//var done = this.async(),
+		var me = this;
+
+		this.logger.log('Setting up locale files');
+		wp.locale.getLanguage(this.conf.get('wpLang'), this.conf.get('contentDir'), function (err) {
+			if (err) me.logger.error(err);
+			//done();
+		});
+	}
+
+};
+
+// Write all these newly created files to disk so that the rest of the generator doesn't fail
+Generator.prototype.doNotFearCommitment = function() {
 
 	var done = this.async(),
-		me = this;
+		me   = this;
 
-	this.wpSite.database.createIfNotExists(function(err) {
-		if (err) {
-			me.logger.warn('Cannot access database');
-			me.logger.warn('Make sure you create the database and update the credentials in the wp-config.php');
-		}
+	this.logger.log('Writing WP files to disk')
+
+	this.fs.commit(function (err) {
+		if (err) me.logger.error(err);
+
+		me.logger.verbose('Done WP writing files');
 		done();
 	});
-
 };
 
 // Set some permissions
@@ -303,6 +328,9 @@ Generator.prototype.hazBaseData = function() {
    BUT, it seems that the theme stuff needs some permissions set to work....
 */
 Generator.prototype.thisIsSparta = function() {
+
+	//var done = this.async(),
+	var me   = this;
 
 	if (fs.existsSync('.')) {
 		this.logger.log('Setting Permissions: 0755 on .');
@@ -316,22 +344,7 @@ Generator.prototype.thisIsSparta = function() {
 		this.logger.verbose('Done setting permissions on ' + this.conf.get('contentDir'));
 	}
 
-};
-
-// Create Language directory
-Generator.prototype.doveIlBagno = function() {
-
-	// Only do this if the user specified a language
-	if (this.conf.get('wpLang')) {
-		var done = this.async(),
-			me = this;
-
-		this.logger.log('Setting up locale files');
-		wp.locale.getLanguage(this.conf.get('wpLang'), this.conf.get('contentDir'), function (err) {
-			if (err) me.logger.error(err);
-			done();
-		});
-	}
+	//done();
 
 };
 
@@ -354,20 +367,50 @@ Generator.prototype.commitThisToMemory = function() {
 
 };
 
+// Check that the database exists, create it otherwise
+Generator.prototype.hazBaseData = function() {
+
+	this.wpSite.database.createIfNotExists(function(err) {
+		if (err) {
+			me.logger.warn('Cannot access database');
+			me.logger.warn('Make sure you create the database and update the credentials in the wp-config.php');
+		}
+	});
+
+};
+
 // Install and activate the theme
 Generator.prototype.dumbledoreHasStyle = function() {
 
 	if (this.conf.get('installTheme')) {
-		var done = this.async()
-			me = this;
+		//var done = this.async()
+		var me = this;
 
 		this.logger.log('Starting to install theme');
 		wordpress.installTheme(this, this.conf.get(), function() {
-			/* @TODO You need to run the install before doing this
-			   see if I can get yeopress to do that.
-		    */
+			//@TODO You need to run the install before doing this
+			//see if I can get yeopress to do that.
 			//wordpress.activateTheme(me.conf.get(), done);
 			me.logger.verbose('Theme install complete');
+			//done();
+		});
+	}
+
+};
+
+// Write all the newly downloaded theme files to disk
+Generator.prototype.gandalfGotThemSkillzTho = function() {
+
+	if (this.conf.get('installTheme')) {
+		var done = this.async(),
+			me   = this;
+
+		this.logger.log('Writing theme files to disk')
+
+		this.fs.commit(function (err) {
+			if (err) me.logger.error(err);
+
+			me.logger.verbose('Done writing theme files');
 			done();
 		});
 	}
@@ -378,9 +421,14 @@ Generator.prototype.dumbledoreHasStyle = function() {
 Generator.prototype.dummyYouHaveToPlugItInFirst = function() {
 
 	if (this.conf.get('installTheme')) {
+		var done = this.async(),
+			me   = this;
+
 		this.logger.log('Starting theme setup');
-		wordpress.setupTheme(this, this.conf.get(), this.async());
-		this.logger.verbose('Theme setup complete');
+		wordpress.setupTheme(this, this.conf.get(), function() {
+			me.logger.verbose('Theme setup complete');
+			done();
+		});
 	}
 
 };
@@ -391,11 +439,14 @@ Generator.prototype.gitMeMOARCommits = function() {
 	if (this.conf.get('git') && this.conf.get('installTheme')) {
 		var done = this.async(),
 			me = this;
-		this.logger.verbose('Committing template to Git');
+
+		this.logger.verbose('Committing theme to Git');
 		git.add('.', function(err) {
 			if (err) me.logger.error(err);
+
 		}).commit('Installed theme', function(err, d) {
 			if (err) me.logger.error(err);
+
 			me.logger.verbose('Done committing: ', JSON.stringify(d, null, '  '));
 			done();
 		});
@@ -431,8 +482,19 @@ Generator.prototype.vagrantUp = function() {
 // Save settings to .yeopress file
 Generator.prototype.saveDaSettings = function() {
 
+	var me = this;
+
 	this.logger.log('Writing .yeopress file');
-	fs.writeFileSync('.yeopress', JSON.stringify(this.conf.get(), null, '\t'));
+	//fs.writeFileSync('.yeopress', JSON.stringify(this.conf.get(), null, '\t'));
+	this.fs.writeJSON(this.destinationPath('.yeopress'), this.conf.get(), null, '\t');
+
+	// just go ahead and write this one to disk so we don't get a
+	// weird "create .yeopress" at termination
+	this.fs.commit(function (err) {
+		if (err) me.logger.error(err);
+
+		me.logger.verbose('Done writing .yeopress file');
+	});
 
 };
 
