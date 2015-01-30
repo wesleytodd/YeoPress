@@ -17,15 +17,15 @@ module.exports = function(grunt) {
 		watch : {
 			sass : {
 				files : ['scss/**/*.scss'],
-				tasks : (hasSass) ? ['sass:dev'] : null,
-				options : {
-					livereload : true
-				}
+				tasks : (hasSass) ? ['sass:dev'] : null
 			},
 			stylus : {
 				files : ['stylus/**/*.styl'],
-				tasks : (hasStylus) ? ['stylus:dev'] : null,
-				options: {
+				tasks : (hasStylus) ? ['stylus:dev'] : null
+			},
+			css : {
+				files : ['css/**/*.css'],
+				options : {
 					livereload : true
 				}
 			},
@@ -192,7 +192,7 @@ module.exports = function(grunt) {
 
 		arr.push('imagemin:production', 'svgmin:production', 'requirejs:production');
 
-		return arr;
+		return grunt.task.run(arr);
 	});
 
 	// Template Setup Task
@@ -200,7 +200,7 @@ module.exports = function(grunt) {
 		var arr = [];
 
 		if (hasSass) {
-			arr.push['sass:dev'];
+			arr.push('sass:dev');
 		}
 
 		if (hasStylus) {
@@ -208,6 +208,8 @@ module.exports = function(grunt) {
 		}
 
 		arr.push('bower-install');
+
+		return grunt.task.run(arr);
 	});
 
 	// Load up tasks
@@ -218,7 +220,7 @@ module.exports = function(grunt) {
 	if (hasStylus) {
 		grunt.loadNpmTasks('grunt-contrib-stylus');
 	}
-	
+
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-bower-requirejs');
