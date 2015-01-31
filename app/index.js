@@ -152,7 +152,6 @@ Generator.prototype.justIgnoreMe = function() {
 	if (this.conf.get('git')) {
 		this.logger.verbose('Copying .gitignore file');
 		this.fs.copyTpl(this.templatePath('gitignore.tmpl'), this.destinationPath('.gitignore'), { conf: this.conf });
-		//this.logger.verbose('Done copying .gitignore file');
 	}
 };
 
@@ -170,15 +169,6 @@ Generator.prototype.gitIsTheShit = function() {
 
 			me.logger.verbose('Git init complete');
 			done();
-			//git.add('.', function(err) {
-				//if (err) me.logger.error(err);
-
-			//}).commit('Initial WP Commit', function(err, d) {
-				//if (err) me.logger.error(err);
-				
-				//me.logger.verbose('Git add and commit complete: ' + JSON.stringify(d, null, '  '));
-				//done();
-			//});
 		});
 	}
 
@@ -190,11 +180,8 @@ Generator.prototype.heIsSuchAVagrant = function() {
 	if (this.conf.get('vagrant')) {
 		this.logger.log('Setting up Vagrant');
 		this.logger.verbose('Copying vagrant file');
-		//this.template('Vagrantfile', 'Vagrantfile');
 		this.fs.copyTpl(this.templatePath('Vagrantfile'), this.destinationPath('Vagrantfile'));
 		this.logger.verbose('Copying puppet files');
-		//this.bulkDirectory('puppet/modules', 'puppet/modules');
-		//this.directory('puppet/manifests', 'puppet/manifests');
 		this.fs.copy(this.templatePath('puppet/'), this.destinationPath('puppet/'));
 		this.logger.verbose('Finished setting up Vagrant');
 	}
@@ -243,17 +230,14 @@ Generator.prototype.somethingsDifferent = function() {
 	if (this.conf.get('submodule') || this.conf.get('customDirs')) {
 
 		var me = this;
-			//done = this.async();
 
 		this.logger.verbose('Copying index.php');
-		//this.template('index.php.tmpl', 'index.php');
 		this.fs.copyTpl(this.templatePath('index.php.tmpl'), this.destinationPath('index.php'), { conf: this.conf });
 
 		this.logger.log('Setting up the content directory');
 		this.remote('wordpress', 'wordpress', this.conf.get('wpVer'), function(err, remote) {
 			remote.directory('wp-content', me.conf.get('contentDir'));
 			me.logger.verbose('Content directory setup');
-			//done();
 		});
 
 	}
@@ -274,7 +258,6 @@ Generator.prototype.muHaHaHaConfig = function() {
 		me.logger.verbose('Salt keys: ' + JSON.stringify(saltKeys, null, '  '));
 		me.conf.set('saltKeys', saltKeys);
 		me.logger.verbose('Copying wp-config');
-		//me.template('wp-config.php.tmpl', 'wp-config.php');
 		me.fs.copyTpl(me.templatePath('wp-config.php.tmpl'), me.destinationPath('wp-config.php'), { conf: me.conf });
 		done();
 	});
@@ -285,7 +268,6 @@ Generator.prototype.muHaHaHaConfig = function() {
 Generator.prototype.localConf = function() {
 	if (this.conf.get('createLocalConfig')) {
 		this.logger.verbose('Copying local-config');
-		//this.template('local-config.php.tmpl', 'local-config.php');
 		this.fs.copyTpl(this.templatePath('local-config.php.tmpl'), this.destinationPath('local-config.php'), { conf: this.conf });
 	}
 };
@@ -295,13 +277,11 @@ Generator.prototype.doveIlBagno = function() {
 
 	// Only do this if the user specified a language
 	if (this.conf.get('wpLang')) {
-		//var done = this.async(),
 		var me = this;
 
 		this.logger.log('Setting up locale files');
 		wp.locale.getLanguage(this.conf.get('wpLang'), this.conf.get('contentDir'), function (err) {
 			if (err) me.logger.error(err);
-			//done();
 		});
 	}
 
@@ -329,7 +309,6 @@ Generator.prototype.doNotFearCommitment = function() {
 */
 Generator.prototype.thisIsSparta = function() {
 
-	//var done = this.async(),
 	var me   = this;
 
 	if (fs.existsSync('.')) {
@@ -343,8 +322,6 @@ Generator.prototype.thisIsSparta = function() {
 		wrench.chmodSyncRecursive(this.conf.get('contentDir'), 0775);
 		this.logger.verbose('Done setting permissions on ' + this.conf.get('contentDir'));
 	}
-
-	//done();
 
 };
 
@@ -383,7 +360,6 @@ Generator.prototype.hazBaseData = function() {
 Generator.prototype.dumbledoreHasStyle = function() {
 
 	if (this.conf.get('installTheme')) {
-		//var done = this.async()
 		var me = this;
 
 		this.logger.log('Starting to install theme');
@@ -392,7 +368,6 @@ Generator.prototype.dumbledoreHasStyle = function() {
 			//see if I can get yeopress to do that.
 			//wordpress.activateTheme(me.conf.get(), done);
 			me.logger.verbose('Theme install complete');
-			//done();
 		});
 	}
 
@@ -485,7 +460,6 @@ Generator.prototype.saveDaSettings = function() {
 	var me = this;
 
 	this.logger.log('Writing .yeopress file');
-	//fs.writeFileSync('.yeopress', JSON.stringify(this.conf.get(), null, '\t'));
 	this.fs.writeJSON(this.destinationPath('.yeopress'), this.conf.get(), null, '\t');
 
 	// just go ahead and write this one to disk so we don't get a
