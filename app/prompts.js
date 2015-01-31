@@ -164,7 +164,7 @@ module.exports = function(advanced, defaults) {
 			name: 'themeTaskRunner',
 			default: defaults.themeTaskRunner || 'grunt',
 			validate: function(value) {
-				if (value != '' && /^(?:grunt|gulp)$/.test(value)) {
+				if (value != '' && /^(?:grunt|gulp)$/i.test(value)) {
 					return true;
 				}
 				return false;
