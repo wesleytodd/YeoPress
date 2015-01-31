@@ -169,6 +169,9 @@ module.exports = function(advanced, defaults) {
 				}
 				return false;
 			},
+			filter: function(value) {
+				return value.toLowerCase();
+			},
 			when: function(res) {
 				return !! res.installTheme;
 			}
