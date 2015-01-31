@@ -151,10 +151,13 @@ module.exports = function(advanced, defaults) {
 			name: 'themeType',
 			default: defaults.themeType || 'git',
 			validate: function(value) {
-				if (value != '' && /^(?:git|tar)$/.test(value)) {
+				if (value != '' && /^(?:git|tar)$/i.test(value)) {
 					return true;
 				}
 				return false;
+			},
+			filter: function(value) {
+				return value.toLowerCase();
 			},
 			when: function(res) {
 				return !!res.installTheme;
