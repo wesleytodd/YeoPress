@@ -396,14 +396,9 @@ Generator.prototype.gandalfGotThemSkillzTho = function() {
 Generator.prototype.dummyYouHaveToPlugItInFirst = function() {
 
 	if (this.conf.get('installTheme')) {
-		var done = this.async(),
-			me   = this;
-
 		this.logger.log('Starting theme setup');
-		wordpress.setupTheme(this, this.conf.get(), function() {
-			me.logger.verbose('Theme setup complete');
-			done();
-		});
+		wordpress.setupTheme(this, this.conf.get(), this.async());
+		this.logger.verbose('Theme setup complete');
 	}
 
 };

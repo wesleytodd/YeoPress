@@ -247,7 +247,7 @@ function installTheme(generator, config, done) {
 
 };
 
-function setupTheme(generator, config, cb) {
+function setupTheme(generator, config, done) {
 	
 	console.log(chalk.green('Setting Up Theme'));
 
@@ -266,17 +266,17 @@ function setupTheme(generator, config, cb) {
 				exec('grunt setup', function(err) {
 					console.log(chalk.green('Theme setup!'));
 					process.chdir(oldDir);
-					cb();
+					done();
 				});
 			} else {
 				console.log(chalk.red('Gruntfile.js missing!'));
 				process.chdir(oldDir);
-				cb();
+				done();
 			}
 		});
 	} else {
 		console.log(chalk.red('package.json missing!'));
-		cb();
+		done();
 	}
 
 };
