@@ -14,15 +14,12 @@
   "license": "BSD",
   "dependencies": {
     "chalk": "^0.2.1",
-    "grunt-contrib-connect": "^0.5.0",
-    "istanbul": "^0.1.46",
     "mkdirp": "^0.3.5",
-    "mocha": "^1.13.0",
     "mysql": "^2.0.1",
     "simple-git": "^0.14.0",
-    "wp-util": "^0.1.2",
     "wrench": "^1.4.4",
-    "yeoman-generator": "^0.18.7"
+    "yeoman-generator": "^0.18.7",
+    "wp-util": "^0.1.4"
   },
   "repository": {
     "type": "git",
