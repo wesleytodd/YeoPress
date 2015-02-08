@@ -19,7 +19,7 @@
     "simple-git": "^0.14.0",
     "wrench": "^1.4.4",
     "yeoman-generator": "^0.18.7",
-    "wp-util": "^0.1.4"
+    "wp-util": "^0.1.5"
   },
   "repository": {
     "type": "git",
