@@ -98,7 +98,7 @@ Generator.prototype.plugItInPlugItIn = function() {
 	})();
 
 	function installPlugin(plugin, cb) {
-		me.tarball('http://downloads.wordpress.org/plugin/' + plugin + '.zip', path.join(me.conf.get('contentDir'), 'plugins', plugin), cb);
+		me.tarball('http://downloads.wordpress.org/plugin/' + plugin + '.zip', path.join(me.conf.get('contentDir') || 'wp-content', 'plugins', plugin), cb);
 	}
 
 };
