@@ -254,22 +254,31 @@ function setupTheme(generator, config, done) {
 	var themePath = path.join(config.contentDir, 'themes', config.themeDir),
 		themePackageJson = path.join(themePath, 'package.json');
 
+	var themeTaskFile = '',
+		themeTaskCmd = '';
+
+	if (config.themeTaskRunner == 'grunt') {
+		themeTaskFile = 'Gruntfile.js',
+		themeTaskCmd = 'grunt';
+	} else if (config.themeTaskRunner == 'gulp') {
+		themeTaskFile = 'gulpfile.js',
+		themeTaskCmd = 'gulp';
+	}
+
 	if (fs.existsSync(themePackageJson)) {
 		var oldDir = process.cwd();
 		process.chdir(themePath);
 		console.log(chalk.green('Installing Node Packages (be patient)'));
 
 		exec('npm install', function(err) {
-			if (fs.existsSync('Gruntfile.js')) {
-				console.log(chalk.green('Running Grunt Setup'));
-
-				exec('grunt setup', function(err) {
+			if (fs.existsSync(themeTaskFile)) {
+				exec(themeTaskCmd + ' setup', function(err) {
 					console.log(chalk.green('Theme setup!'));
 					process.chdir(oldDir);
 					done();
 				});
 			} else {
-				console.log(chalk.red('Gruntfile.js missing!'));
+				console.log(chalk.red(themeTaskFile + ' missing!'));
 				process.chdir(oldDir);
 				done();
 			}
