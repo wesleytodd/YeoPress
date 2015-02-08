@@ -190,7 +190,7 @@ module.exports = function(advanced, defaults) {
 			default: defaults.refreshRemote || true,
 			validate: requiredValidate,
 			when: function(res) {
-				return !!res.installTheme && res.themeType == 'git';
+				return advanced && !!res.installTheme && res.themeType == 'git';
 			}
 		}, {
 			message: 'Remote tarball url',
