@@ -270,7 +270,12 @@ function setupTheme(generator, config, done) {
 		process.chdir(themePath);
 		console.log(chalk.green('Installing Node Packages (be patient)'));
 
-		exec('npm install', function(err) {
+		exec('npm install', function(err, stdout, stderr) {
+			if (err) {
+				console.error('Error installing packages', err, stdout, stderr);
+				return done();
+			}
+
 			if (fs.existsSync(themeTaskFile)) {
 				exec(themeTaskCmd + ' setup', function(err) {
 					console.log(chalk.green('Theme setup!'));
