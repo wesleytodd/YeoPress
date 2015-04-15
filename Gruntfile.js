@@ -127,9 +127,9 @@ module.exports = function(grunt) {
 		},
 
 		// Bower task sets up require config
-		bower : {
-			all : {
-				rjsConfig : 'js/global.js'
+		bowerRequirejs: {
+			target: {
+				rjsConfig: 'js/global.js'
 			}
 		},
 
