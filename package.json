@@ -18,7 +18,7 @@
     "mysql": "^2.0.1",
     "simple-git": "^0.14.0",
     "wrench": "^1.4.4",
-    "yeoman-generator": "git+ssh://git@github.com:yeoman/generator.git",
+    "yeoman-generator": "^0.19.2",
     "wp-util": "^0.1.6"
   },
   "repository": {
