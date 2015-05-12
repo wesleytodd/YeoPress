@@ -1,5 +1,7 @@
 ## Versions
 
+- **2.0.1:** Updated yeoman-generator to fix some things
+- **2.0.0:** Updated to new file api
 - **1.5.0:** Cached busting for remote resources
 - **1.4.3:** Bug fix in wp-util, updated deps, dont ignore important wp files
 - **1.4.1:** Bug fix in wp-util, updated dep
