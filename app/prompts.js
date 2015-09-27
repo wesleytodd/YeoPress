@@ -63,7 +63,7 @@ module.exports = function(advanced, defaults) {
 		}, {
 			message: 'Use Git?',
 			name: 'git',
-			default: defaults.git || 'N',
+			default: defaults.git || false,
 			type: 'confirm'
 		}, {
 			message: 'Would you like to install WordPress as a submodule?',
