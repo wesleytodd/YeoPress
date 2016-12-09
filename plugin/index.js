@@ -75,7 +75,7 @@ Generator.prototype.plugItInPlugItIn = function() {
 			name: 'plugins',
 			filter: function(input) {
 				var plugins = [],
-					items = input.split(',');
+					items = input.toString().split(',');
 				for (var i in items) {
 					plugins.push(items[i].trim());
 				}
