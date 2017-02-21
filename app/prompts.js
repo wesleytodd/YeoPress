@@ -141,7 +141,7 @@ module.exports = function(advanced, defaults) {
 		}, {
 			message: 'Destination directory',
 			name: 'themeDir',
-			default: defaults.themeDir || 'yeopress',
+			default: defaults.themeDir || 'sage',
 			validate: requiredValidate,
 			when: function(res) {
 				return !!res.installTheme;
@@ -165,7 +165,7 @@ module.exports = function(advanced, defaults) {
 		}, {
 			message: 'Task runner (grunt/gulp)',
 			name: 'themeTaskRunner',
-			default: defaults.themeTaskRunner || 'grunt',
+			default: defaults.themeTaskRunner || 'gulp',
 			validate: function(value) {
 				if (value != '' && /^(?:grunt|gulp)$/i.test(value)) {
 					return true;
@@ -179,9 +179,17 @@ module.exports = function(advanced, defaults) {
 				return !! res.installTheme;
 			}
 		}, {
+			message: 'Use Bower?',
+			name: 'bower',
+			default: defaults.bower || false,
+			type: 'confirm',
+			when: function(res) {
+				return !!res.installTheme;
+			}
+		}, {
 			message: 'GitHub username',
 			name: 'themeUser',
-			default: defaults.themeUser || 'wesleytodd',
+			default: defaults.themeUser || 'roots',
 			validate: requiredValidate,
 			when: function(res) {
 				return !!res.installTheme && res.themeType == 'git';
@@ -189,7 +197,7 @@ module.exports = function(advanced, defaults) {
 		}, {
 			message: 'GitHub repository name',
 			name: 'themeRepo',
-			default: defaults.themeRepo || 'YeoPress',
+			default: defaults.themeRepo || 'sage',
 			validate: requiredValidate,
 			when: function(res) {
 				return !!res.installTheme && res.themeType == 'git';
@@ -197,7 +205,7 @@ module.exports = function(advanced, defaults) {
 		}, {
 			message: 'Repository branch',
 			name: 'themeBranch',
-			default: defaults.themeBranch || 'template',
+			default: defaults.themeBranch || '8.5.0',
 			validate: requiredValidate,
 			when: function(res) {
 				return !!res.installTheme && res.themeType == 'git';
@@ -214,7 +222,7 @@ module.exports = function(advanced, defaults) {
 		}, {
 			message: 'Remote tarball url',
 			name: 'themeTarballUrl',
-			default: defaults.themeTarballUrl || 'https://github.com/wesleytodd/YeoPress/archive/template.tar.gz',
+			default: defaults.themeTarballUrl || 'https://github.com/roots/sage/archive/8.5.0.tar.gz',
 			validate: requiredValidate,
 			when: function(res) {
 				return !!res.installTheme && res.themeType == 'tar';

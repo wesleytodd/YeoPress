@@ -255,7 +255,8 @@ function setupTheme(generator, config, done) {
 		themePackageJson = path.join(themePath, 'package.json');
 
 	var themeTaskFile = '',
-		themeTaskCmd = '';
+		themeTaskCmd = '',
+		BowerFile = 'bower.json';
 
 	if (config.themeTaskRunner == 'grunt') {
 		themeTaskFile = 'Gruntfile.js',
@@ -268,17 +269,24 @@ function setupTheme(generator, config, done) {
 	if (fs.existsSync(themePackageJson)) {
 		var oldDir = process.cwd();
 		process.chdir(themePath);
-		console.log(chalk.green('Installing Node Packages (be patient)'));
+		console.log(chalk.green('Installing NPM Packages (be patient)'));
 
 		exec('npm install', function(err, stdout, stderr) {
 			if (err) {
-				console.error('Error installing packages', err, stdout, stderr);
+				console.error('Error installing NPM packages', err, stdout, stderr);
 				return done();
 			}
-
+			if (config.bower && fs.existsSync(BowerFile)) {
+				exec('bower install', function(err, stdout, sterr) {
+					if (err) {
+						console.error('Error installing Bower packages', err, stdout, stderr);
+						return done();
+					}
+				});
+			}
 			if (fs.existsSync(themeTaskFile)) {
 				exec(themeTaskCmd + ' setup', function(err) {
-					console.log(chalk.green('Theme setup!'));
+					console.log(chalk.green('NPM Installed!'));
 					process.chdir(oldDir);
 					done();
 				});
@@ -292,7 +300,6 @@ function setupTheme(generator, config, done) {
 		console.log(chalk.red('package.json missing!'));
 		done();
 	}
-
 };
 
 function activateTheme(themeName, callback) {
