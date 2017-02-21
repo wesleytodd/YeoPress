@@ -178,15 +178,7 @@ module.exports = function(advanced, defaults) {
 			when: function(res) {
 				return !! res.installTheme;
 			}
-		}, {
-			message: 'Use Bower?',
-			name: 'bower',
-			default: defaults.bower || false,
-			type: 'confirm',
-			when: function(res) {
-				return !!res.installTheme;
-			}
-		}, {
+		},  {
 			message: 'GitHub username',
 			name: 'themeUser',
 			default: defaults.themeUser || 'roots',
