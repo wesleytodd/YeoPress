@@ -7,7 +7,7 @@ var https = require('https'),
 	chalk = require('chalk'),
 	exec = require('child_process').exec,
 	EventEmitter = require('events').EventEmitter,
-	wordpressRepo = "git://github.com/WordPress/WordPress.git";
+	wordpressRepo = "git://github.com/WordPress/WordPress/releases/tag/4.8.1";
 
 function getLanguage(contentDir, language, callback) {
 	var files = {
@@ -18,6 +18,9 @@ function getLanguage(contentDir, language, callback) {
 		'twentytwelve': path.join('themes', 'twentytwelve-%s.mo'),
 		'twentythirteen': path.join('themes', 'twentythirteen-%s.mo'),
 		'twentyfourteen': path.join('themes', 'twentyfourteen-%s.mo'),
+		'twentyfifteen': path.join('themes', 'twentyfifteen-%s.mo'),
+		'twentysixteen': path.join('themes', 'twentysixteen-%s.mo'),
+		'twentyseventeen': path.join('themes', 'twentyseventeen-%s.mo'),
 	};
 
 	var requested = complete = 0, errors = [];
@@ -248,7 +251,7 @@ function installTheme(generator, config, done) {
 };
 
 function setupTheme(generator, config, done) {
-	
+
 	console.log(chalk.green('Setting Up Theme'));
 
 	var themePath = path.join(config.contentDir, 'themes', config.themeDir),
@@ -314,7 +317,7 @@ function activateTheme(themeName, callback) {
 				"UPDATE " + db.prefix + "options",
 				"SET option_value =  "+ mysql.escape(themeName),
 				"WHERE option_name = 'template'",
-				"OR option_name = 'stylesheet'"	
+				"OR option_name = 'stylesheet'"
 			].join('\n');
 
 			connection.query(q, function(err, rows, fields) {
