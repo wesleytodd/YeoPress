@@ -6,8 +6,8 @@
 var util = require('util'),
 	path = require('path'),
 	fs = require('fs'),
-    chmodr = require("chmodr"),
-    yeoman = require('yeoman-generator'),
+	chmodr = require("chmodr"),
+	yeoman = require('yeoman-generator'),
 	chalk = require('chalk'),
 	mkdirp = require('mkdirp'),
 	git = require('simple-git')(),
@@ -307,25 +307,25 @@ Generator.prototype.thisIsSparta = function() {
 
 	if (fs.existsSync('.')) {
 		this.logger.log('Setting Permissions: 0755 on .');
-        chmodr('.', 0o755, (err) => {
-            if (err) {
-                this.logger.log(err);
-            } else {
-                this.logger.log("Success");
-            }
-        });
+		chmodr('.', 0o755, (err) => {
+			if (err) {
+				this.logger.log(err);
+			} else {
+				this.logger.log("Success");
+			}
+		});
 		this.logger.verbose('Done setting permissions on .');
 	}
 
 	if (fs.existsSync(this.conf.get('contentDir'))) {
 		this.logger.log('Setting Permissions: 0775 on ' + this.conf.get('contentDir'));
-        chmodr(this.conf.get('contentDir'), 0o755, (err) => {
-            if (err) {
-                this.logger.log(err);
-            } else {
-                this.logger.log("Success");
-            }
-        });
+		chmodr(this.conf.get('contentDir'), 0o755, (err) => {
+			if (err) {
+				this.logger.log(err);
+			} else {
+				this.logger.log("Success");
+			}
+		});
 		this.logger.verbose('Done setting permissions on ' + this.conf.get('contentDir'));
 	}
 
