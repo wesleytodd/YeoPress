@@ -1,0 +1,10 @@
+root = true
+
+[*.js]
+indent_style = tab
+indent_size = 8
+
+[*.json.tmpl]
+indent_style = spaces
+indent_size = 2
+
