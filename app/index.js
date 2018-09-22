@@ -299,6 +299,14 @@ Generator.prototype.doNotFearCommitment = function() {
 	}.bind(this));
 };
 
+// Create a composer.json
+Generator.prototype.createComposerJson = function() {
+	if (this.config.get('addComposer')) {
+		this.logger.log("Adding composer.json");
+		this.fs.copyTpl(this.templatePath('composer.json.tmpl'), this.destinationPath('composer.json'), { conf: this.conf });
+	}
+}
+
 // Set some permissions
 /* @TODO Thinking that maybe permissions should be left up to the user 
    BUT, it seems that the theme stuff needs some permissions set to work....

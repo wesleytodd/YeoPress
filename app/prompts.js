@@ -139,6 +139,11 @@ module.exports = function(advanced, defaults) {
 			type: 'confirm',
 			default: (typeof defaults.installTheme !== 'undefined') ? defaults.installTheme : true
 		}, {
+			message: 'Add composer.json?',
+			name: 'addComposer',
+			type: 'confirm',
+			default: (typeof defaults.addComposer !== 'undefined') ? defaults.addComposer : false
+		}, {
 			message: 'Destination directory',
 			name: 'themeDir',
 			default: defaults.themeDir || 'yeopress',
