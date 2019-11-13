@@ -3,7 +3,7 @@ GEM
   specs:
     builder (3.2.2)
     diff-lcs (1.2.4)
-    facter (1.7.2)
+    facter (1.7.6)
     highline (1.6.19)
     kwalify (0.7.2)
     metaclass (0.0.1)
@@ -13,7 +13,7 @@ GEM
       net-ssh (>= 2.6.5)
     net-ssh (2.6.8)
     nokogiri (1.5.10)
-    puppet (2.7.22)
+    puppet (2.7.26)
       facter (~> 1.5)
     puppet-lint (0.3.2)
     puppetlabs_spec_helper (0.4.1)
@@ -60,7 +60,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  puppet (~> 2.7.0)
+  puppet
   puppet-lint
   puppetlabs_spec_helper
   rake
