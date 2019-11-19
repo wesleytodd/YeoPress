@@ -80,16 +80,16 @@ define('WPLANG', '<%= conf.get('wpLang') %>');
  * These are required because wordpress is installed in a subdirectory.
  */
 if (!defined('WP_SITEURL')) {
-	define('WP_SITEURL', 'http://' . $_SERVER['SERVER_NAME'] . '<%= (conf.get('port')) ? ':' + conf.get('port') : '' %>/<%= conf.get('wpDir') %>');
+	define('WP_SITEURL', 'http://' . $_SERVER['SERVER_NAME'] . '<%= (conf.get('port')) ? ':' + conf.get('port') : '' %>' . dirname($_SERVER['SCRIPT_NAME']) . '/<%= conf.get('wpDir') %>');
 }
 if (!defined('WP_HOME')) {
-	define('WP_HOME',    'http://' . $_SERVER['SERVER_NAME'] . '<%= (conf.get('port')) ? ':' + conf.get('port') : '' %>');
+	define('WP_HOME',    'http://' . $_SERVER['SERVER_NAME'] . '<%= (conf.get('port')) ? ':' + conf.get('port') : '' %>' . dirname($_SERVER['SCRIPT_NAME']));
 }
 if (!defined('WP_CONTENT_DIR')) {
 	define('WP_CONTENT_DIR', dirname(__FILE__) . '/<%= conf.get('contentDir') %>');
 }
 if (!defined('WP_CONTENT_URL')) {
-	define('WP_CONTENT_URL', 'http://' . $_SERVER['SERVER_NAME'] . '<%= (conf.get('port')) ? ':' + conf.get('port') : '' %>/<%= conf.get('contentDir') %>');
+	define('WP_CONTENT_URL', 'http://' . $_SERVER['SERVER_NAME'] . '<%= (conf.get('port')) ? ':' + conf.get('port') : '' %>' . dirname($_SERVER['SCRIPT_NAME']) . '/<%= conf.get('contentDir') %>');
 }
 <% } %>
 <% if (conf.get('blockExternalRequests')) { %>
