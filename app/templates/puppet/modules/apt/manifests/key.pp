@@ -25,7 +25,7 @@ define apt::key (
   # It is used as a unique identifier for this instance of apt::key. It gets
   # hashed to ensure that the resource name doesn't end up being pages and
   # pages (e.g. in the situation where key_content is specified).
-  $digest = sha1("${upkey}/${key_content}/${key_source}/${key_server}/")
+  $digest = str2saltedsha512("${upkey}/${key_content}/${key_source}/${key_server}/")
 
   # Allow multiple ensure => present for the same key to account for many
   # apt::source resources that all reference the same key.
