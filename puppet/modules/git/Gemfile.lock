@@ -29,7 +29,7 @@ GEM
       rake
       rspec (>= 2.9.0)
       rspec-puppet (>= 0.1.1)
-    rake (10.1.0)
+    rake (12.3.3)
     rest-client (1.6.7)
       mime-types (>= 1.16)
     rgen (0.6.5)
